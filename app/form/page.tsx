@@ -3,10 +3,27 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
 const questions = [
-  { id: "name", text: "What should we call you?", type: "text" },
-  { id: "age", text: "How old are you?", type: "number" },
-  { id: "location", text: "Where are you currently based?", type: "text" },
+  {
+    id: "name",
+    text: "What should we call you?",
+    type: "text",
+    placeholder: "e.g. Sam Williams",
+  },
+  {
+    id: "age",
+    text: "How old are you?",
+    type: "number",
+    placeholder: "e.g. 24",
+  },
+  {
+    id: "location",
+    text: "Where are you currently based?",
+    type: "text",
+    placeholder: "e.g. Mumbai, India",
+  },
   {
     id: "gender",
     text: "What is your gender?",
@@ -109,11 +126,13 @@ const questions = [
     id: "talk_forever",
     text: "What is something you could talk about, teach, or share for months without getting bored?",
     type: "long_text",
+    placeholder: "Type your answer here...",
   },
   {
     id: "real_experience",
     text: "What\u2019s something you\u2019ve experienced, achieved, or figured out that could genuinely help someone else?",
     type: "long_text",
+    placeholder: "Type your answer here...",
   },
   {
     id: "platform",
@@ -182,6 +201,8 @@ const questions = [
   },
 ];
 
+const ACCENT = "#FFA126";
+
 export default function FormPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -203,11 +224,17 @@ export default function FormPage() {
     setAnswer(updated);
   }
 
+  function goNext() {
+    if (isLast) {
+      handleSubmit();
+    } else {
+      setStep(step + 1);
+    }
+  }
+
   async function handleSubmit() {
     setSubmitting(true);
-
     const { name, age, location, gender, ...restAnswers } = responses;
-
     const payload = {
       name,
       age: Number(age),
@@ -217,16 +244,13 @@ export default function FormPage() {
       profile_image_type: "avatar",
       profile_image_reference: "avatar_default.svg",
     };
-
     const res = await fetch("/api/submit-answers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
     const result = await res.json();
     setSubmitting(false);
-
     if (result.success) {
       router.push("/form/thank-you");
     } else {
@@ -234,117 +258,238 @@ export default function FormPage() {
     }
   }
 
+  const questionStyle: React.CSSProperties = {
+    fontFamily: "var(--font-body)",
+    fontWeight: 400,
+    fontSize: 32,
+    color: "#000",
+    margin: 0,
+  };
+
+  const optionTextStyle: React.CSSProperties = {
+    fontFamily: "var(--font-body)",
+    fontWeight: 300,
+    fontSize: 20,
+    color: ACCENT,
+  };
+
   return (
-    <div style={{ maxWidth: 600, margin: "80px auto", padding: 24 }}>
-      <p style={{ opacity: 0.5, marginBottom: 8 }}>
-        Question {step + 1} of {questions.length}
-      </p>
-      <h2 style={{ marginBottom: 24 }}>{current.text}</h2>
-
-      {current.type === "text" && (
-        <input
-          type="text"
-          value={responses[current.id] || ""}
-          onChange={(e) => setAnswer(e.target.value)}
-          style={{ width: "100%", padding: 12, fontSize: 16 }}
-        />
-      )}
-
-      {current.type === "number" && (
-        <input
-          type="number"
-          value={responses[current.id] || ""}
-          onChange={(e) => setAnswer(e.target.value)}
-          style={{ width: "100%", padding: 12, fontSize: 16 }}
-        />
-      )}
-
-      {current.type === "long_text" && (
-        <textarea
-          value={responses[current.id] || ""}
-          onChange={(e) => setAnswer(e.target.value)}
-          rows={5}
-          style={{ width: "100%", padding: 12, fontSize: 16 }}
-        />
-      )}
-
-      {current.type === "single_select" &&
-        current.options?.map((opt) => (
-          <div key={opt} style={{ marginBottom: 8 }}>
-            <button
-              onClick={() => setAnswer(opt)}
-              style={{
-                width: "100%",
-                textAlign: "left",
-                padding: 12,
-                background: responses[current.id] === opt ? "#333" : "#f0f0f0",
-                color: responses[current.id] === opt ? "#fff" : "#000",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              {opt}
-            </button>
-          </div>
-        ))}
-
-      {current.type === "multi_select" &&
-        current.options?.map((opt) => (
-          <div key={opt} style={{ marginBottom: 8 }}>
-            <button
-              onClick={() => toggleMulti(opt)}
-              style={{
-                width: "100%",
-                textAlign: "left",
-                padding: 12,
-                background: (responses[current.id] || []).includes(opt)
-                  ? "#333"
-                  : "#f0f0f0",
-                color: (responses[current.id] || []).includes(opt)
-                  ? "#fff"
-                  : "#000",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              {opt}
-            </button>
-          </div>
-        ))}
-
-      <div
-        style={{
-          marginTop: 32,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <button
-          onClick={() => setStep(step - 1)}
-          disabled={step === 0}
-          style={{ padding: "10px 20px" }}
+    <div
+      style={{
+        background: "#FFFFFF",
+        minHeight: "100vh",
+        padding: "80px 24px",
+      }}
+    >
+      <div style={{ maxWidth: 760, margin: "0 auto" }}>
+        {/* Number badge + question, same grid every time */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 16,
+            marginBottom: 40,
+          }}
         >
-          Back
-        </button>
+          <span
+            style={{
+              background: ACCENT,
+              color: "#fff",
+              fontFamily: "var(--font-body)",
+              fontWeight: 400,
+              fontSize: 14,
+              width: 28,
+              height: 28,
+              borderRadius: 6,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              marginTop: 6,
+            }}
+          >
+            {step + 1}
+          </span>
+          <h2 style={questionStyle}>{current.text}</h2>
+        </div>
 
-        {isLast ? (
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            style={{ padding: "10px 20px" }}
-          >
-            {submitting ? "Submitting..." : "Submit"}
-          </button>
-        ) : (
-          <button
-            onClick={() => setStep(step + 1)}
-            style={{ padding: "10px 20px" }}
-          >
-            Next
-          </button>
+        {/* Text / number / long_text inputs */}
+        {(current.type === "text" || current.type === "number") && (
+          <input
+            type={current.type}
+            value={responses[current.id] || ""}
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder={current.placeholder}
+            style={{
+              width: "100%",
+              border: "none",
+              borderBottom: `1px solid ${ACCENT}`,
+              outline: "none",
+              fontFamily: "var(--font-body)",
+              fontWeight: 300,
+              fontSize: 24,
+              padding: "10px 0",
+              color: "#000",
+            }}
+          />
         )}
+
+        {current.type === "long_text" && (
+          <textarea
+            value={responses[current.id] || ""}
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder={current.placeholder}
+            rows={4}
+            style={{
+              width: "100%",
+              border: "none",
+              borderBottom: `1px solid ${ACCENT}`,
+              outline: "none",
+              fontFamily: "var(--font-body)",
+              fontWeight: 300,
+              fontSize: 24,
+              padding: "10px 0",
+              color: "#000",
+              resize: "none",
+            }}
+          />
+        )}
+
+        {/* Single select */}
+        {current.type === "single_select" && (
+          <div style={{ display: "grid", gap: 12 }}>
+            {current.options?.map((opt, i) => {
+              const selected = responses[current.id] === opt;
+              return (
+                <button
+                  key={opt}
+                  onClick={() => setAnswer(opt)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    textAlign: "left",
+                    padding: "18px 20px",
+                    background: selected ? "#FFF3E0" : "#FFFAF3",
+                    border: `1px solid ${selected ? ACCENT : "transparent"}`,
+                    borderRadius: 10,
+                    cursor: "pointer",
+                  }}
+                >
+                  <span
+                    style={{
+                      border: `1px solid ${ACCENT}`,
+                      color: ACCENT,
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 400,
+                      fontSize: 13,
+                      width: 26,
+                      height: 26,
+                      borderRadius: 6,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {letters[i]}
+                  </span>
+                  <span style={optionTextStyle}>{opt}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Multi select */}
+        {current.type === "multi_select" && (
+          <div style={{ display: "grid", gap: 12 }}>
+            {current.options?.map((opt, i) => {
+              const selected = (responses[current.id] || []).includes(opt);
+              return (
+                <button
+                  key={opt}
+                  onClick={() => toggleMulti(opt)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    textAlign: "left",
+                    padding: "18px 20px",
+                    background: selected ? "#FFF3E0" : "#FFFAF3",
+                    border: `1px solid ${selected ? ACCENT : "transparent"}`,
+                    borderRadius: 10,
+                    cursor: "pointer",
+                  }}
+                >
+                  <span
+                    style={{
+                      border: `1px solid ${ACCENT}`,
+                      color: ACCENT,
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 400,
+                      fontSize: 13,
+                      width: 26,
+                      height: 26,
+                      borderRadius: 6,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {letters[i]}
+                  </span>
+                  <span style={optionTextStyle}>{opt}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Nav */}
+        <div
+          style={{
+            marginTop: 40,
+            display: "flex",
+            gap: 12,
+            alignItems: "center",
+          }}
+        >
+          <button
+            onClick={goNext}
+            disabled={submitting}
+            style={{
+              background: ACCENT,
+              color: "#000000",
+              border: "none",
+              borderRadius: 8,
+              padding: "14px 32px",
+              fontFamily: "var(--font-body)",
+              fontWeight: 400,
+              fontSize: 16,
+              cursor: "pointer",
+            }}
+          >
+            {isLast ? (submitting ? "Submitting..." : "Submit") : "OK"}
+          </button>
+
+          {step > 0 && (
+            <button
+              onClick={() => setStep(step - 1)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#999",
+                fontFamily: "var(--font-body)",
+                fontSize: 14,
+                cursor: "pointer",
+              }}
+            >
+              Back
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
