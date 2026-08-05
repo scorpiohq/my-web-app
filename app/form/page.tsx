@@ -25,10 +25,10 @@ const questions = [
     placeholder: "e.g. Mumbai, India",
   },
   {
-    id: "gender",
-    text: "What is your gender?",
-    type: "single_select",
-    options: ["Male", "Female", "Other"],
+    id: "photo_or_avatar",
+    text: "How would you like your report to be personalized?",
+    type: "image_choice",
+    note: "So many people hesitate to share their picture online — that's why we go with avatars instead. It feels safer, and your report still feels personal to you.",
   },
   {
     id: "current_situation",
@@ -224,6 +224,14 @@ export default function FormPage() {
     setAnswer(updated);
   }
 
+  function chooseAvatar(gender: string) {
+    setResponses({
+      ...responses,
+      profile_image_type: "avatar",
+      gender: gender.toLowerCase(),
+    });
+  }
+
   function goNext() {
     if (isLast) {
       handleSubmit();
@@ -234,15 +242,15 @@ export default function FormPage() {
 
   async function handleSubmit() {
     setSubmitting(true);
-    const { name, age, location, gender, ...restAnswers } = responses;
+    const { name, age, location, gender, profile_image_type, ...restAnswers } =
+      responses;
     const payload = {
       name,
       age: Number(age),
       location,
-      gender,
+      gender: gender || null,
       answers: restAnswers,
-      profile_image_type: "avatar",
-      profile_image_reference: "avatar_default.svg",
+      profile_image_type: profile_image_type || "avatar",
     };
     const res = await fetch("/api/submit-answers", {
       method: "POST",
@@ -444,6 +452,59 @@ export default function FormPage() {
                 </button>
               );
             })}
+          </div>
+        )}
+
+        {/* Image choice / avatar selection */}
+        {current.type === "image_choice" && (
+          <div style={{ display: "grid", gap: 20 }}>
+            {current.note && (
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontWeight: 300,
+                  fontSize: 18,
+                  color: "#333",
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                {current.note}
+              </p>
+            )}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                gap: 12,
+              }}
+            >
+              {[
+                { label: "Male", value: "Male" },
+                { label: "Female", value: "Female" },
+              ].map((option) => {
+                const selected = responses.gender === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => chooseAvatar(option.value)}
+                    style={{
+                      padding: "18px 20px",
+                      borderRadius: 10,
+                      border: `1px solid ${selected ? ACCENT : "transparent"}`,
+                      background: selected ? "#FFF3E0" : "#FFFAF3",
+                      color: "#000",
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 400,
+                      fontSize: 18,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
 
