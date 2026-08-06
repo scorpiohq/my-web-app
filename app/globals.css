@@ -22,5 +22,100 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.grid-bg {
+  background-color: #f8f8f8;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.btn-brutal {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-brutal:hover {
+  transform: translate(-3px, -3px);
+}
+
+.btn-brutal:active {
+  transform: translate(0, 0);
+}
+
+.btn-brutal-primary {
+  border: 2px solid #000;
+  background: #ffc940;
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.btn-brutal-primary:hover {
+  box-shadow: 7px 7px 0 0 #000;
+}
+
+.btn-brutal-primary:active {
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.btn-brutal-secondary {
+  border: 1px solid #000;
+  background: #fff;
+  box-shadow: 3px 3px 0 0 #c8c8c8;
+}
+
+.btn-brutal-secondary:hover {
+  box-shadow: 6px 6px 0 0 #c8c8c8;
+}
+
+.btn-brutal-secondary:active {
+  box-shadow: 3px 3px 0 0 #c8c8c8;
+}
+
+@keyframes form-slide-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes form-slide-down-in {
+  from {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-step-enter-forward {
+  animation: form-slide-up-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.form-step-enter-back {
+  animation: form-slide-down-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.form-action-btn {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-action-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 161, 38, 0.35);
+}
+
+.form-action-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
 }

@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Header from "@/components/Header";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -31,78 +31,77 @@ export default function SignInPage() {
     }
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && email && !loading) {
+      handleSignIn();
+    }
+  }
+
   return (
-    <>
-      <Header />
-      <div
-        style={{
-          maxWidth: 420,
-          margin: "100px auto",
-          padding: 24,
-          textAlign: "center",
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 32,
-            marginBottom: 12,
-          }}
-        >
-          Sign In
-        </h1>
-        <p style={{ color: "#666", marginBottom: 32 }}>
-          Enter the email you used to get your blueprint.
-        </p>
+    <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
+      <div className="absolute inset-0 grid-bg opacity-40" aria-hidden="true" />
 
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@email.com"
-          style={{
-            width: "100%",
-            padding: "14px 16px",
-            fontSize: 16,
-            border: "1px solid #ddd",
-            borderRadius: 8,
-            marginBottom: 16,
-            fontFamily: "var(--font-body)",
-          }}
-        />
+      <div className="relative z-10 w-full max-w-[300px] sm:max-w-[320px]">
+        <div className="border-2 border-black bg-white px-5 py-6 shadow-[6px_6px_0_0_#000] sm:px-6 sm:py-7">
+          <Link href="/" className="mb-5 inline-block">
+            <img
+              src="/logo.svg"
+              alt="Your Blueprint"
+              className="h-7 w-auto sm:h-8"
+            />
+          </Link>
 
-        <button
-          onClick={handleSignIn}
-          disabled={loading || !email}
-          style={{
-            width: "100%",
-            background: "#FFA126",
-            color: "#000",
-            border: "none",
-            borderRadius: 8,
-            padding: "14px 0",
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: "pointer",
-            fontFamily: "var(--font-body)",
-          }}
-        >
-          {loading ? "Checking..." : "Sign In"}
-        </button>
-
-        {error && (
-          <p
-            style={{
-              color: "#c0392b",
-              marginTop: 20,
-              fontSize: 14,
-              lineHeight: 1.5,
-            }}
-          >
-            {error}
+          <h1 className="text-lg font-semibold leading-snug text-black sm:text-xl">
+            Sign in
+          </h1>
+          <p className="mt-1 text-xs leading-snug text-[#6B6B6B] sm:text-sm">
+            Enter the email you used to get your blueprint.
           </p>
-        )}
+
+          <div className="mt-5">
+            <label htmlFor="signin-email" className="sr-only">
+              Email
+            </label>
+            <input
+              id="signin-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="you@email.com"
+              autoComplete="email"
+              className="w-full border-2 border-black bg-white px-3 py-2.5 text-sm text-black outline-none transition-shadow placeholder:text-[#BDBDBD] focus:shadow-[2px_2px_0_0_#000]"
+            />
+          </div>
+
+          {error && (
+            <p className="mt-3 text-xs leading-relaxed text-[#c0392b] sm:text-sm">
+              {error}
+            </p>
+          )}
+
+          <div className="mt-5 flex flex-col items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSignIn}
+              disabled={loading || !email}
+              className="btn-brutal btn-brutal-primary w-full px-8 py-3 text-sm font-semibold text-black disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? "Checking..." : "Sign in"}
+            </button>
+
+            <p className="text-center text-xs leading-snug text-[#6B6B6B]">
+              Don&apos;t have a blueprint yet?{" "}
+              <Link
+                href="/form"
+                className="font-semibold text-black underline underline-offset-2"
+              >
+                Get yours
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
+import FormHeader from "@/components/FormHeader";
+import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+function getOptionLetter(index: number): string {
+  return String.fromCharCode(65 + index);
+}
 
 const questions = [
   {
@@ -22,20 +26,21 @@ const questions = [
   {
     id: "age",
     text: "How old are you?",
-    type: "number",
+    type: "text",
     placeholder: "e.g. 24",
+    inputMode: "numeric" as const,
   },
   {
     id: "location",
     text: "Where are you currently based?",
     type: "text",
-    placeholder: "e.g. Mumbai, India",
+    placeholder: "e.g. New York, United States",
   },
   {
     id: "photo_or_avatar",
-    text: "How would you like your report to be personalized?",
+    text: "Which best describes you?",
     type: "image_choice",
-    note: "So many people hesitate to share their picture online — that's why we go with avatars instead. It feels safer, and your report still feels personal to you.",
+    note: "It\u2019s for your report personalization \u2014 some people told us they don\u2019t want to share their personal images, so we decided to go with avatars.",
   },
   {
     id: "current_situation",
@@ -133,13 +138,17 @@ const questions = [
     id: "talk_forever",
     text: "What is something you could talk about, teach, or share for months without getting bored?",
     type: "long_text",
-    placeholder: "Type your answer here...",
+    placeholder: `Ex: Business. I think about it 24/7 — how companies grow, how people make their first sale, how to escape a 9-to-5. I never get tired of this.
+
+Ex: Fitness and nutrition. I could talk about workouts, diet mistakes, and mindset around body image forever — it's just part of who I am now.`,
   },
   {
     id: "real_experience",
     text: "What\u2019s something you\u2019ve experienced, achieved, or figured out that could genuinely help someone else?",
     type: "long_text",
-    placeholder: "Type your answer here...",
+    placeholder: `Ex: I lost 22kg over a year without any crash diet, just consistency. I can help people who feel lost and think they need to starve themselves to see results.
+
+Ex: I traveled to 5 states on a tight budget by figuring out how to cut costs without cutting the experience. I can help people travel more without needing a big income.`,
   },
   {
     id: "platform",
@@ -210,14 +219,74 @@ const questions = [
 
 const ACCENT = "#FFA126";
 
+function ChoiceOption({
+  label,
+  letter,
+  selected,
+  onClick,
+}: {
+  label: string;
+  letter: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left transition-all duration-200 ease-out active:scale-[0.99] sm:gap-3 sm:px-3.5 sm:py-2.5 ${
+        selected
+          ? "border border-[#FFA126] bg-[#FFF3E0]"
+          : "border border-transparent bg-[#FFFAF3] hover:bg-[#FFF6EB]"
+      }`}
+    >
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#FFA126] text-xs font-medium text-[#FFA126]">
+        {letter}
+      </span>
+      <span className="text-sm font-light leading-snug text-[#FFA126] sm:text-[15px]">
+        {label}
+      </span>
+    </button>
+  );
+}
+
+function OptionsList({
+  children,
+  scrollable,
+}: {
+  children: ReactNode;
+  scrollable?: boolean;
+}) {
+  if (scrollable) {
+    return (
+      <div className="max-h-[min(38vh,260px)] overflow-y-auto overscroll-contain sm:max-h-[min(42vh,300px)]">
+        <div className="grid gap-1.5 pr-1">{children}</div>
+      </div>
+    );
+  }
+
+  return <div className="grid gap-1.5">{children}</div>;
+}
+
 export default function FormPage() {
   const router = useRouter();
+  const [showIntro, setShowIntro] = useState(true);
+  const [formVisible, setFormVisible] = useState(false);
   const [step, setStep] = useState(0);
+  const [stepDirection, setStepDirection] = useState<"forward" | "back">("forward");
   const [responses, setResponses] = useState<Record<string, any>>({});
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (!showIntro) {
+      requestAnimationFrame(() => setFormVisible(true));
+    }
+  }, [showIntro]);
+
   const current = questions[step];
   const isLast = step === questions.length - 1;
+  const optionCount = current.options?.length ?? 0;
+  const scrollOptions = optionCount > 5;
 
   function setAnswer(value: any) {
     setResponses({ ...responses, [current.id]: value });
@@ -232,10 +301,12 @@ export default function FormPage() {
   }
 
   function chooseAvatar(gender: string) {
+    const value = gender.toLowerCase();
     setResponses({
       ...responses,
+      [current.id]: value,
       profile_image_type: "avatar",
-      gender: gender.toLowerCase(),
+      gender: value,
     });
   }
 
@@ -243,8 +314,14 @@ export default function FormPage() {
     if (isLast) {
       handleSubmit();
     } else {
+      setStepDirection("forward");
       setStep(step + 1);
     }
+  }
+
+  function goBack() {
+    setStepDirection("back");
+    setStep(step - 1);
   }
 
   async function handleSubmit() {
@@ -281,317 +358,167 @@ export default function FormPage() {
     }
   }
 
-  const questionStyle: React.CSSProperties = {
-    fontFamily: "var(--font-body)",
-    fontWeight: 400,
-    fontSize: 32,
-    color: "#000",
-    margin: 0,
-  };
-
-  const optionTextStyle: React.CSSProperties = {
-    fontFamily: "var(--font-body)",
-    fontWeight: 300,
-    fontSize: 20,
-    color: ACCENT,
-  };
+  if (showIntro) {
+    return (
+      <BlueprintJourneyIntro
+        onComplete={() => {
+          setShowIntro(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div
-      style={{
-        background: "#FFFFFF",
-        minHeight: "100vh",
-        padding: "80px 24px",
-      }}
+      className="flex min-h-screen flex-col bg-white transition-opacity duration-500 ease-out"
+      style={{ opacity: formVisible ? 1 : 0 }}
     >
-      <div style={{ maxWidth: 760, margin: "0 auto" }}>
-        {/* Number badge + question, same grid every time */}
+      <FormHeader activeStep={1} />
+
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-5 pb-10 pt-6 sm:px-8 sm:pb-12">
         <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 16,
-            marginBottom: 40,
-          }}
+          key={step}
+          className={`w-full ${
+            stepDirection === "forward"
+              ? "form-step-enter-forward"
+              : "form-step-enter-back"
+          }`}
         >
-          <span
-            style={{
-              background: ACCENT,
-              color: "#fff",
-              fontFamily: "var(--font-body)",
-              fontWeight: 400,
-              fontSize: 14,
-              width: 28,
-              height: 28,
-              borderRadius: 6,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              marginTop: 6,
-            }}
-          >
-            {step + 1}
-          </span>
-          <h2 style={questionStyle}>{current.text}</h2>
-        </div>
-        {(current.type === "text" || current.type === "number") && (
-          <>
+          <div className="flex flex-col">
+            <span className="mb-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] text-sm font-medium text-white">
+              {step + 1}
+            </span>
+
+            <h1 className="text-xl font-normal leading-snug text-black sm:text-2xl sm:leading-tight">
+              {current.text}
+            </h1>
+
+            {(current.type === "text" ||
+              current.type === "number" ||
+              current.type === "long_text") &&
+              current.placeholder && (
+                <p
+                  className={`mt-1.5 text-sm text-[#999] ${
+                    current.type === "long_text"
+                      ? "leading-relaxed whitespace-pre-line"
+                      : ""
+                  }`}
+                >
+                  {current.placeholder}
+                </p>
+              )}
+
             {current.note && (
-              <p style={{ fontSize: 14, color: "#888", marginBottom: 16 }}>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#888]">
                 {current.note}
               </p>
             )}
-            <input
-              type={current.type}
-              value={responses[current.id] || ""}
-              onChange={(e) => setAnswer(e.target.value)}
-              placeholder={current.placeholder}
-              style={{
-                width: "100%",
-                border: "none",
-                borderBottom: `1px solid #FFA126`,
-                outline: "none",
-                fontFamily: "var(--font-body)",
-                fontWeight: 300,
-                fontSize: 24,
-                padding: "10px 0",
-                color: "#000",
-              }}
-            />
-          </>
-        )}
-        {/* Text / number / long_text inputs */}
-        {(current.type === "text" || current.type === "number") && (
-          <input
-            type={current.type}
-            value={responses[current.id] || ""}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder={current.placeholder}
-            style={{
-              width: "100%",
-              border: "none",
-              borderBottom: `1px solid ${ACCENT}`,
-              outline: "none",
-              fontFamily: "var(--font-body)",
-              fontWeight: 300,
-              fontSize: 24,
-              padding: "10px 0",
-              color: "#000",
-            }}
-          />
-        )}
 
-        {current.type === "long_text" && (
-          <textarea
-            value={responses[current.id] || ""}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder={current.placeholder}
-            rows={4}
-            style={{
-              width: "100%",
-              border: "none",
-              borderBottom: `1px solid ${ACCENT}`,
-              outline: "none",
-              fontFamily: "var(--font-body)",
-              fontWeight: 300,
-              fontSize: 24,
-              padding: "10px 0",
-              color: "#000",
-              resize: "none",
-            }}
-          />
-        )}
-
-        {/* Single select */}
-        {current.type === "single_select" && (
-          <div style={{ display: "grid", gap: 12 }}>
-            {current.options?.map((opt, i) => {
-              const selected = responses[current.id] === opt;
-              return (
-                <button
-                  key={opt}
-                  onClick={() => setAnswer(opt)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    textAlign: "left",
-                    padding: "18px 20px",
-                    background: selected ? "#FFF3E0" : "#FFFAF3",
-                    border: `1px solid ${selected ? ACCENT : "transparent"}`,
-                    borderRadius: 10,
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      border: `1px solid ${ACCENT}`,
-                      color: ACCENT,
-                      fontFamily: "var(--font-body)",
-                      fontWeight: 400,
-                      fontSize: 13,
-                      width: 26,
-                      height: 26,
-                      borderRadius: 6,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {letters[i]}
-                  </span>
-                  <span style={optionTextStyle}>{opt}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Multi select */}
-        {current.type === "multi_select" && (
-          <div style={{ display: "grid", gap: 12 }}>
-            {current.options?.map((opt, i) => {
-              const selected = (responses[current.id] || []).includes(opt);
-              return (
-                <button
-                  key={opt}
-                  onClick={() => toggleMulti(opt)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    textAlign: "left",
-                    padding: "18px 20px",
-                    background: selected ? "#FFF3E0" : "#FFFAF3",
-                    border: `1px solid ${selected ? ACCENT : "transparent"}`,
-                    borderRadius: 10,
-                    cursor: "pointer",
-                  }}
-                >
-                  <span
-                    style={{
-                      border: `1px solid ${ACCENT}`,
-                      color: ACCENT,
-                      fontFamily: "var(--font-body)",
-                      fontWeight: 400,
-                      fontSize: 13,
-                      width: 26,
-                      height: 26,
-                      borderRadius: 6,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {letters[i]}
-                  </span>
-                  <span style={optionTextStyle}>{opt}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Image choice / avatar selection */}
-        {current.type === "image_choice" && (
-          <div style={{ display: "grid", gap: 20 }}>
-            {current.note && (
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 300,
-                  fontSize: 18,
-                  color: "#333",
-                  lineHeight: 1.6,
-                  margin: 0,
-                }}
-              >
-                {current.note}
-              </p>
+            <div className="mt-4">
+            {(current.type === "text" || current.type === "number") && (
+              <input
+                type={current.type === "number" ? "number" : "text"}
+                inputMode={
+                  "inputMode" in current ? current.inputMode : undefined
+                }
+                value={responses[current.id] || ""}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="Type your answer here..."
+                className="w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl font-light text-black outline-none transition-[border-color] duration-300 placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                autoFocus
+              />
             )}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                gap: 12,
-              }}
-            >
-              {[
-                { label: "Male", value: "Male" },
-                { label: "Female", value: "Female" },
-              ].map((option) => {
-                const selected = responses.gender === option.value;
-                return (
-                  <button
-                    key={option.value}
-                    onClick={() => chooseAvatar(option.value)}
-                    style={{
-                      padding: "18px 20px",
-                      borderRadius: 10,
-                      border: `1px solid ${selected ? ACCENT : "transparent"}`,
-                      background: selected ? "#FFF3E0" : "#FFFAF3",
-                      color: "#000",
-                      fontFamily: "var(--font-body)",
-                      fontWeight: 400,
-                      fontSize: 18,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                );
-              })}
+
+            {current.type === "long_text" && (
+              <input
+                type="text"
+                value={responses[current.id] || ""}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="Type your answer here..."
+                className="w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl font-light text-black outline-none transition-[border-color] duration-300 placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl"
+                autoFocus
+              />
+            )}
+
+            {current.type === "single_select" && (
+              <OptionsList scrollable={scrollOptions}>
+                {current.options?.map((opt, i) => (
+                  <ChoiceOption
+                    key={opt}
+                    label={opt}
+                    letter={getOptionLetter(i)}
+                    selected={responses[current.id] === opt}
+                    onClick={() => setAnswer(opt)}
+                  />
+                ))}
+              </OptionsList>
+            )}
+
+            {current.type === "multi_select" && (
+              <OptionsList scrollable={scrollOptions}>
+                {current.options?.map((opt, i) => (
+                  <ChoiceOption
+                    key={opt}
+                    label={opt}
+                    letter={getOptionLetter(i)}
+                    selected={(responses[current.id] || []).includes(opt)}
+                    onClick={() => toggleMulti(opt)}
+                  />
+                ))}
+              </OptionsList>
+            )}
+
+            {current.type === "image_choice" && (
+              <div className="grid max-w-xs grid-cols-2 gap-2">
+                {[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                ].map((option) => {
+                  const selected =
+                    (responses.gender || "").toLowerCase() ===
+                    option.value.toLowerCase();
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => chooseAvatar(option.value)}
+                      className={`rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ease-out active:scale-[0.99] ${
+                        selected
+                          ? "border border-[#FFA126] bg-[#FFF3E0] text-black"
+                          : "border border-transparent bg-[#FFFAF3] text-black hover:bg-[#FFF6EB]"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             </div>
-          </div>
-        )}
 
-        {/* Nav */}
-        <div
-          style={{
-            marginTop: 40,
-            display: "flex",
-            gap: 12,
-            alignItems: "center",
-          }}
-        >
-          <button
-            onClick={goNext}
-            disabled={submitting}
-            style={{
-              background: ACCENT,
-              color: "#000000",
-              border: "none",
-              borderRadius: 8,
-              padding: "14px 32px",
-              fontFamily: "var(--font-body)",
-              fontWeight: 400,
-              fontSize: 16,
-              cursor: "pointer",
-            }}
-          >
-            {isLast ? (submitting ? "Submitting..." : "Submit") : "OK"}
-          </button>
-
-          {step > 0 && (
+            <div className="mt-5 flex items-center gap-3">
+            {step > 0 && (
+              <button
+                type="button"
+                onClick={goBack}
+                className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-semibold text-white disabled:opacity-60"
+                aria-label="Go back"
+              >
+                ‹
+              </button>
+            )}
             <button
-              onClick={() => setStep(step - 1)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#999",
-                fontFamily: "var(--font-body)",
-                fontSize: 14,
-                cursor: "pointer",
-              }}
+              type="button"
+              onClick={goNext}
+              disabled={submitting}
+              className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-semibold text-white disabled:opacity-60"
             >
-              Back
+              {isLast ? (submitting ? "Submitting..." : "Submit") : "OK"}
             </button>
-          )}
+          </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

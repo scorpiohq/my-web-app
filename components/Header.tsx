@@ -3,47 +3,44 @@
 import { useState } from "react";
 import Link from "next/link";
 
+const navLinks = [
+  { href: "#how-it-works", label: "How it work" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#backstory", label: "The BackStory" },
+];
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="relative bg-white shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
-        <Link href="/" className="flex items-center">
-          <img src="/logo.svg" alt="Your Blueprint" className="h-8 w-auto" />
+    <header className="grid-bg relative">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
+        <Link href="/" className="flex shrink-0 items-center">
+          <img src="/logo.svg" alt="Your Blueprint" className="h-9 w-auto sm:h-10" />
         </Link>
 
-        <div className="hidden items-center gap-10 md:flex">
-          <Link
-            href="#"
-            className="text-sm font-medium text-black hover:text-gray-700"
-          >
-            How it works
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium text-black hover:text-gray-700"
-          >
-            Pricing
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium text-black hover:text-gray-700"
-          >
-            The Backstory
-          </Link>
+        <div className="hidden items-center gap-8 lg:flex lg:gap-10">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[15px] font-medium text-black transition hover:text-black/70"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/signin"
-            className="rounded-full border border-black bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-gray-50"
+            className="btn-brutal btn-brutal-secondary inline-block px-5 py-2.5 text-sm font-medium text-black"
           >
-            Sign In
+            Sign in
           </Link>
           <Link
             href="/form"
-            className="rounded-full bg-[#FFA126] px-4 py-2 text-sm font-semibold text-black transition hover:bg-orange-400"
+            className="btn-brutal btn-brutal-primary inline-block px-5 py-2.5 text-sm font-semibold text-black"
           >
             Get your Blueprint
           </Link>
@@ -52,7 +49,7 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="inline-flex items-center justify-center rounded-md border border-black p-2 text-black md:hidden"
+          className="inline-flex items-center justify-center border border-black bg-white p-2 text-black shadow-[2px_2px_0_0_#c8c8c8] lg:hidden"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
           {menuOpen ? (
@@ -68,55 +65,32 @@ export default function Header() {
       </div>
 
       {menuOpen && (
-        <div className="absolute inset-x-0 top-full z-20 bg-white px-4 pb-4 shadow-xl md:hidden">
-          <div className="mx-auto w-full max-w-md rounded-3xl border border-gray-200 bg-white p-4 shadow-lg transition-all duration-300 ease-out">
-            <div className="flex items-center justify-between">
-              <div />
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                className="text-2xl font-bold text-black transition hover:text-gray-700"
-                aria-label="Close menu"
-              >
-                ×
-              </button>
+        <div className="grid-bg absolute inset-x-0 top-full z-20 border-t border-black/10 px-5 pb-5 shadow-lg lg:hidden">
+          <div className="mx-auto max-w-md pt-4">
+            <div className="space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="block px-2 py-3 text-sm font-medium text-black transition hover:bg-black/5"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
-            <div className="mt-6 space-y-3">
-              <Link
-                href="#"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-black transition duration-200 hover:bg-gray-50"
-                onClick={() => setMenuOpen(false)}
-              >
-                How it works
-              </Link>
-              <Link
-                href="#"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-black transition duration-200 hover:bg-gray-50"
-                onClick={() => setMenuOpen(false)}
-              >
-                Pricing
-              </Link>
-              <Link
-                href="#"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-black transition duration-200 hover:bg-gray-50"
-                onClick={() => setMenuOpen(false)}
-              >
-                The Backstory
-              </Link>
-            </div>
-
-            <div className="mt-6 space-y-3">
+            <div className="mt-4 space-y-3">
               <Link
                 href="/signin"
-                className="block rounded-2xl border border-black bg-white px-4 py-3 text-center text-sm font-medium text-black transition duration-200 hover:bg-gray-50"
+                className="btn-brutal btn-brutal-secondary block px-4 py-3 text-center text-sm font-medium text-black"
                 onClick={() => setMenuOpen(false)}
               >
-                Sign In
+                Sign in
               </Link>
               <Link
                 href="/form"
-                className="block rounded-2xl bg-[#FFA126] px-4 py-3 text-center text-sm font-semibold text-black transition duration-200 hover:bg-orange-400"
+                className="btn-brutal btn-brutal-primary block px-4 py-3 text-center text-sm font-semibold text-black"
                 onClick={() => setMenuOpen(false)}
               >
                 Get your Blueprint
