@@ -1,6 +1,6 @@
 type ReportData = {
   name: string;
-  age: number;
+  age: number | string;
   location: string;
   goal_line: string;
   profile_image_url: string;

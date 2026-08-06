@@ -13,6 +13,13 @@ const questions = [
     placeholder: "e.g. Sam Williams",
   },
   {
+    id: "email",
+    text: "What\u2019s your email?",
+    type: "text",
+    placeholder: "e.g. sam@email.com",
+    note: "We\u2019ll use this to send your report and let you sign back in anytime.",
+  },
+  {
     id: "age",
     text: "How old are you?",
     type: "number",
@@ -242,10 +249,18 @@ export default function FormPage() {
 
   async function handleSubmit() {
     setSubmitting(true);
-    const { name, age, location, gender, profile_image_type, ...restAnswers } =
-      responses;
+    const {
+      name,
+      email,
+      age,
+      location,
+      gender,
+      profile_image_type,
+      ...restAnswers
+    } = responses;
     const payload = {
       name,
+      email,
       age: Number(age),
       location,
       gender: gender || null,
@@ -320,7 +335,32 @@ export default function FormPage() {
           </span>
           <h2 style={questionStyle}>{current.text}</h2>
         </div>
-
+        {(current.type === "text" || current.type === "number") && (
+          <>
+            {current.note && (
+              <p style={{ fontSize: 14, color: "#888", marginBottom: 16 }}>
+                {current.note}
+              </p>
+            )}
+            <input
+              type={current.type}
+              value={responses[current.id] || ""}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder={current.placeholder}
+              style={{
+                width: "100%",
+                border: "none",
+                borderBottom: `1px solid #FFA126`,
+                outline: "none",
+                fontFamily: "var(--font-body)",
+                fontWeight: 300,
+                fontSize: 24,
+                padding: "10px 0",
+                color: "#000",
+              }}
+            />
+          </>
+        )}
         {/* Text / number / long_text inputs */}
         {(current.type === "text" || current.type === "number") && (
           <input

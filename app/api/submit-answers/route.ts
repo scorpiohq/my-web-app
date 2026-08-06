@@ -34,6 +34,7 @@ export async function POST(request: Request) {
     .insert([
       {
         name: body.name,
+        email: body.email,
         age: body.age,
         location: body.location,
         gender: body.gender,
