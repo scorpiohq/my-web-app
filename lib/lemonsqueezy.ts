@@ -9,13 +9,13 @@ export function configureLemonSqueezy() {
   }
 
   if (!configured) {
-    lemonSqueezySetup({ apiKey });
+    lemonSqueezySetup({ apiKey: apiKey.trim() });
     configured = true;
   }
 }
 
 function requireEnv(name: string) {
-  const value = process.env[name];
+  const value = process.env[name]?.trim();
   if (!value) {
     throw new Error(`${name} is not set`);
   }
@@ -85,9 +85,6 @@ export async function createBlueprintCheckout({
       redirectUrl,
       receiptButtonText: "View your progress",
       receiptThankYouNote: "Thanks for your purchase. Your Blueprint is on the way.",
-      confirmationTitle: "Payment complete",
-      confirmationMessage: "We received your payment and started preparing your Blueprint.",
-      confirmationButtonText: "Continue",
     },
   });
 
