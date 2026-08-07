@@ -10,10 +10,10 @@ export default function FormProgressStepper({
   activeStep: number;
 }) {
   const [lineProgress, setLineProgress] = useState(0);
+  const effectiveLineProgress = activeStep < 1 ? 0 : lineProgress;
 
   useEffect(() => {
     if (activeStep < 1) {
-      setLineProgress(0);
       return;
     }
 
@@ -45,7 +45,7 @@ export default function FormProgressStepper({
 
         let connectorFill = "0%";
         if (index === 0 && activeStep >= 1) {
-          connectorFill = `${lineProgress}%`;
+          connectorFill = `${effectiveLineProgress}%`;
         } else if (index < activeStep) {
           connectorFill = "100%";
         }

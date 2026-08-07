@@ -120,8 +120,7 @@ export default function FinalOffer() {
             href="/form"
             className="btn-brutal btn-brutal-primary mt-6 inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-black sm:mt-8 sm:px-8 sm:py-4"
           >
-            Get your Blueprint
-            <span aria-hidden="true">→</span>
+            Get your Blueprint →
           </Link>
         </div>
       </div>

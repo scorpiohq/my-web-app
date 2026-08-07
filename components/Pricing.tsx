@@ -78,7 +78,7 @@ export default function Pricing() {
               className="btn-brutal btn-brutal-primary mt-8 inline-block w-full max-w-md px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
               style={{ fontFamily: "var(--font-hero)" }}
             >
-              GET YOUR BLUEPRINT FOR $24
+              GET YOUR BLUEPRINT FOR $24 →
             </Link>
           </div>
 

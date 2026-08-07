@@ -33,6 +33,60 @@ body {
   background-size: 24px 24px;
 }
 
+/* Report sits on the page grid — outer canvas stays transparent */
+.report-page-shell main {
+  background-color: transparent !important;
+}
+
+.report-page-shell main article {
+  background-color: transparent !important;
+}
+
+/* Puppeteer export — full-size report at 1:1 (no screen scale transform) */
+.report-export-mode {
+  width: 2214px;
+  height: 3365px;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+}
+
+.report-export-mode .report-page-main {
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+}
+
+.report-export-mode .report-viewport {
+  width: 2214px !important;
+  height: 3365px !important;
+  margin: 0 !important;
+  overflow: visible !important;
+}
+
+.report-export-mode article {
+  transform: none !important;
+  scale: 1 !important;
+  width: 2214px !important;
+  height: 3365px !important;
+  background: #ffffff !important;
+}
+
+.report-export-mode #report-pdf-source {
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.report-export-mode #report-pdf-source img {
+  image-rendering: auto;
+}
+
 .btn-brutal {
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
@@ -76,18 +130,33 @@ body {
 @keyframes form-slide-up-in {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(18px);
+    filter: blur(3px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
 
 @keyframes form-slide-down-in {
   from {
     opacity: 0;
-    transform: translateY(-22px);
+    transform: translateY(-18px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes form-item-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -95,19 +164,81 @@ body {
   }
 }
 
+.form-journey {
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
+}
+
+.form-question {
+  font-weight: 500;
+}
+
+.form-option-text {
+  font-weight: 300;
+}
+
+.form-placeholder-text {
+  font-weight: 300;
+}
+
+.form-step-panel {
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-step-panel-hidden.form-step-exit-forward {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.form-step-panel-hidden.form-step-exit-back {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
 .form-step-enter-forward {
-  animation: form-slide-up-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: form-slide-up-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .form-step-enter-back {
-  animation: form-slide-down-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: form-slide-down-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.form-step-item {
+  opacity: 0;
+  animation: form-item-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.form-step-item-1 {
+  animation-delay: 0.06s;
+}
+
+.form-step-item-2 {
+  animation-delay: 0.14s;
+}
+
+.form-step-item-3 {
+  animation-delay: 0.22s;
+}
+
+.form-step-item-4 {
+  animation-delay: 0.3s;
+}
+
+.form-step-item-5 {
+  animation-delay: 0.38s;
 }
 
 .form-action-btn {
   transition:
-    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.28s ease,
+    box-shadow 0.28s ease;
 }
 
 .form-action-btn:hover:not(:disabled) {
@@ -118,4 +249,56 @@ body {
 .form-action-btn:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: none;
+}
+
+@keyframes checkout-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.checkout-progress-bar {
+  width: 40%;
+  animation: checkout-progress 1.1s ease-in-out infinite;
+}
+
+@keyframes report-card-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.report-card-float {
+  animation: report-card-float 4s ease-in-out infinite;
+}
+
+.report-card-float-delay-1 {
+  animation-delay: 0.4s;
+}
+
+.report-card-float-delay-2 {
+  animation-delay: 0.9s;
+}
+
+.progress-status-copy {
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+.progress-status-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.progress-status-hidden {
+  opacity: 0;
+  transform: translateY(6px);
 }

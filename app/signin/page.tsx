@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -44,9 +45,11 @@ export default function SignInPage() {
       <div className="relative z-10 w-full max-w-[300px] sm:max-w-[320px]">
         <div className="border-2 border-black bg-white px-5 py-6 shadow-[6px_6px_0_0_#000] sm:px-6 sm:py-7">
           <Link href="/" className="mb-5 inline-block">
-            <img
+            <Image
               src="/logo.svg"
               alt="Your Blueprint"
+              width={140}
+              height={32}
               className="h-7 w-auto sm:h-8"
             />
           </Link>

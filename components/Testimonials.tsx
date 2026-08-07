@@ -231,7 +231,7 @@ export default function Testimonials() {
             href="/form"
             className="btn-brutal btn-brutal-primary inline-block px-10 py-4 text-base font-semibold text-black sm:px-12 sm:text-lg"
           >
-            Get your Blueprint
+            Get your Blueprint →
           </Link>
         </div>
       </div>

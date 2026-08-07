@@ -1,9 +1,9 @@
 "use client";
 
 import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
+import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import { useEffect, useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
 
 function getOptionLetter(index: number): string {
   return String.fromCharCode(65 + index);
@@ -217,7 +217,11 @@ Ex: I traveled to 5 states on a tight budget by figuring out how to cut costs wi
   },
 ];
 
-const ACCENT = "#FFA126";
+type FormAnswer = string | string[];
+type FormResponses = Record<string, FormAnswer> & {
+  gender?: string;
+  profile_image_type?: string;
+};
 
 function ChoiceOption({
   label,
@@ -234,16 +238,16 @@ function ChoiceOption({
     <button
       type="button"
       onClick={onClick}
-      className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left transition-all duration-200 ease-out active:scale-[0.99] sm:gap-3 sm:px-3.5 sm:py-2.5 ${
+      className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.995] sm:gap-3 sm:px-3.5 sm:py-2.5 ${
         selected
           ? "border border-[#FFA126] bg-[#FFF3E0]"
           : "border border-transparent bg-[#FFFAF3] hover:bg-[#FFF6EB]"
       }`}
     >
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#FFA126] text-xs font-medium text-[#FFA126]">
+      <span className="form-option-text flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#FFA126] text-xs text-[#FFA126]">
         {letter}
       </span>
-      <span className="text-sm font-light leading-snug text-[#FFA126] sm:text-[15px]">
+      <span className="form-option-text text-sm leading-snug text-[#FFA126] sm:text-[15px]">
         {label}
       </span>
     </button>
@@ -268,14 +272,45 @@ function OptionsList({
   return <div className="grid gap-1.5">{children}</div>;
 }
 
+function FormExampleHints({ text }: { text: string }) {
+  const items = text
+    .split(/\n\n+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (items.length <= 1) {
+    return (
+      <p className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 text-sm leading-relaxed text-[#999]">
+        {text}
+      </p>
+    );
+  }
+
+  return (
+    <ul className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 space-y-2.5 text-sm text-[#999]">
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2.5 text-left leading-relaxed">
+          <span
+            className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#CFCFCF]"
+            aria-hidden="true"
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function FormPage() {
-  const router = useRouter();
   const [showIntro, setShowIntro] = useState(true);
   const [formVisible, setFormVisible] = useState(false);
   const [step, setStep] = useState(0);
   const [stepDirection, setStepDirection] = useState<"forward" | "back">("forward");
-  const [responses, setResponses] = useState<Record<string, any>>({});
+  const [responses, setResponses] = useState<FormResponses>({});
   const [submitting, setSubmitting] = useState(false);
+  const [showCheckoutTransition, setShowCheckoutTransition] = useState(false);
+  const [stepVisible, setStepVisible] = useState(true);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     if (!showIntro) {
@@ -288,15 +323,16 @@ export default function FormPage() {
   const optionCount = current.options?.length ?? 0;
   const scrollOptions = optionCount > 5;
 
-  function setAnswer(value: any) {
+  function setAnswer(value: FormAnswer) {
     setResponses({ ...responses, [current.id]: value });
   }
 
   function toggleMulti(option: string) {
-    const existing: string[] = responses[current.id] || [];
-    const updated = existing.includes(option)
-      ? existing.filter((o) => o !== option)
-      : [...existing, option];
+    const existing = responses[current.id];
+    const existingList = Array.isArray(existing) ? existing : [];
+    const updated = existingList.includes(option)
+      ? existingList.filter((o) => o !== option)
+      : [...existingList, option];
     setAnswer(updated);
   }
 
@@ -310,22 +346,35 @@ export default function FormPage() {
     });
   }
 
+  function navigateTo(nextStep: number, direction: "forward" | "back") {
+    if (isNavigating) return;
+    setIsNavigating(true);
+    setStepDirection(direction);
+    setStepVisible(false);
+
+    window.setTimeout(() => {
+      setStep(nextStep);
+      setStepVisible(true);
+      window.setTimeout(() => setIsNavigating(false), 920);
+    }, 460);
+  }
+
   function goNext() {
     if (isLast) {
       handleSubmit();
     } else {
-      setStepDirection("forward");
-      setStep(step + 1);
+      navigateTo(step + 1, "forward");
     }
   }
 
   function goBack() {
-    setStepDirection("back");
-    setStep(step - 1);
+    navigateTo(step - 1, "back");
   }
 
   async function handleSubmit() {
     setSubmitting(true);
+    setShowCheckoutTransition(true);
+
     const {
       name,
       email,
@@ -335,6 +384,7 @@ export default function FormPage() {
       profile_image_type,
       ...restAnswers
     } = responses;
+
     const payload = {
       name,
       email,
@@ -344,17 +394,34 @@ export default function FormPage() {
       answers: restAnswers,
       profile_image_type: profile_image_type || "avatar",
     };
-    const res = await fetch("/api/submit-answers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const result = await res.json();
-    setSubmitting(false);
-    if (result.success) {
-      router.push("/form/thank-you");
-    } else {
-      alert("Something went wrong: " + result.error);
+
+    const transitionStart = Date.now();
+
+    try {
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await res.json();
+
+      if (!res.ok || !result.checkoutUrl) {
+        throw new Error(result.error || "Could not start checkout");
+      }
+
+      const elapsed = Date.now() - transitionStart;
+      const remaining = Math.max(0, 900 - elapsed);
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+
+      window.location.assign(result.checkoutUrl);
+    } catch (error) {
+      setShowCheckoutTransition(false);
+      setSubmitting(false);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong starting checkout.",
+      );
     }
   }
 
@@ -370,51 +437,51 @@ export default function FormPage() {
 
   return (
     <div
-      className="flex min-h-screen flex-col bg-white transition-opacity duration-500 ease-out"
+      className="form-journey flex min-h-screen flex-col bg-white transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
       style={{ opacity: formVisible ? 1 : 0 }}
     >
+      {showCheckoutTransition && <CheckoutTransition />}
       <FormHeader activeStep={1} />
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-5 pb-10 pt-6 sm:px-8 sm:pb-12">
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-5 pb-10 pt-6 sm:px-8 sm:pb-12 lg:max-w-4xl xl:max-w-5xl">
         <div
           key={step}
-          className={`w-full ${
-            stepDirection === "forward"
-              ? "form-step-enter-forward"
-              : "form-step-enter-back"
+          className={`form-step-panel w-full ${
+            !stepVisible
+              ? `form-step-panel-hidden form-step-exit-${stepDirection}`
+              : stepDirection === "forward"
+                ? "form-step-enter-forward"
+                : "form-step-enter-back"
           }`}
         >
           <div className="flex flex-col">
-            <span className="mb-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] text-sm font-medium text-white">
+            <span className="form-step-item form-step-item-1 mb-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] text-sm font-medium text-white">
               {step + 1}
             </span>
 
-            <h1 className="text-xl font-normal leading-snug text-black sm:text-2xl sm:leading-tight">
+            <h1 className="form-step-item form-step-item-2 form-question text-lg leading-snug text-black sm:text-xl lg:text-[1.35rem] lg:whitespace-nowrap xl:text-[1.45rem]">
               {current.text}
             </h1>
 
             {(current.type === "text" ||
               current.type === "number" ||
               current.type === "long_text") &&
-              current.placeholder && (
-                <p
-                  className={`mt-1.5 text-sm text-[#999] ${
-                    current.type === "long_text"
-                      ? "leading-relaxed whitespace-pre-line"
-                      : ""
-                  }`}
-                >
+              current.placeholder &&
+              (current.type === "long_text" ? (
+                <FormExampleHints text={current.placeholder} />
+              ) : (
+                <p className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 text-sm text-[#999]">
                   {current.placeholder}
                 </p>
-              )}
+              ))}
 
             {current.note && (
-              <p className="mt-1.5 text-sm leading-relaxed text-[#888]">
+              <p className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 text-sm leading-relaxed text-[#888]">
                 {current.note}
               </p>
             )}
 
-            <div className="mt-4">
+            <div className="form-step-item form-step-item-4 mt-4">
             {(current.type === "text" || current.type === "number") && (
               <input
                 type={current.type === "number" ? "number" : "text"}
@@ -424,7 +491,7 @@ export default function FormPage() {
                 value={responses[current.id] || ""}
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="Type your answer here..."
-                className="w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl font-light text-black outline-none transition-[border-color] duration-300 placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="form-option-text w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl text-black outline-none transition-[border-color] duration-500 placeholder:font-light placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 autoFocus
               />
             )}
@@ -435,7 +502,7 @@ export default function FormPage() {
                 value={responses[current.id] || ""}
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="Type your answer here..."
-                className="w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl font-light text-black outline-none transition-[border-color] duration-300 placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl"
+                className="form-option-text w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl text-black outline-none transition-[border-color] duration-500 placeholder:font-light placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl"
                 autoFocus
               />
             )}
@@ -469,39 +536,35 @@ export default function FormPage() {
             )}
 
             {current.type === "image_choice" && (
-              <div className="grid max-w-xs grid-cols-2 gap-2">
+              <div className="grid max-w-md grid-cols-1 gap-1.5 sm:max-w-lg">
                 {[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
+                  { label: "Male", value: "Male", letter: "A" },
+                  { label: "Female", value: "Female", letter: "B" },
                 ].map((option) => {
                   const selected =
                     (responses.gender || "").toLowerCase() ===
                     option.value.toLowerCase();
                   return (
-                    <button
+                    <ChoiceOption
                       key={option.value}
-                      type="button"
+                      label={option.label}
+                      letter={option.letter}
+                      selected={selected}
                       onClick={() => chooseAvatar(option.value)}
-                      className={`rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-200 ease-out active:scale-[0.99] ${
-                        selected
-                          ? "border border-[#FFA126] bg-[#FFF3E0] text-black"
-                          : "border border-transparent bg-[#FFFAF3] text-black hover:bg-[#FFF6EB]"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
+                    />
                   );
                 })}
               </div>
             )}
             </div>
 
-            <div className="mt-5 flex items-center gap-3">
+            <div className="form-step-item form-step-item-5 mt-5 flex items-center gap-3">
             {step > 0 && (
               <button
                 type="button"
                 onClick={goBack}
-                className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-semibold text-white disabled:opacity-60"
+                disabled={isNavigating || submitting}
+                className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-medium text-white disabled:opacity-60"
                 aria-label="Go back"
               >
                 ‹
@@ -510,10 +573,10 @@ export default function FormPage() {
             <button
               type="button"
               onClick={goNext}
-              disabled={submitting}
-              className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-semibold text-white disabled:opacity-60"
+              disabled={submitting || isNavigating}
+              className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-medium text-white disabled:opacity-60"
             >
-              {isLast ? (submitting ? "Submitting..." : "Submit") : "OK"}
+              {isLast ? (submitting ? "Redirecting..." : "Submit") : "OK"}
             </button>
           </div>
           </div>

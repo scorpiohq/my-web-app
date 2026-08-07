@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 // Drop your video URL here when ready (YouTube embed, Vimeo, or direct .mp4)
 const VIDEO_EMBED_URL = "";
 
@@ -17,11 +19,14 @@ export default function VideoSection() {
               />
             </div>
           ) : (
-            <div className="relative">
-              <img
+            <div className="relative aspect-[16/9] w-full">
+              <Image
                 src="/video-section-poster.png"
                 alt="Product preview — replace with your video"
-                className="block w-full"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                priority
               />
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/10">
                 <div className="flex h-16 w-16 items-center justify-center border-2 border-black bg-[#FFC940] shadow-[4px_4px_0_0_#000] sm:h-20 sm:w-20">

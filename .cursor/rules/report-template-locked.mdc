@@ -1,0 +1,22 @@
+---
+description: Report template is final and locked — no edits unless user explicitly asks
+alwaysApply: true
+---
+
+# Report Template — FINAL & LOCKED
+
+The personalized creator report template is **complete and approved**.
+
+## Locked file
+
+- `app/report-preview/page.tsx` — `ReportTemplate`, `ReportData`, and all layout/spacing/styling
+
+## Rules
+
+- **Do not edit** this file for refactors, polish, drive-by fixes, or unrelated tasks.
+- **Do not suggest** layout, spacing, typography, or copy changes unless the user asks.
+- **Only modify** when the user **explicitly** requests a change to the report template.
+
+## Status
+
+Finalized August 2026. Lewis Hamilton sample data in preview. Wire to `/report/[id]` with API JSON when ready — without changing approved layout unless requested.

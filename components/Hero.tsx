@@ -27,7 +27,7 @@ export default function Hero() {
           href="/form"
           className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
         >
-          Get your Blueprint
+          Get your Blueprint →
         </Link>
 
         <p className="mt-8 text-sm text-[#8A8A8A] sm:mt-10">

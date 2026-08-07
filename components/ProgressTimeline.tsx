@@ -8,13 +8,9 @@ type TimelineStep = {
 
 interface ProgressTimelineProps {
   steps: TimelineStep[];
-  currentStep: number;
 }
 
-export default function ProgressTimeline({
-  steps,
-  currentStep,
-}: ProgressTimelineProps) {
+export default function ProgressTimeline({ steps }: ProgressTimelineProps) {
   const ACCENT = "#FFA126";
 
   return (

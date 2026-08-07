@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type ReportData = {
   name: string;
   age: number | string;
@@ -77,15 +79,13 @@ export default function ReportTemplate({ report }: { report: ReportData }) {
 
         {/* Profile row */}
         <div style={{ display: "flex", gap: 24 }}>
-          <img
+          <Image
             src={report.profile_image_url}
             alt={report.name}
-            style={{
-              width: 200,
-              height: 200,
-              objectFit: "cover",
-              borderRadius: 12,
-            }}
+            width={200}
+            height={200}
+            className="rounded-xl object-cover"
+            unoptimized={report.profile_image_url.startsWith("/avatars/")}
           />
           <div style={{ flex: 1 }}>
             <p>
@@ -182,7 +182,7 @@ export default function ReportTemplate({ report }: { report: ReportData }) {
             </ul>
           </div>
           <div>
-            <h4 style={{ color: accent }}>☆ What's still missing?</h4>
+            <h4 style={{ color: accent }}>☆ What&apos;s still missing?</h4>
             <p style={{ lineHeight: 1.6 }}>{report.missing_paragraph}</p>
             <button
               style={{
