@@ -62,7 +62,7 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
     throw new Error(error.message);
   }
 
-  return data.id as string;
+  return String(data.id);
 }
 
 export async function markSubmissionPaid(submissionId: string) {

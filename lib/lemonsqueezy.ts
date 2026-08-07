@@ -78,7 +78,7 @@ export async function createBlueprintCheckout({
       email,
       name,
       custom: {
-        submission_id: submissionId,
+        submission_id: String(submissionId),
       },
     },
     productOptions: {
