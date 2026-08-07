@@ -28,11 +28,25 @@ export async function POST(request: Request) {
     });
 
     const appUrl = getAppBaseUrl(request);
+    const redirectUrl = `${appUrl}/form/thank-you?submission_id=${submissionId}`;
+
+    try {
+      new URL(redirectUrl);
+    } catch {
+      return NextResponse.json(
+        {
+          error:
+            "App URL is misconfigured. Set NEXT_PUBLIC_APP_URL to your Vercel URL on Vercel.",
+        },
+        { status: 500 },
+      );
+    }
+
     const checkoutUrl = await createBlueprintCheckout({
       submissionId,
       email: body.email.trim().toLowerCase(),
       name: body.name.trim(),
-      redirectUrl: `${appUrl}/form/thank-you?submission_id=${submissionId}`,
+      redirectUrl,
     });
 
     return NextResponse.json({

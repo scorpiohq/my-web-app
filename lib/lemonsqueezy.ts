@@ -22,6 +22,30 @@ function requireEnv(name: string) {
   return value;
 }
 
+function formatLemonSqueezyError(error: unknown) {
+  if (!(error instanceof Error)) {
+    return "Failed to create Lemon Squeezy checkout";
+  }
+
+  const cause = (error as Error & { cause?: unknown }).cause;
+  if (Array.isArray(cause) && cause.length > 0) {
+    const details = cause
+      .map((item) => {
+        if (typeof item === "object" && item !== null && "detail" in item) {
+          return String(item.detail);
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    if (details.length > 0) {
+      return details.join(" ");
+    }
+  }
+
+  return error.message;
+}
+
 export async function createBlueprintCheckout({
   submissionId,
   email,
@@ -35,9 +59,13 @@ export async function createBlueprintCheckout({
 }) {
   configureLemonSqueezy();
 
-  const storeId = requireEnv("LEMONSQUEEZY_STORE_ID");
-  const variantId = requireEnv("LEMONSQUEEZY_VARIANT_ID");
+  const storeId = Number(requireEnv("LEMONSQUEEZY_STORE_ID"));
+  const variantId = Number(requireEnv("LEMONSQUEEZY_VARIANT_ID"));
   const testMode = process.env.LEMONSQUEEZY_TEST_MODE === "true";
+
+  if (!Number.isFinite(storeId) || !Number.isFinite(variantId)) {
+    throw new Error("LEMONSQUEEZY_STORE_ID and LEMONSQUEEZY_VARIANT_ID must be numbers");
+  }
 
   const checkout = await createCheckout(storeId, variantId, {
     testMode,
@@ -64,7 +92,7 @@ export async function createBlueprintCheckout({
   });
 
   if (checkout.error) {
-    throw checkout.error;
+    throw new Error(formatLemonSqueezyError(checkout.error));
   }
 
   const checkoutUrl = checkout.data?.data.attributes.url;

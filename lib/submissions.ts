@@ -205,11 +205,24 @@ export async function saveSubmissionReview(
 }
 
 export function getAppBaseUrl(request?: Request) {
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configuredUrl) {
+    const normalized = configuredUrl.replace(/\/$/, "");
+    if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
+      return normalized;
+    }
+    return `https://${normalized}`;
   }
 
   if (request) {
+    const host =
+      request.headers.get("x-forwarded-host") || request.headers.get("host");
+    const protocol = request.headers.get("x-forwarded-proto") || "https";
+
+    if (host) {
+      return `${protocol}://${host}`;
+    }
+
     return new URL(request.url).origin;
   }
 
