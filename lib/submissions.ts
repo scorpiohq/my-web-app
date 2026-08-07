@@ -1,4 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import type { StoredReportJson } from "@/lib/report-mapper";
+
+export type ReportStatus = "pending" | "generating" | "ready" | "failed";
 
 const avatarsByGender: Record<string, string[]> = {
   male: [
@@ -49,6 +52,7 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
         profile_image_type: "avatar",
         profile_image_reference: finalImageReference,
         payment_status: "pending",
+        report_status: "pending",
       },
     ])
     .select("id")
@@ -64,13 +68,106 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
 export async function markSubmissionPaid(submissionId: string) {
   const { error } = await supabaseAdmin
     .from("submissions")
-    .update({ payment_status: "paid" })
+    .update({
+      payment_status: "paid",
+      report_status: "pending",
+    })
     .eq("id", submissionId)
     .eq("payment_status", "pending");
 
   if (error) {
     throw new Error(error.message);
   }
+}
+
+export async function setReportStatus(
+  submissionId: string,
+  reportStatus: ReportStatus,
+) {
+  const { error } = await supabaseAdmin
+    .from("submissions")
+    .update({ report_status: reportStatus })
+    .eq("id", submissionId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function saveGeneratedReport(
+  submissionId: string,
+  reportJson: StoredReportJson,
+) {
+  const { error } = await supabaseAdmin
+    .from("submissions")
+    .update({
+      report_json: reportJson,
+      report_status: "ready",
+    })
+    .eq("id", submissionId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getSubmissionForGeneration(submissionId: string) {
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select(
+      "id, name, email, age, location, gender, answers, profile_image_type, profile_image_reference, payment_status, report_status, report_json",
+    )
+    .eq("id", submissionId)
+    .eq("payment_status", "paid")
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    ...data,
+    answers: (data.answers || {}) as Record<string, unknown>,
+    report_json: data.report_json as StoredReportJson | null,
+  };
+}
+
+export async function getSubmissionReportStatus(submissionId: string) {
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select("id, payment_status, report_status")
+    .eq("id", submissionId)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data as {
+    id: string;
+    payment_status: string;
+    report_status: ReportStatus;
+  };
+}
+
+export async function getSubmissionForReportPage(submissionId: string) {
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select(
+      "id, name, age, location, profile_image_reference, payment_status, report_status, report_json",
+    )
+    .eq("id", submissionId)
+    .eq("payment_status", "paid")
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    ...data,
+    report_json: data.report_json as StoredReportJson | null,
+  };
 }
 
 export type SubmissionReview = {
@@ -105,4 +202,66 @@ export async function saveSubmissionReview(
   if (!data) {
     throw new Error("Review already submitted or report not found");
   }
+}
+
+export function getAppBaseUrl(request?: Request) {
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+  }
+
+  if (request) {
+    return new URL(request.url).origin;
+  }
+
+  return "http://127.0.0.1:3000";
+}
+
+export async function enqueueReportGeneration(
+  submissionId: string,
+  request?: Request,
+) {
+  const baseUrl = getAppBaseUrl(request);
+  const secret = process.env.INTERNAL_API_SECRET;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (secret) {
+    headers.Authorization = `Bearer ${secret}`;
+  }
+
+  const response = await fetch(`${baseUrl}/api/generate-report`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ submissionId }),
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(
+      `Failed to enqueue report generation (${response.status}): ${message}`,
+    );
+  }
+}
+
+export async function triggerReportGeneration(submissionId: string) {
+  const baseUrl = getAppBaseUrl();
+  const secret = process.env.INTERNAL_API_SECRET;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (secret) {
+    headers.Authorization = `Bearer ${secret}`;
+  }
+
+  void fetch(`${baseUrl}/api/generate-report`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ submissionId }),
+  }).catch((error) => {
+    console.error("Fire-and-forget report generation failed:", error);
+  });
 }

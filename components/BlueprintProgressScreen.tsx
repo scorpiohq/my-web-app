@@ -31,6 +31,8 @@ function randomDelayMs() {
   return 2000 + Math.floor(Math.random() * 3001);
 }
 
+type ReportStatus = "pending" | "generating" | "ready" | "failed";
+
 export default function BlueprintProgressScreen({
   submissionId,
 }: {
@@ -38,18 +40,80 @@ export default function BlueprintProgressScreen({
 }) {
   const [statusIndex, setStatusIndex] = useState(0);
   const [visible, setVisible] = useState(true);
-  const isReady = statusIndex === STATUS_MESSAGES.length - 1;
-  const current = STATUS_MESSAGES[statusIndex];
+  const [reportStatus, setReportStatus] = useState<ReportStatus>("generating");
+  const [pollError, setPollError] = useState<string | null>(null);
+
+  const isReady = reportStatus === "ready";
+  const isFailed = reportStatus === "failed";
+  const current = isReady
+    ? STATUS_MESSAGES[STATUS_MESSAGES.length - 1]
+    : STATUS_MESSAGES[statusIndex];
   const reportHref = submissionId ? `/report/${submissionId}` : "/report-preview";
 
   useEffect(() => {
-    if (isReady) return;
+    if (!submissionId) {
+      return;
+    }
+
+    const activeSubmissionId = submissionId;
+    let cancelled = false;
+
+    async function pollStatus() {
+      try {
+        const response = await fetch(
+          `/api/report-status?submission_id=${encodeURIComponent(activeSubmissionId)}`,
+          { cache: "no-store" },
+        );
+
+        if (!response.ok) {
+          throw new Error("Could not check report status");
+        }
+
+        const payload = (await response.json()) as {
+          reportStatus: ReportStatus;
+        };
+
+        if (cancelled) return;
+
+        setReportStatus(payload.reportStatus);
+        setPollError(null);
+
+        if (payload.reportStatus === "ready") {
+          setStatusIndex(STATUS_MESSAGES.length - 1);
+          setVisible(true);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setPollError(
+            error instanceof Error
+              ? error.message
+              : "Could not check report status",
+          );
+        }
+      }
+    }
+
+    pollStatus();
+    const interval = setInterval(pollStatus, 3000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [submissionId]);
+
+  useEffect(() => {
+    if (isReady || isFailed || !submissionId) {
+      return;
+    }
 
     const delay = randomDelayMs();
     const fadeOutTimer = setTimeout(() => setVisible(false), delay - 280);
 
     const nextTimer = setTimeout(() => {
-      setStatusIndex((index) => Math.min(index + 1, STATUS_MESSAGES.length - 1));
+      setStatusIndex((index) =>
+        Math.min(index + 1, STATUS_MESSAGES.length - 2),
+      );
       setVisible(true);
     }, delay);
 
@@ -57,7 +121,7 @@ export default function BlueprintProgressScreen({
       clearTimeout(fadeOutTimer);
       clearTimeout(nextTimer);
     };
-  }, [statusIndex, isReady]);
+  }, [statusIndex, isReady, isFailed, submissionId]);
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-12 sm:px-6">
@@ -66,20 +130,30 @@ export default function BlueprintProgressScreen({
 
         <div className="mt-10 flex w-full flex-col items-center sm:mt-12">
           <div
-            key={statusIndex}
+            key={isReady ? "ready" : statusIndex}
             className={`progress-status-copy min-h-[52px] w-max max-w-full px-2 text-center sm:min-h-[60px] ${
               visible ? "progress-status-visible" : "progress-status-hidden"
             }`}
           >
             <p className="text-base font-semibold leading-snug text-[#333] sm:text-lg sm:whitespace-nowrap md:text-xl">
-              {current.title}
+              {isFailed ? "We hit a snag building your Blueprint" : current.title}
             </p>
-            {current.subtitle ? (
+            {isFailed ? (
+              <p className="mt-2 text-sm italic leading-relaxed text-[#9A9A9A] sm:text-base">
+                Please refresh in a minute or contact support if this continues.
+              </p>
+            ) : current.subtitle ? (
               <p className="mt-2 text-sm italic leading-relaxed text-[#9A9A9A] sm:text-base md:whitespace-nowrap">
                 {current.subtitle}
               </p>
             ) : null}
           </div>
+
+          {pollError ? (
+            <p className="mt-3 text-center text-xs text-[#c0392b] sm:text-sm">
+              {pollError}
+            </p>
+          ) : null}
 
           <div
             className={`flex justify-center transition-all duration-500 ${

@@ -1,5 +1,6 @@
 import { existsSync } from "fs";
-import puppeteer, { type Page } from "puppeteer";
+import type { Browser, Page } from "puppeteer-core";
+import puppeteer from "puppeteer-core";
 import {
   extractRasterDataUrlFromSvgFile,
   resolveLocalAvatarSvgPath,
@@ -31,7 +32,7 @@ function getAppBaseUrl() {
   return process.env.NEXT_PUBLIC_APP_URL ?? "http://127.0.0.1:3000";
 }
 
-function getChromeExecutablePath() {
+function getLocalChromeExecutablePath() {
   if (process.env.PUPPETEER_EXECUTABLE_PATH) {
     return process.env.PUPPETEER_EXECUTABLE_PATH;
   }
@@ -45,8 +46,22 @@ function getChromeExecutablePath() {
   return undefined;
 }
 
-async function launchBrowser() {
-  const executablePath = getChromeExecutablePath();
+async function launchBrowser(): Promise<Browser> {
+  if (process.env.VERCEL === "1") {
+    const chromium = await import("@sparticuz/chromium");
+    return puppeteer.launch({
+      args: chromium.default.args,
+      executablePath: await chromium.default.executablePath(),
+      headless: true,
+    });
+  }
+
+  const executablePath = getLocalChromeExecutablePath();
+  if (!executablePath) {
+    throw new Error(
+      "No local Chrome found. Set PUPPETEER_EXECUTABLE_PATH or install Google Chrome.",
+    );
+  }
 
   return puppeteer.launch({
     headless: true,
@@ -98,7 +113,10 @@ async function injectHighResProfileAvatar(page: Page, baseUrl: string) {
   const profileSrc = await page.evaluate(() => {
     const profileImg = Array.from(
       document.querySelectorAll("#report-pdf-source img"),
-    ).find((img) => img.alt !== "Your Blueprint");
+    ).find(
+      (img) =>
+        img instanceof HTMLImageElement && img.alt !== "Your Blueprint",
+    );
 
     return profileImg instanceof HTMLImageElement ? profileImg.src : null;
   });
@@ -123,7 +141,10 @@ async function injectHighResProfileAvatar(page: Page, baseUrl: string) {
   await page.evaluate((dataUrl) => {
     const profileImg = Array.from(
       document.querySelectorAll("#report-pdf-source img"),
-    ).find((img) => img.alt !== "Your Blueprint");
+    ).find(
+      (img) =>
+        img instanceof HTMLImageElement && img.alt !== "Your Blueprint",
+    );
 
     if (profileImg instanceof HTMLImageElement) {
       profileImg.src = dataUrl;
@@ -133,7 +154,10 @@ async function injectHighResProfileAvatar(page: Page, baseUrl: string) {
   await page.waitForFunction(() => {
     const profileImg = Array.from(
       document.querySelectorAll("#report-pdf-source img"),
-    ).find((img) => img.alt !== "Your Blueprint") as HTMLImageElement | undefined;
+    ).find(
+      (img) =>
+        img instanceof HTMLImageElement && img.alt !== "Your Blueprint",
+    ) as HTMLImageElement | undefined;
 
     return Boolean(profileImg?.complete && profileImg.naturalWidth >= 700);
   });

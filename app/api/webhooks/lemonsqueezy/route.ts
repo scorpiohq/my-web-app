@@ -1,6 +1,9 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
-import { markSubmissionPaid } from "@/lib/submissions";
+import {
+  markSubmissionPaid,
+  triggerReportGeneration,
+} from "@/lib/submissions";
 
 export const runtime = "nodejs";
 
@@ -63,6 +66,7 @@ export async function POST(request: Request) {
 
   try {
     await markSubmissionPaid(submissionId);
+    triggerReportGeneration(submissionId);
     return NextResponse.json({ received: true });
   } catch (error) {
     const message =

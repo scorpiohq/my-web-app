@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "app/api/generate-report/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/webhooks/lemonsqueezy/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/download-report-pdf/route.ts": {
+      "maxDuration": 120
+    }
+  }
+}

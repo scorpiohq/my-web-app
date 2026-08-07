@@ -2,12 +2,9 @@ import { NextResponse } from "next/server";
 import { createBlueprintCheckout } from "@/lib/lemonsqueezy";
 import {
   createPendingSubmission,
+  getAppBaseUrl,
   type SubmissionPayload,
 } from "@/lib/submissions";
-
-function getAppUrl(request: Request) {
-  return process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
-}
 
 export async function POST(request: Request) {
   try {
@@ -30,7 +27,7 @@ export async function POST(request: Request) {
       profile_image_type: body.profile_image_type || "avatar",
     });
 
-    const appUrl = getAppUrl(request);
+    const appUrl = getAppBaseUrl(request);
     const checkoutUrl = await createBlueprintCheckout({
       submissionId,
       email: body.email.trim().toLowerCase(),
