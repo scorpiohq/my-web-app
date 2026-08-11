@@ -4,34 +4,34 @@ import { useState } from "react";
 
 const faqs = [
   {
-    question: "CAN I CANCEL ANYTIME?",
+    question: "WHO IS THIS BLUEPRINT FOR?",
     answer:
-      "Yes, you can cancel your plan whenever you want from your account settings and you won't be charged again after the current billing period.",
+      "It's designed for beginners, aspiring creators, and anyone who wants to start building on social media but isn't sure where to begin. Whether you're starting from scratch or changing direction, the blueprint adapts to where you are today.",
   },
   {
-    question: "DO I NEED TO DOWNLOAD OR INSTALL ANYTHING?",
+    question: "WHAT EXACTLY DO I GET?",
     answer:
-      "No. Everything runs in your browser — answer the questionnaire, get your Blueprint, and download your PDF. No apps or installs required.",
+      "You'll receive a personalized Creator Blueprint built around your answers, including your best-fit direction, strengths, potential roadblocks, and practical next steps to help you start with confidence.",
   },
   {
-    question: "IS THERE A FREE TRIAL AVAILABLE?",
+    question: "IS THIS REALLY PERSONALIZED?",
     answer:
-      "We offer a one-time payment instead of a subscription. You pay once and get lifetime access to your personalized Blueprint.",
+      "Yes. Every blueprint is created using your answers, making it unique to your goals, interests, strengths, and current situation. No two blueprints are exactly the same.",
   },
   {
-    question: "CAN I UPLOAD VIDEOS AND DOCUMENTS?",
+    question: "HOW LONG DOES IT TAKE?",
     answer:
-      "Your Blueprint is built from your questionnaire answers. You receive a personalized report as an instant PDF download — no uploads needed.",
+      "The questionnaire takes about 1–3 minutes, and your personalized blueprint is usually ready within minutes after payment.",
   },
   {
-    question: "HOW MANY STUDENTS CAN I ADD?",
+    question: "WHAT HAPPENS AFTER I RECEIVE MY BLUEPRINT?",
     answer:
-      "Your Blueprint is personal to you — it's a creator roadmap built around your goals, strengths, and starting point.",
+      "You'll be able to view and download your blueprint as a PDF. If you'd like help putting it into action, you'll also have the option to continue with the Step-by-step Gameplan.",
   },
   {
-    question: "DO STUDENTS NEED THEIR OWN ACCOUNT?",
+    question: "DO YOU OFFER REFUNDS?",
     answer:
-      "This is for creators getting their own Blueprint. One purchase, one report, one account — no extra logins required.",
+      "Since every blueprint is personalized and created specifically for you, refunds generally aren't available once it has been generated. If you experience a technical issue or don't receive your blueprint, we'll make it right.",
   },
 ];
 

@@ -1,21 +1,21 @@
 const cards = [
   {
     step: 1,
-    title: "TOO MANY TOOLS BREAK FLOW",
+    title: "ANSWER 18 QUESTIONS",
     description:
-      "Jumping between platforms for videos quizzes emails and files breaks your flow every day.",
+      "Tell us about you, your interests, your goals, where you're starting from.",
   },
   {
     step: 2,
-    title: "NO CLEAR VIEW OF PROGRESS",
+    title: "LET OUR AI DO THE MAGIC",
     description:
-      "You don't know who is learning who is stuck or who already dropped out of the course.",
+      "It goes to work using our 133-page Creator Brain to build your plan.",
   },
   {
     step: 3,
-    title: "MOST STUDENTS LOSE FOCUS FAST",
+    title: "DOWNLOAD YOUR BLUEPRINT",
     description:
-      "Learners get bored lose motivation and drop out before finishing even your best content.",
+      "Your personalized Creator Blueprint is ready, Start your Journey.",
   },
 ];
 
@@ -39,16 +39,11 @@ export default function HowItWorks() {
         </span>
 
         <h2
-          className="mb-5 max-w-3xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
+          className="mb-10 max-w-3xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-12"
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          A SIMPLE 3-STEP PROCESS
+          SIMPLE. JUST THREE STEPS.
         </h2>
-
-        <p className="mb-10 max-w-2xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-          Many teachers and teams waste time switching tools lose track of
-          students and struggle to keep courses engaging.
-        </p>
 
         <div className="grid w-full gap-6 md:grid-cols-3 md:gap-8">
           {cards.map((card) => (

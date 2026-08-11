@@ -2,9 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
-  { href: "#how-it-works", label: "How it work" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#backstory", label: "The BackStory" },
+  { href: "/#how-it-works", label: "How it work" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#backstory", label: "The BackStory" },
+  { href: "/reviews", label: "What people are saying" },
+  { href: "/policies", label: "Our Policies" },
 ];
 
 function InstagramIcon() {
@@ -60,7 +62,7 @@ export default function Footer() {
 
         <div className="mb-8 flex items-center gap-4 sm:mb-10">
           <a
-            href="https://instagram.com"
+            href="https://instagram.com/yourblueprnt"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
@@ -69,7 +71,7 @@ export default function Footer() {
             <InstagramIcon />
           </a>
           <a
-            href="https://threads.net"
+            href="https://www.threads.com/@yourblueprnt"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
@@ -78,7 +80,7 @@ export default function Footer() {
             <ThreadsIcon />
           </a>
           <a
-            href="mailto:hello@yourblueprint.com"
+            href="mailto:hello@yourblueprint.in"
             className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
             aria-label="Email"
           >

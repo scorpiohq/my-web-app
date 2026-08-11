@@ -30,12 +30,12 @@ export default function Pricing() {
           className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          CHOOSE THE PLAN THAT BEST FITS YOUR GOALS
+          Pay Once, No Subscription.
         </h2>
 
         <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-          Start small or scale fast with flexible plans built for creators
-          teachers and teams ready to grow without limits.
+          Get your Blueprint today & Start your journey with what you have, and
+          in the way that actually works for you.
         </p>
 
         <div className="w-full border-2 border-black bg-white shadow-[8px_8px_0_0_#000]">
@@ -78,7 +78,7 @@ export default function Pricing() {
               className="btn-brutal btn-brutal-primary mt-8 inline-block w-full max-w-md px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
               style={{ fontFamily: "var(--font-hero)" }}
             >
-              GET YOUR BLUEPRINT FOR $24 →
+              GET YOUR BLUEPRINT →
             </Link>
           </div>
 
