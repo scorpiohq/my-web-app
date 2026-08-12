@@ -98,10 +98,13 @@ export default function FinalOffer() {
             A SIMPLE PRICING
           </span>
 
-          <h2 className="text-xl font-bold leading-snug tracking-tight text-black sm:text-2xl sm:leading-tight lg:text-[clamp(1.75rem,3vw,2.5rem)]">
-            Start your Social Media journey
-            <br />
-            with clarity, not confusion.
+          <h2 className="text-[clamp(1.05rem,4.8vw,2.5rem)] font-bold leading-snug tracking-tight text-black">
+            <span className="block whitespace-nowrap">
+              Start your Social Media journey
+            </span>
+            <span className="block whitespace-nowrap">
+              with clarity, not confusion.
+            </span>
           </h2>
 
           <p className="mt-4 text-sm leading-relaxed text-[#6B6B6B] sm:mt-5 sm:text-base lg:text-lg">

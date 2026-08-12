@@ -7,7 +7,7 @@ const cards = [
   },
   {
     step: 2,
-    title: "LET OUR AI DO THE MAGIC",
+    title: "AI DO THE MAGIC",
     description:
       "It goes to work using our 133-page Creator Brain to build your plan.",
   },
@@ -42,7 +42,7 @@ export default function HowItWorks() {
           className="mb-10 max-w-3xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-12"
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          SIMPLE. JUST THREE STEPS.
+          SIMPLE. JUST 3 STEPS!
         </h2>
 
         <div className="grid w-full gap-6 md:grid-cols-3 md:gap-8">

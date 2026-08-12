@@ -1,14 +1,9 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 import { TestimonialCard, testimonials } from "@/components/testimonial-data";
 
 const MOBILE_INITIAL_COUNT = 5;
 
 export default function Testimonials() {
-  const [showMore, setShowMore] = useState(false);
-  const hiddenTestimonials = testimonials.slice(MOBILE_INITIAL_COUNT);
-
   return (
     <section className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
@@ -20,34 +15,26 @@ export default function Testimonials() {
           className="mb-5 max-w-4xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          HELPING REAL USERS ACHIEVE REAL RESULTS
+          WHAT PEOPLE ARE SAYING
         </h2>
 
         <p className="mb-10 max-w-2xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-          Real stories from people who use the platform to teach better grow
-          faster and work smarter every day.
+          See what people had to say after receiving their personalized
+          blueprint.
         </p>
 
-        {/* Mobile: first batch + expand */}
+        {/* Mobile: first batch + link to full reviews */}
         <div className="w-full space-y-8 md:hidden">
           {testimonials.slice(0, MOBILE_INITIAL_COUNT).map((item) => (
             <TestimonialCard key={item.author} {...item} />
           ))}
 
-          {!showMore && (
-            <button
-              type="button"
-              onClick={() => setShowMore(true)}
-              className="w-full text-center text-sm font-medium text-black underline underline-offset-4 transition hover:text-black/70"
-            >
-              Wanna see more...
-            </button>
-          )}
-
-          {showMore &&
-            hiddenTestimonials.map((item) => (
-              <TestimonialCard key={item.author} {...item} />
-            ))}
+          <Link
+            href="/reviews"
+            className="block w-full text-center text-sm font-medium text-black underline underline-offset-4 transition hover:text-black/70"
+          >
+            Wanna see more...
+          </Link>
         </div>
 
         {/* Tablet & desktop: full grid */}
