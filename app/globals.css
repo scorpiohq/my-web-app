@@ -287,6 +287,67 @@ body {
   animation-delay: 0.9s;
 }
 
+@keyframes checkout-bar-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Exactly one segment (bar + 18px gap) out of three */
+    transform: translate3d(calc(-100% / 3), 0, 0);
+  }
+}
+
+.checkout-bar-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: checkout-bar-marquee 16s linear infinite;
+}
+
+.checkout-bar-segment {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  box-sizing: content-box;
+  padding-right: 18px;
+}
+
+.checkout-bar-slide {
+  display: block;
+  flex: 0 0 auto;
+  width: 300px;
+  height: 56px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.checkout-bar-mask {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 639px) {
+  .checkout-bar-slide {
+    width: 260px;
+    height: 48px;
+  }
+}
+
 .progress-status-copy {
   transition:
     opacity 0.28s ease,

@@ -32,7 +32,7 @@ export default function Hero() {
           <HeroSamplePreviewTrigger />
 
           <Link
-            href="/form"
+            href="/#pricing"
             className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
           >
             Get your Blueprint →

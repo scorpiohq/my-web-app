@@ -39,7 +39,7 @@ export default function Header() {
             Sign in
           </Link>
           <Link
-            href="/form"
+            href="/#pricing"
             className="btn-brutal btn-brutal-primary inline-block px-5 py-2.5 text-sm font-semibold text-black"
           >
             Get your Blueprint →
@@ -89,7 +89,7 @@ export default function Header() {
                 Sign in
               </Link>
               <Link
-                href="/form"
+                href="/#pricing"
                 className="btn-brutal btn-brutal-primary block px-4 py-3 text-center text-sm font-semibold text-black"
                 onClick={() => setMenuOpen(false)}
               >

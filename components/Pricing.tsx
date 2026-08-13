@@ -73,13 +73,88 @@ export default function Pricing() {
               ))}
             </ul>
 
-            <Link
-              href="/form"
-              className="btn-brutal btn-brutal-primary mt-8 inline-block w-full max-w-md px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
-              style={{ fontFamily: "var(--font-hero)" }}
-            >
-              GET YOUR BLUEPRINT →
-            </Link>
+            <div className="mx-auto mt-8 w-full max-w-md">
+              <Link
+                href="/form"
+                className="btn-brutal btn-brutal-primary inline-block w-full px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
+                style={{ fontFamily: "var(--font-hero)" }}
+              >
+                GET YOUR BLUEPRINT →
+              </Link>
+
+              <div className="mt-5 flex w-full flex-col items-center">
+                <div className="flex w-full items-center gap-2.5">
+                  <div className="flex min-w-0 flex-1 items-center">
+                    <div
+                      className="h-px w-full"
+                      style={{
+                        background:
+                          "linear-gradient(to right, transparent, rgba(0,0,0,0.55))",
+                      }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="ml-1.5 h-1 w-1 shrink-0 rounded-full bg-black"
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <p className="shrink-0 text-[10px] font-semibold tracking-[0.12em] text-black sm:text-xs sm:tracking-[0.15em]">
+                    SECURE CHECKOUT ViA LEMONSQUEEZY
+                  </p>
+
+                  <div className="flex min-w-0 flex-1 items-center">
+                    <span
+                      className="mr-1.5 h-1 w-1 shrink-0 rounded-full bg-black"
+                      aria-hidden="true"
+                    />
+                    <div
+                      className="h-px w-full"
+                      style={{
+                        background:
+                          "linear-gradient(to left, transparent, rgba(0,0,0,0.55))",
+                      }}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="checkout-bar-mask relative mt-3.5 w-full overflow-hidden"
+                  aria-hidden="true"
+                >
+                  <div className="checkout-bar-track">
+                    <div className="checkout-bar-segment">
+                      <img
+                        src="/checkout-bar.svg"
+                        alt=""
+                        width={300}
+                        height={56}
+                        className="checkout-bar-slide"
+                      />
+                    </div>
+                    <div className="checkout-bar-segment">
+                      <img
+                        src="/checkout-bar.svg"
+                        alt=""
+                        width={300}
+                        height={56}
+                        className="checkout-bar-slide"
+                      />
+                    </div>
+                    <div className="checkout-bar-segment">
+                      <img
+                        src="/checkout-bar.svg"
+                        alt=""
+                        width={300}
+                        height={56}
+                        className="checkout-bar-slide"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="px-4 pb-6 pt-2 sm:px-8 sm:pb-7 sm:pt-3">
