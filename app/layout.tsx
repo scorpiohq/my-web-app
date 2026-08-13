@@ -32,6 +32,23 @@ const fuzzyBubbles = localFont({
   display: "swap",
 });
 
+const appleGaramond = localFont({
+  src: [
+    {
+      path: "../public/AppleGaramond.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/AppleGaramond-Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-garamond",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Your Blueprint",
   description:
@@ -50,7 +67,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

@@ -6,7 +6,11 @@ export default function GameplanLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ReportPageShell userName="Lewis Hamilton" showIntro={false}>
+    <ReportPageShell
+      userName="Lewis Hamilton"
+      showIntro={false}
+      scaleReport={false}
+    >
       {children}
     </ReportPageShell>
   );

@@ -1,5 +1,6 @@
 /** Shared report canvas measurements — keep intro + report in sync */
 export const REPORT_ARTICLE_WIDTH = 2356;
+export const REPORT_ARTICLE_HEIGHT = 3525;
 export const REPORT_CARD_INSET = 71;
 export const REPORT_CARD_TOP = 80;
 

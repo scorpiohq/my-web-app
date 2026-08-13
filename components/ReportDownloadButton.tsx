@@ -4,6 +4,7 @@ import { useState } from "react";
 
 type ReportDownloadButtonProps = {
   userName: string;
+  size?: "compact" | "large";
 };
 
 function sanitizeFileName(name: string) {
@@ -16,6 +17,7 @@ function sanitizeFileName(name: string) {
 
 export default function ReportDownloadButton({
   userName,
+  size = "compact",
 }: ReportDownloadButtonProps) {
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -51,6 +53,25 @@ export default function ReportDownloadButton({
     } finally {
       setIsDownloading(false);
     }
+  }
+
+  if (size === "large") {
+    return (
+      <button
+        type="button"
+        onClick={handleDownload}
+        disabled={isDownloading}
+        aria-busy={isDownloading}
+        className="inline-flex h-[44px] w-[196px] flex-col items-center justify-center rounded-none border-2 border-black bg-[#ffc940] font-semibold text-black shadow-[3px_3px_0_0_#000] transition hover:bg-[#ffd966] disabled:cursor-wait disabled:opacity-70 sm:h-[50px] sm:w-[224px] sm:shadow-[4px_4px_0_0_#000] md:h-[56px] md:w-[250px]"
+      >
+        <span className="text-[11px] font-bold leading-none tracking-wide sm:text-xs md:text-[13px]">
+          {isDownloading ? "..." : "DOWNLOAD YOUR BLUEPRINT"}
+        </span>
+        <span className="mt-0.5 text-[8px] font-semibold leading-none sm:mt-1 sm:text-[9px] md:text-[10px]">
+          as pdf
+        </span>
+      </button>
+    );
   }
 
   return (

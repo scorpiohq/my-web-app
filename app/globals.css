@@ -42,6 +42,35 @@ body {
   background-color: transparent !important;
 }
 
+/* Scale the locked report as one document — do not reflow inner layout */
+.report-scale-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.report-scale-frame .report-page-main {
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  padding-bottom: 0 !important;
+}
+
+.report-scale-frame .report-viewport {
+  width: 100% !important;
+  height: 100% !important;
+  margin-top: 0 !important;
+  overflow: hidden;
+}
+
+.report-scale-frame .report-viewport > article {
+  position: absolute;
+  top: 0;
+  left: 0;
+  scale: var(--report-scale) !important;
+  transform: none !important;
+  transform-origin: top left;
+}
+
 /* Puppeteer export — full-size report at 1:1 (no screen scale transform) */
 .report-export-mode {
   width: 2214px;
