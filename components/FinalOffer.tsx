@@ -53,7 +53,7 @@ export default function FinalOffer() {
                   x1 Personalized Blueprint
                 </p>
                 <p className="shrink-0 whitespace-nowrap text-xs font-medium leading-none text-black sm:text-sm">
-                  $24.00
+                  $18.00
                 </p>
               </div>
 
@@ -75,7 +75,7 @@ export default function FinalOffer() {
                   className="text-3xl leading-none text-black sm:text-4xl"
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
-                  $24.00
+                  $18.00
                 </p>
               </div>
 

@@ -47,13 +47,13 @@ export default function Pricing() {
 
               <div className="flex items-end justify-center gap-1 sm:gap-1.5">
                 <p className="pb-2 text-2xl font-medium text-[#999] line-through sm:pb-3 sm:text-3xl">
-                  $49
+                  $30
                 </p>
                 <p
                   className="text-[clamp(3.5rem,12vw,5.5rem)] leading-none text-black"
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
-                  $24
+                  $18
                 </p>
               </div>
 
@@ -172,7 +172,7 @@ export default function Pricing() {
                     className="text-base text-[#999] line-through sm:text-lg"
                     style={{ fontFamily: "var(--font-hero)" }}
                   >
-                    $18
+                    $12
                   </p>
                   <p className="mt-1 text-[10px] leading-tight text-[#999] sm:text-xs">
                     SOLD OUT
@@ -187,7 +187,7 @@ export default function Pricing() {
                     className="text-2xl text-black sm:text-3xl"
                     style={{ fontFamily: "var(--font-hero)" }}
                   >
-                    $24
+                    $18
                   </p>
                   <p className="mt-1 text-[10px] leading-tight text-[#333] sm:text-xs">
                     <span className="font-bold text-black">35</span> SPOTS
@@ -201,7 +201,7 @@ export default function Pricing() {
                     className="text-base text-[#999] sm:text-lg"
                     style={{ fontFamily: "var(--font-hero)" }}
                   >
-                    $36
+                    $30
                   </p>
                   <p className="mt-1 text-[10px] leading-tight text-[#999] sm:text-xs">
                     NEXT 50 USERS
