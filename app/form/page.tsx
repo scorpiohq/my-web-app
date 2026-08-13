@@ -3,6 +3,7 @@
 import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
 import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
+import CountrySelect from "@/components/CountrySelect";
 import { useEffect, useState, type ReactNode } from "react";
 
 function getOptionLetter(index: number): string {
@@ -10,6 +11,17 @@ function getOptionLetter(index: number): string {
 }
 
 const questions = [
+  {
+    id: "instructions",
+    text: "Before We Start, A Few Things to Know",
+    type: "intro",
+    options: [
+      "There are no right or wrong answers. So just answer Honestly.",
+      "It only takes 1\u20133 minutes.",
+      "The more you share, the better your blueprint becomes.",
+      "When you\u2019re ready, hit Start and let\u2019s begin.",
+    ],
+  },
   {
     id: "name",
     text: "What should we call you?",
@@ -33,8 +45,8 @@ const questions = [
   {
     id: "location",
     text: "Where are you currently based?",
-    type: "text",
-    placeholder: "e.g. New York, United States",
+    type: "location",
+    placeholder: "Select your country",
   },
   {
     id: "photo_or_avatar",
@@ -382,6 +394,7 @@ export default function FormPage() {
       location,
       gender,
       profile_image_type,
+      instructions: _instructions,
       ...restAnswers
     } = responses;
 
@@ -455,8 +468,14 @@ export default function FormPage() {
           }`}
         >
           <div className="flex flex-col">
-            <span className="form-step-item form-step-item-1 mb-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] text-sm font-medium text-white">
-              {step + 1}
+            <span
+              className={`form-step-item form-step-item-1 mb-3 flex h-7 w-7 shrink-0 items-center justify-center text-sm font-medium ${
+                current.type === "intro"
+                  ? "rounded-full border border-[#CFCFCF] bg-white text-[#6B6B6B]"
+                  : "rounded-md bg-[#FFA126] text-white"
+              }`}
+            >
+              {current.type === "intro" ? "ⓘ" : step}
             </span>
 
             <h1 className="form-step-item form-step-item-2 form-question text-lg leading-snug text-black sm:text-xl lg:text-[1.35rem] lg:whitespace-nowrap xl:text-[1.45rem]">
@@ -465,7 +484,8 @@ export default function FormPage() {
 
             {(current.type === "text" ||
               current.type === "number" ||
-              current.type === "long_text") &&
+              current.type === "long_text" ||
+              current.type === "location") &&
               current.placeholder &&
               (current.type === "long_text" ? (
                 <FormExampleHints text={current.placeholder} />
@@ -481,7 +501,7 @@ export default function FormPage() {
               </p>
             )}
 
-            <div className="form-step-item form-step-item-4 mt-4">
+            <div className="form-step-item form-step-item-4 relative z-20 mt-4">
             {(current.type === "text" || current.type === "number") && (
               <input
                 type={current.type === "number" ? "number" : "text"}
@@ -496,6 +516,18 @@ export default function FormPage() {
               />
             )}
 
+            {current.type === "location" && (
+              <CountrySelect
+                value={
+                  typeof responses[current.id] === "string"
+                    ? (responses[current.id] as string)
+                    : ""
+                }
+                onChange={setAnswer}
+                placeholder="Select your country"
+              />
+            )}
+
             {current.type === "long_text" && (
               <input
                 type="text"
@@ -505,6 +537,31 @@ export default function FormPage() {
                 className="form-option-text w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl text-black outline-none transition-[border-color] duration-500 placeholder:font-light placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl"
                 autoFocus
               />
+            )}
+
+            {current.type === "intro" && (
+              <ul className="grid max-w-xl gap-3">
+                {current.options?.map((opt) => (
+                  <li
+                    key={opt}
+                    className="flex items-start gap-3 text-left text-sm leading-relaxed text-[#4A4A4A] sm:text-[15px]"
+                  >
+                    <span className="mt-0.5 shrink-0 text-[#888]" aria-hidden="true">
+                      ✦
+                    </span>
+                    <span>
+                      {opt.includes("hit Start") ? (
+                        <>
+                          When you&apos;re ready, hit <em>Start</em> and
+                          let&apos;s begin.
+                        </>
+                      ) : (
+                        opt
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             )}
 
             {current.type === "single_select" && (
@@ -558,7 +615,7 @@ export default function FormPage() {
             )}
             </div>
 
-            <div className="form-step-item form-step-item-5 mt-5 flex items-center gap-3">
+            <div className="form-step-item form-step-item-5 relative z-0 mt-5 flex items-center gap-3">
             {step > 0 && (
               <button
                 type="button"
@@ -576,7 +633,13 @@ export default function FormPage() {
               disabled={submitting || isNavigating}
               className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-medium text-white disabled:opacity-60"
             >
-              {isLast ? (submitting ? "Redirecting..." : "Submit") : "OK"}
+              {isLast
+                ? submitting
+                  ? "Redirecting..."
+                  : "Submit"
+                : current.id === "instructions"
+                  ? "START"
+                  : "OK"}
             </button>
           </div>
           </div>
