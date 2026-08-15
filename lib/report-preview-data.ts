@@ -58,7 +58,8 @@ export const previewReportData: ReportData = {
     "The More you enjoy, more you create better.",
     "The More you enjoy, more you create better.",
   ],
-  gameplanCopyLine1: "A direction, niche, Experiences worth sharing,",
-  gameplanCopyLine2: "& Enough time to start, The only thing missing",
-  gameplanCopyLine3: "now is a system that turns this into reality.",
+  gameplanCopyLine1:
+    "A direction, niche, Experiences worth sharing, & Enough time to start, The only thing missing now is a system that turns this into reality.",
+  gameplanCopyLine2: "",
+  gameplanCopyLine3: "",
 };

@@ -11,13 +11,13 @@ export const STAGE2_LIMITS = {
   creator_identity_title: { maxWords: 4, maxChars: 30, minWords: 2, minChars: 12 },
   goal_line: { maxWords: 20, maxChars: 100, minWords: 12, minChars: 55 },
   niche_explanation: { maxWords: 42, maxChars: 250, minWords: 28, minChars: 170 },
-  why_fits_bullet_short: { maxWords: 8, maxChars: 45, minWords: 5, minChars: 30 },
-  why_fits_bullet_long: { maxWords: 15, maxChars: 90, minWords: 10, minChars: 62 },
+  why_fits_bullet_short: { maxWords: 8, maxChars: 45, minWords: 4, minChars: 22 },
+  why_fits_bullet_long: { maxWords: 14, maxChars: 85, minWords: 8, minChars: 48 },
   why_fits_paragraph: { maxWords: 42, maxChars: 250, minWords: 28, minChars: 170 },
-  list_item: { maxWords: 8, maxChars: 45, minWords: 5, minChars: 30 },
+  list_item: { maxWords: 8, maxChars: 45, minWords: 4, minChars: 22 },
   box_summary: { maxWords: 40, maxChars: 240, minWords: 26, minChars: 160 },
-  next_move_item: { maxWords: 8, maxChars: 45, minWords: 5, minChars: 28 },
-  missing_line: { maxWords: 10, maxChars: 52, minWords: 7, minChars: 44 },
+  next_move_item: { maxWords: 8, maxChars: 45, minWords: 4, minChars: 22 },
+  missing_paragraph: { maxWords: 32, maxChars: 175, minWords: 18, minChars: 110 },
 } as const;
 
 export const DISPLAY_LIMITS = {
@@ -71,6 +71,14 @@ function stripDanglingTail(text: string) {
   return next;
 }
 
+function lastCompleteSentence(text: string) {
+  const matches = [...text.matchAll(/[.!?](?=\s|$)/g)];
+  if (matches.length === 0) return null;
+  const last = matches[matches.length - 1];
+  if (last.index == null) return null;
+  return text.slice(0, last.index + 1).trim();
+}
+
 export function trimToLimit(text: string, limit: SlotLimit) {
   let next = text.trim().replace(/\s+/g, " ");
   if (!next) return "";
@@ -88,44 +96,21 @@ export function trimToLimit(text: string, limit: SlotLimit) {
     }
   }
 
+  next = stripDanglingTail(next);
+
+  if (!/[.!?]$/.test(next)) {
+    const complete = lastCompleteSentence(next);
+    if (complete && countWords(complete) >= 4) {
+      next = complete;
+    }
+  }
+
   return stripDanglingTail(next);
 }
 
 export function parseMissingLines(missingParagraph: string): [string, string, string] {
-  const raw = missingParagraph.replace(/\r\n/g, "\n").trim();
-  if (!raw) {
-    return ["", "", ""];
-  }
-
-  const words = raw.split(/\s+/).filter(Boolean);
-  const lines: [string, string, string] = ["", "", ""];
-  let lineIndex = 0;
-
-  for (const word of words) {
-    const current = lines[lineIndex];
-    const candidate = current ? `${current} ${word}` : word;
-    const fits =
-      candidate.length <= STAGE2_LIMITS.missing_line.maxChars &&
-      countWords(candidate) <= STAGE2_LIMITS.missing_line.maxWords;
-
-    if (fits) {
-      lines[lineIndex] = candidate;
-      continue;
-    }
-
-    if (lineIndex < 2) {
-      lineIndex += 1;
-      lines[lineIndex] = word;
-      continue;
-    }
-
-    lines[2] = trimToLimit(
-      `${lines[2]} ${word}`.trim(),
-      STAGE2_LIMITS.missing_line,
-    );
-  }
-
-  return lines;
+  const raw = missingParagraph.replace(/\s+/g, " ").trim();
+  return [raw, "", ""];
 }
 
 function collectArrayViolations(
@@ -157,14 +142,17 @@ export function findStage2Violations(stage2: Stage2ReportJson): Stage2Violation[
     ["why_fits_paragraph", STAGE2_LIMITS.why_fits_paragraph],
     ["strengths_summary", STAGE2_LIMITS.box_summary],
     ["blockers_summary", STAGE2_LIMITS.box_summary],
+    ["missing_paragraph", STAGE2_LIMITS.missing_paragraph],
   ];
 
   for (const [key, limit] of strings) {
     const value = stage2[key];
     if (typeof value !== "string") continue;
-    const reason = lengthIssue(value, limit);
+    const checked =
+      key === "missing_paragraph" ? value.replace(/\s+/g, " ").trim() : value;
+    const reason = lengthIssue(checked, limit);
     if (reason) {
-      violations.push({ path: key, value, limit, reason });
+      violations.push({ path: key, value: checked, limit, reason });
     }
   }
 
@@ -199,18 +187,6 @@ export function findStage2Violations(stage2: Stage2ReportJson): Stage2Violation[
     "next_move_bullets",
     violations,
   );
-
-  parseMissingLines(stage2.missing_paragraph || "").forEach((line, index) => {
-    const reason = lengthIssue(line, STAGE2_LIMITS.missing_line);
-    if (reason) {
-      violations.push({
-        path: `missing_paragraph[${index}]`,
-        value: line,
-        limit: STAGE2_LIMITS.missing_line,
-        reason,
-      });
-    }
-  });
 
   return violations;
 }
@@ -280,6 +256,101 @@ function collectStage2Slots(stage2: Stage2ReportJson) {
   }
 
   return slots;
+}
+
+const PARAGRAPH_SLOT_KEYS: Array<keyof Stage2ReportJson> = [
+  "goal_line",
+  "niche_explanation",
+  "why_fits_paragraph",
+  "strengths_summary",
+  "blockers_summary",
+  "missing_paragraph",
+];
+
+export function findIncompleteSentenceViolations(
+  stage2: Stage2ReportJson,
+): Stage2Violation[] {
+  const violations: Stage2Violation[] = [];
+
+  for (const key of PARAGRAPH_SLOT_KEYS) {
+    const value = stage2[key];
+    if (typeof value !== "string" || !value.trim()) continue;
+    const text =
+      key === "missing_paragraph" ? value.replace(/\s+/g, " ").trim() : value.trim();
+    if (DANGLING_TAIL.test(text) || !/[.!?]$/.test(text)) {
+      violations.push({
+        path: key,
+        value: text,
+        reason: "sentence is incomplete — rewrite as a finished thought",
+      });
+    }
+  }
+
+  for (const slot of collectStage2Slots(stage2)) {
+    if (!slot.path.includes("[")) continue;
+    if (DANGLING_TAIL.test(slot.value.trim())) {
+      violations.push({
+        path: slot.path,
+        value: slot.value,
+        reason: "sentence is incomplete — rewrite as a finished thought",
+      });
+    }
+  }
+
+  return violations;
+}
+
+export function findCopyShapeViolations(
+  stage2: Stage2ReportJson,
+): Stage2Violation[] {
+  const violations: Stage2Violation[] = [];
+  const why = (stage2.why_fits_paragraph || "").trim();
+  if (
+    why &&
+    !/^(it fits you because|this direction fits you because)/i.test(why)
+  ) {
+    violations.push({
+      path: "why_fits_paragraph",
+      value: why,
+      reason:
+        'must open with "It fits you because" or "This direction fits you because"',
+    });
+  }
+
+  const missing = (stage2.missing_paragraph || "").replace(/\s+/g, " ").trim();
+  if (
+    missing &&
+    !/\b(system|gameplan|plan that|turns this|turn this)\b/i.test(missing)
+  ) {
+    violations.push({
+      path: "missing_paragraph",
+      value: missing,
+      reason:
+        "must hand off to GAMEPLAN — end with needing a system that turns the first post into the week",
+    });
+  }
+
+  for (const slot of collectStage2Slots(stage2)) {
+    if (!slot.path.includes("[")) continue;
+    const text = slot.value.trim();
+    if (/\bpersonal\b/i.test(text) && /\b(you|your|you're|you’ve|you've)\b/i.test(text)) {
+      violations.push({
+        path: slot.path,
+        value: text,
+        reason:
+          'drop "personal" — the report is already about them; you/your already does that job',
+      });
+    }
+    if (/\band\b/i.test(text) && text.length > 40) {
+      violations.push({
+        path: slot.path,
+        value: text,
+        reason: 'use & instead of "and" so the pointer stays on one line',
+      });
+    }
+  }
+
+  return violations;
 }
 
 export function findVoiceViolations(
@@ -446,10 +517,6 @@ function trimArray(
 }
 
 export function enforceStage2Limits(stage2: Stage2ReportJson): Stage2ReportJson {
-  const missingLines = parseMissingLines(stage2.missing_paragraph || "").map(
-    (line) => trimToLimit(line, STAGE2_LIMITS.missing_line),
-  );
-
   return {
     ...stage2,
     creator_identity_title: trimToLimit(
@@ -485,7 +552,10 @@ export function enforceStage2Limits(stage2: Stage2ReportJson): Stage2ReportJson 
       6,
       () => STAGE2_LIMITS.next_move_item,
     ),
-    missing_paragraph: missingLines.join("\n"),
+    missing_paragraph: trimToLimit(
+      (stage2.missing_paragraph || "").replace(/\s+/g, " ").trim(),
+      STAGE2_LIMITS.missing_paragraph,
+    ),
     gameplan_transition_line: "",
     cta_button_text: "",
   };

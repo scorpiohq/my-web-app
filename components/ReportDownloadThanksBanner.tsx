@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import ReportDownloadButton from "@/components/ReportDownloadButton";
 import { downloadReportPdf } from "@/lib/client-download-report";
@@ -10,6 +11,7 @@ type ReportDownloadThanksBannerProps = {
   showDownloadButton?: boolean;
   align?: "center" | "left";
   showEarlyBirdBadge?: boolean;
+  giftHref?: string | false;
 };
 
 export default function ReportDownloadThanksBanner({
@@ -18,6 +20,7 @@ export default function ReportDownloadThanksBanner({
   showDownloadButton = true,
   align = "center",
   showEarlyBirdBadge = false,
+  giftHref,
 }: ReportDownloadThanksBannerProps) {
   const firstName = userName.trim().split(/\s+/)[0] || "there";
   const isLeft = align === "left";
@@ -65,18 +68,26 @@ export default function ReportDownloadThanksBanner({
       >
         Your personalized blueprint is ready. We&apos;ve also got a little gift
         for you,{" "}
-        <button
-          type="button"
-          onClick={handleTextDownload}
-          disabled={linkPhase === "loading"}
-          className="font-normal text-black underline underline-offset-2 disabled:cursor-wait"
-        >
-          {linkPhase === "loading"
-            ? "preparing your pdf…"
-            : linkPhase === "error"
-              ? "try download again"
-              : "download it here"}
-        </button>
+        {giftHref === false ? (
+          <span className="underline underline-offset-2">download it here</span>
+        ) : giftHref ? (
+          <Link href={giftHref} className="underline underline-offset-2">
+            download it here
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={handleTextDownload}
+            disabled={linkPhase === "loading"}
+            className="font-normal text-black underline underline-offset-2 disabled:cursor-wait"
+          >
+            {linkPhase === "loading"
+              ? "preparing your pdf…"
+              : linkPhase === "error"
+                ? "try download again"
+                : "download it here"}
+          </button>
+        )}
         .
       </p>
       <div

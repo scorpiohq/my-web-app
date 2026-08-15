@@ -168,7 +168,9 @@ export async function generateReportPdf(
   appBaseUrl?: string,
 ) {
   const baseUrl = (appBaseUrl || getAppBaseUrl()).replace(/\/$/, "");
-  const targetUrl = `${baseUrl}${exportPath}`;
+  const exportUrl = new URL(exportPath, `${baseUrl}/`);
+  exportUrl.searchParams.set("origin", baseUrl);
+  const targetUrl = exportUrl.toString();
 
   const browser = await launchBrowser();
 

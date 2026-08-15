@@ -51,6 +51,16 @@ function ReportBrutalButton({
   );
 
   if (href) {
+    const isAbsolute = /^https?:\/\//i.test(href);
+
+    if (isAbsolute) {
+      return (
+        <a href={href} className={sharedClassName}>
+          {content}
+        </a>
+      );
+    }
+
     return (
       <Link href={href} className={sharedClassName}>
         {content}
@@ -82,7 +92,7 @@ function ReportCard({
           <li key={item}>{item}</li>
         ))}
       </ol>
-      <p className="m-0 max-h-[240px] overflow-hidden text-[40px] leading-[48px] tracking-[-0.01em]">
+      <p className="m-0 max-h-[250px] overflow-hidden text-[40px] leading-[50px] tracking-[-0.01em]">
         {description}
       </p>
     </section>
@@ -222,7 +232,7 @@ export function ReportTemplate({
                   </li>
                 )}
               </ul>
-              <p className="m-0 mt-[24px] text-[48px] leading-[74px] tracking-[-0.01em]">
+              <p className="m-0 mt-[24px] text-[48px] leading-[62px] tracking-[-0.01em]">
                 {data.whyItFitsDescription}
               </p>
             </section>
@@ -251,21 +261,24 @@ export function ReportTemplate({
               </div>
               <div className="flex min-h-[420px] flex-col">
                 <ReportHeading>What&apos;s still missing?</ReportHeading>
-                <p className="m-[29px_0_0] text-[44px] leading-[53px] tracking-[-0.01em]">
-                  {data.gameplanCopyLine1}
-                  <br />
-                  {data.gameplanCopyLine2}
-                  <br />
-                  {data.gameplanCopyLine3}
+                <p className="m-[29px_0_0] line-clamp-3 whitespace-normal text-[44px] leading-[53px] tracking-[-0.01em]">
+                  {[
+                    data.gameplanCopyLine1,
+                    data.gameplanCopyLine2,
+                    data.gameplanCopyLine3,
+                  ]
+                    .join(" ")
+                    .replace(/\s+/g, " ")
+                    .trim()}
                 </p>
-                <p className="m-[37px_0_0] whitespace-nowrap text-[44px] leading-[53px] tracking-[-0.01em]">
-                  That&apos;s why GAMEPLAN is designed to help with
+                <p className="m-[53px_0_0] whitespace-nowrap text-[44px] leading-[53px] tracking-[-0.01em]">
+                  let&apos;s build the plan to get you there.
                 </p>
                 <ReportBrutalButton
                   href={gameplanHref}
-                  className="mt-auto h-[98px] w-full -translate-y-[24px] text-[48px] font-bold leading-[58px]"
+                  className="mt-[24px] h-[98px] w-full text-[48px] font-bold leading-[58px]"
                 >
-                  Build my Step-by-Step Gameplan →
+                  Checkout your Gameplan →
                 </ReportBrutalButton>
               </div>
             </section>

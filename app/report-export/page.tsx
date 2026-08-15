@@ -9,17 +9,34 @@ import { getSubmissionForReportPage } from "@/lib/submissions";
 
 export const dynamic = "force-dynamic";
 
+function getGameplanHref(origin: string | undefined, submissionId?: string) {
+  const path = submissionId
+    ? `/gameplan?submission_id=${encodeURIComponent(submissionId)}`
+    : "/gameplan";
+  const base = (origin || process.env.NEXT_PUBLIC_APP_URL || "").replace(
+    /\/$/,
+    "",
+  );
+
+  return base ? `${base}${path}` : path;
+}
+
 export default async function ReportExportPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submission_id?: string }>;
+  searchParams: Promise<{ submission_id?: string; origin?: string }>;
 }) {
-  const { submission_id: submissionId } = await searchParams;
+  const { submission_id: submissionId, origin } = await searchParams;
+  const gameplanHref = getGameplanHref(origin, submissionId);
 
   if (!submissionId) {
     return (
       <div className="report-export-mode bg-white">
-        <ReportTemplate data={previewReportData} gameplanHref="#" exportMode />
+        <ReportTemplate
+          data={previewReportData}
+          gameplanHref={gameplanHref}
+          exportMode
+        />
       </div>
     );
   }
@@ -41,7 +58,11 @@ export default async function ReportExportPage({
 
   return (
     <div className="report-export-mode bg-white">
-      <ReportTemplate data={reportData} gameplanHref="#" exportMode />
+      <ReportTemplate
+        data={reportData}
+        gameplanHref={gameplanHref}
+        exportMode
+      />
     </div>
   );
 }

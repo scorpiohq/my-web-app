@@ -20,6 +20,17 @@ function ProfileIcon({ className = "h-5 w-5" }: { className?: string }) {
   );
 }
 
+function GiftNotificationBadge() {
+  return (
+    <span
+      className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full border border-black bg-white text-[14px] leading-none shadow-[2px_2px_0_0_#000]"
+      aria-hidden="true"
+    >
+      🎁
+    </span>
+  );
+}
+
 function ChevronDownIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg
@@ -37,9 +48,15 @@ function ChevronDownIcon({ className = "h-4 w-4" }: { className?: string }) {
 
 type ReportPageHeaderProps = {
   userName: string;
+  reportHref: string;
+  giftHref: string;
 };
 
-export default function ReportPageHeader({ userName }: ReportPageHeaderProps) {
+export default function ReportPageHeader({
+  userName,
+  reportHref,
+  giftHref,
+}: ReportPageHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const firstName = userName.trim().split(/\s+/)[0] || "Profile";
@@ -87,7 +104,21 @@ export default function ReportPageHeader({ userName }: ReportPageHeaderProps) {
                 <p className="px-4 py-2 text-xs font-medium uppercase tracking-wide text-black/50">
                   Signed in as
                 </p>
-                <p className="px-4 pb-3 text-sm font-semibold text-black">{userName}</p>
+                <Link
+                  href={reportHref}
+                  className="block px-4 pb-3 text-sm font-semibold text-black transition hover:bg-black/5"
+                  onClick={() => setProfileOpen(false)}
+                >
+                  {userName}
+                </Link>
+                <Link
+                  href={giftHref}
+                  className="relative mx-3 mb-1 mt-1 block border border-black bg-white px-4 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-black shadow-[2px_2px_0_0_#c8c8c8] transition hover:bg-black/5"
+                  onClick={() => setProfileOpen(false)}
+                >
+                  Your gift
+                  <GiftNotificationBadge />
+                </Link>
                 <Link
                   href="/signin"
                   className="block px-4 py-2.5 text-sm font-medium text-black transition hover:bg-black/5"
@@ -121,7 +152,11 @@ export default function ReportPageHeader({ userName }: ReportPageHeaderProps) {
       {menuOpen && (
         <div className="absolute inset-x-0 top-full z-20 border-t border-black/10 bg-[#f8f8f8] px-5 pb-5 shadow-lg lg:hidden">
           <div className="mx-auto max-w-md pt-4">
-            <div className="flex items-center gap-3 border border-black bg-white px-3 py-3 shadow-[2px_2px_0_0_#c8c8c8]">
+            <Link
+              href={reportHref}
+              className="flex items-center gap-3 border border-black bg-white px-3 py-3 shadow-[2px_2px_0_0_#c8c8c8]"
+              onClick={() => setMenuOpen(false)}
+            >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/15 bg-[#f3f3f3] text-black/70">
                 <ProfileIcon className="h-5 w-5" />
               </span>
@@ -132,9 +167,17 @@ export default function ReportPageHeader({ userName }: ReportPageHeaderProps) {
                 <p className="text-sm font-semibold text-black">{userName}</p>
               </div>
               <ChevronDownIcon className="ml-auto h-4 w-4 text-black/60" />
-            </div>
+            </Link>
 
             <div className="mt-4 space-y-3">
+              <Link
+                href={giftHref}
+                className="btn-brutal btn-brutal-secondary relative block px-4 py-3 text-center text-sm font-medium uppercase tracking-wide text-black"
+                onClick={() => setMenuOpen(false)}
+              >
+                Your gift
+                <GiftNotificationBadge />
+              </Link>
               <Link
                 href="/signin"
                 className="btn-brutal btn-brutal-secondary block px-4 py-3 text-center text-sm font-medium text-black"

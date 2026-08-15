@@ -5,6 +5,26 @@ import ReportPageHeader from "@/components/ReportPageHeader";
 import ReportReviewSection from "@/components/ReportReviewSection";
 import ReportScaleFrame from "@/components/ReportScaleFrame";
 
+function getPromptHref(userName: string, submissionId?: string) {
+  const params = new URLSearchParams();
+
+  if (submissionId) {
+    params.set("submission_id", submissionId);
+  }
+
+  const trimmedName = userName.trim();
+  if (trimmedName) {
+    params.set("name", trimmedName);
+  }
+
+  const query = params.toString();
+  return query ? `/prompt?${query}` : "/prompt";
+}
+
+function getReportHref(submissionId?: string) {
+  return submissionId ? `/report/${submissionId}` : "/report-preview";
+}
+
 type ReportPageShellProps = {
   userName: string;
   children: ReactNode;
@@ -13,6 +33,7 @@ type ReportPageShellProps = {
   showReviews?: boolean;
   scaleReport?: boolean;
   submissionId?: string;
+  giftHref?: string | false;
 };
 
 export default function ReportPageShell({
@@ -23,15 +44,25 @@ export default function ReportPageShell({
   showReviews = true,
   scaleReport = true,
   submissionId,
+  giftHref,
 }: ReportPageShellProps) {
+  const promptHref = getPromptHref(userName, submissionId);
+  const reportHref = getReportHref(submissionId);
+  const resolvedGiftHref =
+    giftHref !== undefined ? giftHref : promptHref;
   return (
     <div className="report-page-shell grid-bg flex min-h-screen flex-col">
-      <ReportPageHeader userName={userName} />
+      <ReportPageHeader
+        userName={userName}
+        reportHref={reportHref}
+        giftHref={promptHref}
+      />
       {showIntro ? (
         <ReportDownloadThanksBanner
           userName={userName}
           submissionId={submissionId}
           showDownloadButton={showDownloadButton}
+          giftHref={resolvedGiftHref}
         />
       ) : null}
       <div

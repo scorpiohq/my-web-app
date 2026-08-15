@@ -27,20 +27,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
+  const payload =
+    typeof body === "object" && body !== null
+      ? (body as { submissionId?: unknown; force?: unknown })
+      : {};
   const submissionId =
-    typeof body === "object" &&
-    body !== null &&
-    "submissionId" in body &&
-    typeof body.submissionId === "string"
-      ? body.submissionId.trim()
-      : "";
+    typeof payload.submissionId === "string" ? payload.submissionId.trim() : "";
+  const force = payload.force === true;
 
   if (!submissionId) {
     return NextResponse.json({ error: "Missing submissionId" }, { status: 400 });
   }
 
   try {
-    const reportJson = await generateReportForSubmission(submissionId);
+    const reportJson = await generateReportForSubmission(submissionId, { force });
     return NextResponse.json({ ok: true, reportJson });
   } catch (error) {
     console.error("Report generation failed:", error);

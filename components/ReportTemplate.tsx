@@ -195,7 +195,7 @@ export default function ReportTemplate({ report }: { report: ReportData }) {
                 marginTop: 8,
               }}
             >
-              Build my Step-by-Step Gameplan →
+              Checkout your Gameplan →
             </button>
           </div>
         </div>
