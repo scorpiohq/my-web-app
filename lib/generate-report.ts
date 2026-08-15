@@ -96,14 +96,16 @@ function mergeStage2Retry(
   ];
 
   for (const key of stringKeys) {
-    if (typeof patch[key] === "string") {
-      next[key] = patch[key];
+    const value = patch[key];
+    if (typeof value === "string") {
+      Object.assign(next, { [key]: value });
     }
   }
 
   for (const key of arrayKeys) {
-    if (Array.isArray(patch[key])) {
-      next[key] = patch[key] as string[];
+    const value = patch[key];
+    if (Array.isArray(value)) {
+      Object.assign(next, { [key]: value as string[] });
     }
   }
 
