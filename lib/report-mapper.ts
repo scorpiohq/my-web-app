@@ -1,3 +1,9 @@
+import {
+  DISPLAY_LIMITS,
+  enforceStage2Limits,
+  parseMissingLines,
+  trimDisplayField,
+} from "@/lib/report-limits";
 import type { ReportData } from "@/lib/report-preview-data";
 
 export type Stage2ReportJson = {
@@ -39,36 +45,6 @@ function asStringArray(value: unknown, length: number, fallback = ""): string[] 
   return items.slice(0, length);
 }
 
-function splitGameplanLines(missingParagraph: string, transitionLine: string) {
-  const missing = missingParagraph.trim();
-  const transition = transitionLine.trim();
-
-  if (!missing) {
-    return ["", transition, ""];
-  }
-
-  const commaIndex = missing.indexOf(",");
-  if (commaIndex > 0 && commaIndex < missing.length - 1) {
-    return [
-      `${missing.slice(0, commaIndex + 1).trim()}`,
-      missing.slice(commaIndex + 1).trim(),
-      transition,
-    ];
-  }
-
-  const words = missing.split(/\s+/);
-  if (words.length <= 6) {
-    return [missing, transition, ""];
-  }
-
-  const midpoint = Math.ceil(words.length / 2);
-  return [
-    words.slice(0, midpoint).join(" "),
-    words.slice(midpoint).join(" "),
-    transition,
-  ];
-}
-
 export function mapSubmissionToReportData(
   submission: {
     name: string;
@@ -78,7 +54,7 @@ export function mapSubmissionToReportData(
   },
   reportJson: StoredReportJson,
 ): ReportData {
-  const stage2 = reportJson.stage2;
+  const stage2 = enforceStage2Limits(reportJson.stage2);
   const profileFile = submission.profile_image_reference || "avatar_male_01.svg";
   const profileImage = profileFile.startsWith("/")
     ? profileFile
@@ -87,15 +63,15 @@ export function mapSubmissionToReportData(
       : `/avatars/${profileFile}`;
 
   const [gameplanCopyLine1, gameplanCopyLine2, gameplanCopyLine3] =
-    splitGameplanLines(
-      asString(stage2.missing_paragraph),
-      asString(stage2.gameplan_transition_line),
-    );
+    parseMissingLines(asString(stage2.missing_paragraph));
 
   return {
-    name: submission.name || "Creator",
+    name: trimDisplayField(submission.name || "Creator", DISPLAY_LIMITS.name),
     age: submission.age ?? "",
-    location: submission.location || "",
+    location: trimDisplayField(
+      submission.location || "",
+      DISPLAY_LIMITS.location,
+    ),
     goal: asString(stage2.goal_line, "I want to build something meaningful online."),
     creatorIdentity: asString(stage2.creator_identity_title, "Creator"),
     profileImage,

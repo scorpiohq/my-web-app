@@ -24,7 +24,6 @@ export async function POST(request: Request) {
       location: body.location?.trim() || "",
       gender: body.gender || null,
       answers: body.answers || {},
-      profile_image_type: body.profile_image_type || "avatar",
     });
 
     const appUrl = getAppBaseUrl(request);

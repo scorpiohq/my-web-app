@@ -67,8 +67,14 @@ export default function ReportReviewSection({
 
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as
-          | { error?: string }
+          | { error?: string; alreadySubmitted?: boolean }
           | null;
+
+        if (response.status === 409 || body?.alreadySubmitted) {
+          setIsSubmitted(true);
+          return;
+        }
+
         throw new Error(body?.error ?? "Could not submit review");
       }
 

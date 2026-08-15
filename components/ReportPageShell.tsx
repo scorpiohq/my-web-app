@@ -9,6 +9,8 @@ type ReportPageShellProps = {
   userName: string;
   children: ReactNode;
   showIntro?: boolean;
+  showDownloadButton?: boolean;
+  showReviews?: boolean;
   scaleReport?: boolean;
   submissionId?: string;
 };
@@ -17,13 +19,21 @@ export default function ReportPageShell({
   userName,
   children,
   showIntro = true,
+  showDownloadButton = true,
+  showReviews = true,
   scaleReport = true,
   submissionId,
 }: ReportPageShellProps) {
   return (
     <div className="report-page-shell grid-bg flex min-h-screen flex-col">
       <ReportPageHeader userName={userName} />
-      {showIntro ? <ReportDownloadThanksBanner userName={userName} /> : null}
+      {showIntro ? (
+        <ReportDownloadThanksBanner
+          userName={userName}
+          submissionId={submissionId}
+          showDownloadButton={showDownloadButton}
+        />
+      ) : null}
       <div
         className={`flex-1 px-4 pb-4 sm:px-6 lg:px-8 ${
           showIntro ? "pt-6 sm:pt-7" : "pt-6 sm:pt-8 lg:pt-10"
@@ -45,7 +55,9 @@ export default function ReportPageShell({
               aria-hidden="true"
             />
           ) : null}
-          <ReportReviewSection submissionId={submissionId} />
+          {showReviews ? (
+            <ReportReviewSection submissionId={submissionId} />
+          ) : null}
         </div>
       </div>
       <ReportPageFooter />

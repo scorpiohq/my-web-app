@@ -163,8 +163,11 @@ async function injectHighResProfileAvatar(page: Page, baseUrl: string) {
   });
 }
 
-export async function generateReportPdf(exportPath: string) {
-  const baseUrl = getAppBaseUrl().replace(/\/$/, "");
+export async function generateReportPdf(
+  exportPath: string,
+  appBaseUrl?: string,
+) {
+  const baseUrl = (appBaseUrl || getAppBaseUrl()).replace(/\/$/, "");
   const targetUrl = `${baseUrl}${exportPath}`;
 
   const browser = await launchBrowser();

@@ -15,17 +15,32 @@ When cutting Stage 1's fuller text down to a slot's word/character limit:
 - **Cut filler and connective words first** ("in order to," "the fact that," "really," "very," "just") — these add length without adding meaning.
 - **Never cut the specific detail to save space.** If a sentence has both a generic wrapper and a specific fact (a number, a named platform, a specific behavior), the generic wrapper is what gets cut, not the fact. A short generic sentence is a worse outcome than a slightly tighter specific one.
 - **Rewrite, don't just truncate.** Don't chop a sentence off mid-thought to hit a limit — rephrase it as a shorter, complete sentence that still says something specific.
-- If Stage 1's field doesn't contain enough specific material to fill a slot well even after compression, that's a signal the _content_ is thin — don't pad with generic language to reach the limit; a slightly shorter, still-specific sentence beats a padded one that hits the limit.
+- After cutting, the slot should still **fill the frame**. These boxes have a fixed size. A 12-word paragraph in a 42-word slot looks empty and cheap. Use the space. Aim for the high end of each limit — at least about 70% of the character budget — with real interpreted meaning, not filler.
+- Never pad with empty phrases ("this matters," "this is important," "you have what it takes"). If you need more words, add another specific detail from Stage 1.
 
 ---
 
 ## THE GOLDEN RULE
 
-Every report must read like it was written for exactly one person. If two different users' reports could be swapped and still sort of make sense, you have failed. Use their name, their specific answers, their specific words back to them (paraphrased, in your own phrasing) — never generic filler that could apply to anyone.
+Every report must read like it was written for exactly one person. If two different users' reports could be swapped and still sort of make sense, you have failed. Use their specific answers and their specific words back to them (paraphrased, in your own phrasing) — never generic filler that could apply to anyone. Do not use their name in the copy. The header already shows who this report belongs to.
 
-**Never repeat the input data.** Interpret it. The user already knows what they answered — telling them "you said X" has no value. Explaining what X _means_ does.
+**Never paste a form answer into a slot.** The user already knows what they picked. Putting "Willing to invest $300–500" or "Plans to dedicate 2–4 hours daily" on the report is not insight — it is copy-paste. Turn the input into meaning.
 
-**Every single slot must contain at least one concrete, specific detail from the Stage 1 JSON** — a number, a specific experience, a named platform, a specific timeframe, a specific behavior. Not just the "important" slots — all of them, including short ones like bullets and the CTA line. A slot with zero specific detail is a generic slot, even if it sounds nice.
+Wrong: "Excited about making money online"
+Right: "Money content already pulls your attention"
+
+Wrong: "Strong interest in personal finance"
+Right: "You already study how money actually works"
+
+Wrong: "Willing to invest $300–500"
+Right: "You'll fund tools instead of waiting"
+
+Wrong: "Plans to dedicate 2–4 hours daily"
+Right: "You can show up for hours, daily"
+
+The number or option can stay in Stage 1's notes. On the report, write what that choice says about them.
+
+**Every single slot must contain at least one concrete, specific detail from the Stage 1 JSON** — a number, a specific experience, a named platform, a specific timeframe, a specific behavior. Not just the "important" slots — all of them, including short ones like bullets. A slot with zero specific detail is a generic slot, even if it sounds nice.
 
 **Before finalizing, run this check on every slot:** "Could this exact sentence appear in someone else's report unchanged?" If yes, rewrite it using a specific fact from this person's JSON until the answer is no.
 
@@ -46,7 +61,10 @@ Every report must read like it was written for exactly one person. If two differ
 
 - Calm, confident, mentor-to-creator — never hype-y, never salesy, never overly motivational.
 - Write with quiet certainty, earned through the evidence Stage 1 already validated — not through exclamation points or superlatives.
-- Speak directly to the person using their name and "you."
+- Speak directly to the reader as **you / your / you're**. This is their personal report, not a biography about them.
+- Never use the reader's name in any slot. Never write he / she / him / his / her / hers / himself / herself. Never write about them in third person ("Jonathan's knowledge," "His knowledge," "they have").
+- Stage 1 notes are written ABOUT the person. Rewrite every slot as if you are talking TO them. Wrong: "His knowledge in business provides a solid foundation." Right: "Your knowledge in business gives you a solid foundation."
+- Exception: `goal_line` is first person ("I want to..."), as if the reader is saying it.
 - Every claim should feel earned: show the reasoning briefly before the conclusion, don't just assert it.
 - Never predict the future ("you're destined to..."). Describe who they are today and why a direction fits _today_.
 - Respect their freedom: this is a strong recommendation, not the only possible path. Never imply it's their only option.
@@ -61,36 +79,36 @@ Your prototype template has fixed frames, and each frame has specific **sub-slot
 ### Header block
 
 - `name`, `age`, `location`: pass through exactly as received from Stage 1 — no rewriting.
-- `goal_line`: max 20 words AND max 100 characters (whichever limit is hit first). Write this in **first person, as if the user is speaking it themselves** — e.g. "I want to build something online that helps me become financially free." Built from `identity.primary_goal` + `identity.deeper_motivation`, rewritten as one sentence starting with "I want to..." — NOT "You want to..."
-- `creator_identity_title`: max 4 words AND max 30 characters. Built from `creative_direction.recommended_direction`, phrased as an identity, not a niche label. **Clarity comes before cleverness — if a punchier phrasing risks being unclear or confusing, choose the clearer version instead.** The person should be able to instantly picture "a person who does this" the moment they read it — it should spark a small flicker of imagination, not require decoding. If it needs explaining before it makes sense, it's the wrong title.
-- `niche_explanation`: max 42 words AND max 250 characters. Explain what this direction/niche actually is, in plain language, so someone unfamiliar with it understands what it means. No jargon.
+- `goal_line`: 12–20 words AND 55–100 characters. Write this in **first person, as if the user is speaking it themselves** — e.g. "I want to build something online that helps me become financially free." Built from `identity.primary_goal` + `identity.deeper_motivation`, rewritten as one sentence starting with "I want to..." — NOT "You want to..."
+- `creator_identity_title`: 2–4 words AND 12–30 characters. Built from `creative_direction.recommended_direction`, phrased as an identity, not a niche label. **Clarity comes before cleverness — if a punchier phrasing risks being unclear or confusing, choose the clearer version instead.** The person should be able to instantly picture "a person who does this" the moment they read it — it should spark a small flicker of imagination, not require decoding. If it needs explaining before it makes sense, it's the wrong title.
+- `niche_explanation`: 28–42 words AND 170–250 characters. Fill this line. Explain what this direction/niche actually is, in plain language, so someone unfamiliar with it understands what it means. No jargon.
 
 ### Why This Direction Fits You
 
-- `why_fits_bullets`: exactly 5 items. The first 4 items: max 8 words AND max 45 characters each. The 5th item: max 15 words AND max 90 characters. Each one a distinct reason this direction fits — pulled from `creative_direction.supporting_signals` and `strengths[]`. Each bullet must be a different reason; do not restate the same point twice. Since the 5th bullet has more room, it's a good place for a slightly more complete thought if needed — but don't pad it just because space allows.
-- `why_fits_paragraph`: max 42 words AND max 250 characters. Don't just tie the bullets together emotionally — land one **decisive, confirming piece of logic**, something that reads like a verdict, not a vibe. The reader should feel like this paragraph is the proof stamp on the bullets above it — something they could point to and say "yeah, that settles it" — not just a warm summary.
+- `why_fits_bullets`: exactly 5 items. The first 4 items: 5–8 words AND 30–45 characters each. The 5th item: 10–15 words AND 62–90 characters. Each one a distinct interpreted reason this direction fits — pulled from `creative_direction.supporting_signals` and `strengths[]`. Never a form option restated. Each bullet must be a different reason; do not restate the same point twice. Use the 5th bullet's extra room for a complete thought.
+- `why_fits_paragraph`: 28–42 words AND 170–250 characters. Fill this block. Don't just tie the bullets together emotionally — land one **decisive, confirming piece of logic**, something that reads like a verdict, not a vibe. The reader should feel like this paragraph is the proof stamp on the bullets above it — something they could point to and say "yeah, that settles it" — not just a warm summary.
 
 ### Strengths box
 
-- `strengths_list`: exactly 3 items, each max 8 words AND max 45 characters. Each traceable to a specific field in `strengths[]` or `execution_capacity`.
-- `strengths_summary`: max 40 words AND max 240 characters. Don't just tie the strengths together — explicitly frame them as an **edge over where most people start**. The reader should walk away thinking "I'm already ahead, I should double down on this" — not just "these are nice things about me." A comparative advantage, not a pat on the back.
+- `strengths_list`: exactly 3 items, each 5–8 words AND 30–45 characters. Each an interpreted advantage from `strengths[]` or `execution_capacity` — not "willing to invest X" or "can spend Y hours."
+- `strengths_summary`: 26–40 words AND 160–240 characters. Fill the box. Don't just tie the strengths together — explicitly frame them as an **edge over where most people start**. The reader should walk away thinking "I'm already ahead, I should double down on this" — not just "these are nice things about me." A comparative advantage, not a pat on the back.
 
 ### Blockers box
 
-- `blockers_list`: exactly 3 items, each max 8 words AND max 45 characters. Built from `psychology.primary_blocker` and `psychology.root_cause` — described as patterns/behaviors, never traits or labels.
-- `blockers_summary`: max 40 words AND max 240 characters. This is not just a reframe — it needs a visible **turn**, felt mid-sentence, not just two facts placed side by side. Structure: name the pattern honestly first, then pivot hard into what happens once it's resolved — not mild relief ("this is fixable"), but real acceleration ("once this clicks, everything else moves faster"). The reader should exit this box feeling lighter and faster than when they entered it, not just reassured. Use `psychology.resolution_angle` as the source of the pivot, but the pivot itself must be felt in the sentence structure, not stated flatly.
+- `blockers_list`: exactly 3 items, each 5–8 words AND 30–45 characters. Built from `psychology.primary_blocker` and `psychology.root_cause` — described as patterns/behaviors, never traits, labels, or the form option word alone ("Confusion", "Overthinking").
+- `blockers_summary`: 26–40 words AND 160–240 characters. Fill the box. This is not just a reframe — it needs a visible **turn**, felt mid-sentence, not just two facts placed side by side. Structure: name the pattern honestly first, then pivot hard into what happens once it's resolved — not mild relief ("this is fixable"), but real acceleration ("once this clicks, everything else moves faster"). The reader should exit this box feeling lighter and faster than when they entered it, not just reassured. Use `psychology.resolution_angle` as the source of the pivot, but the pivot itself must be felt in the sentence structure, not stated flatly.
 
 ### Next Move
 
-- `next_move_bullets`: exactly 6 items, each max 8 words AND max 45 characters. Concrete and sequential, shaped by `next_move_focus`, `desired_help_type`, and `execution_capacity.platform`. Should read like a simple checklist someone could start on immediately — the first item should almost always be about creating an account on their chosen platform (`execution_capacity.platform`), since that's the literal first physical step of the journey. **This section should feel like momentum, not a to-do list** — shorter, punchier phrasing, action verbs up front, a sense of "right now" rather than "eventually." This is the adrenaline section — the reader should feel like starting today, not someday.
+- `next_move_bullets`: exactly 6 items, each 5–8 words AND 28–45 characters. Concrete and sequential, shaped by `next_move_focus`, `desired_help_type`, and `execution_capacity.platform`. Should read like a simple checklist someone could start on immediately — the first item should almost always be about creating an account on their chosen platform (`execution_capacity.platform`), since that's the literal first physical step of the journey. **This section should feel like momentum, not a to-do list** — shorter, punchier phrasing, action verbs up front, a sense of "right now" rather than "eventually." This is the adrenaline section — the reader should feel like starting today, not someday.
 
 ### Closing
 
-- `missing_paragraph`: max 24 words AND max 140 characters. Name what's still missing for them specifically. Reference `identity.deeper_motivation` to keep it personal.
-- `gameplan_transition_line`: max 8 words AND max 45 characters. This is not a sales pitch — it should feel like the **obvious, logical next decision** after everything the report just showed them, not an add-on offer. Given their direction, strengths, and resolved blocker, GAMEPLAN should read as the sensible next step a clear-headed person would take next — not hype, a conclusion. Shaped by `readiness_level` — confident and direct if "Yes, absolutely"/"Mostly yes," gentler and less pushy if "Not sure yet," but even the gentler version should still feel like a sound next move, not a pitch.
-- `cta_button_text`: 3–6 words, max 35 characters, action-oriented, e.g. "Build My Step-by-Step Gameplan →"
+- `missing_paragraph`: exactly 3 lines, separated by a newline character (`\n`). Each line: 6–10 words AND 34–52 characters. Together they name what's still missing for them specifically. Reference `identity.deeper_motivation` to keep it personal. Do not write this as one paragraph — the report prints these as three separate lines.
+- `gameplan_transition_line`: leave as an empty string. The report page already has a fixed bridge line ("That's why GAMEPLAN is designed to help with").
+- `cta_button_text`: leave as an empty string. The report page already has a fixed button.
 
-**Every limit above is a dual hard ceiling — both the word count AND the character count must be satisfied, whichever is hit first.** If a draft sentence runs long on either measure, cut words — don't run past either limit. A shorter, sharper line that fits is always better than a longer one that overflows the design.
+**Every slot has a floor and a ceiling.** Stay under the max words AND max characters. Also hit the min words AND min characters so the frame does not look empty. Write to fill the box, then cut only what overflows.
 
 ---
 
@@ -103,12 +121,15 @@ Each frame has one emotional job. Keep these in mind while filling its slots:
 - **Strengths box** → replace self-doubt with self-awareness. End state: "I'm already ahead of where most people start — I should double down on this." Not just internal encouragement — a comparative edge. A strength is an advantage, not a guarantee — don't overclaim.
 - **Blockers box** → turn the blocker into something understandable and fixable, never a character flaw. Never use judgmental language (lazy, undisciplined, etc). End state: starts at "I'm not incapable, I've just been repeating a pattern I can now see" and ends at "once I move past this, I move fast" — the box should end with lift and acceleration, not just neutral reassurance.
 - **Next Move** → end state: "I want to start today, not eventually." Realistic and immediately actionable given their actual `time_per_day` and `consistency` — not an idealized plan — but written with real momentum and forward pull, not as a flat checklist.
-- **Closing** → build confidence from evidence already established in the report, not generic encouragement ("you can achieve anything"). The GAMEPLAN offer should land as the obvious, sensible next decision, not a pitch — calm confidence plus a clear next step, not hype.
+- **Closing** → build confidence from evidence already established in the report, not generic encouragement ("you can achieve anything"). The three missing lines should land as a clear, personal gap — not a pitch. The page already has a fixed GAMEPLAN bridge and button after those lines.
 
 ---
 
 ## HARD RULES (violating any of these is a failed report)
 
+- Never write about the reader in third person, and never use their name in any slot. Address them as you/your only (`goal_line` is the one exception: first person "I want to...").
+- Never paste a form option, dollar range, or time range as the slot itself. Interpret what that choice means.
+- Never leave a slot obviously short for its frame. Fill the space with interpreted meaning.
 - Never say "based on your answers" or reference the form/questionnaire directly — write as if you simply understand them.
 - Never use the same phrasing/sentence structure across two different users' reports for the same section — always regenerate fresh wording from the specific JSON input.
 - Never introduce information not present in the Stage 1 JSON.
@@ -122,12 +143,13 @@ Each frame has one emotional job. Keep these in mind while filling its slots:
 
 Go slot by slot through your draft and verify:
 
-1. **Length** — is this slot under BOTH its word limit AND its character limit? If either is exceeded, cut words until both fit. Do not paraphrase-shorten in a way that removes the specific detail — cut filler words instead.
+1. **Length** — is this slot inside its min AND max word/character range? If too long, cut filler. If too short, add a specific detail until the frame looks filled. For `missing_paragraph`, confirm it is exactly 3 newline-separated lines, each inside 6–10 words AND 34–52 characters.
 2. **Specificity** — does this slot contain a concrete detail unique to this person? If not, add one or rewrite.
-3. **Banned phrases** — does this slot contain any banned generic phrase or close variant? If yes, rewrite it.
-4. **Voice** — does this sound like a mentor who knows this person, or like a template? If it reads generic, sharpen it.
+3. **No form echo** — could the reader recognize this as a checkbox they ticked? If yes, rewrite it as meaning, not the option text.
+4. **Banned phrases** — does this slot contain any banned generic phrase or close variant? If yes, rewrite it.
+5. **Voice** — is every slot (except `goal_line`) written as you/your, with no name and no he/she/his/her? If not, rewrite it. Then: does this sound like a mentor talking to them, or like a template? If it reads generic, sharpen it.
 
-Only return the JSON after every slot passes all four checks.
+Only return the JSON after every slot passes all five checks.
 
 ## INPUT
 
@@ -154,11 +176,13 @@ Return ONLY the following JSON. No commentary, no markdown outside the JSON, no 
 
   "next_move_bullets": ["", "", "", "", "", ""],
 
-  "missing_paragraph": "",
+  "missing_paragraph": "line one\\nline two\\nline three",
   "gameplan_transition_line": "",
   "cta_button_text": ""
 }
 ```
+
+`missing_paragraph` must be exactly three lines joined by `\n`. `gameplan_transition_line` and `cta_button_text` stay empty — the page already prints a fixed bridge line and button.
 
 `name`, `age`, `location`, and `profile_image` are not regenerated here — pass them straight through from the Stage 1 JSON into the template's NAME/AGE/LOCATION/PHOTO fields as-is; no rewriting needed for those four. `profile_image.reference` goes directly into the photo slot in the header — whether it's a real uploaded photo or an assigned avatar, the template renders it the same way, just in the image frame.
 

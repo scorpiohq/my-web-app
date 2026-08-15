@@ -9,6 +9,7 @@ export default function GameplanLayout({
     <ReportPageShell
       userName="Lewis Hamilton"
       showIntro={false}
+      showReviews={false}
       scaleReport={false}
     >
       {children}

@@ -27,7 +27,6 @@ export type SubmissionPayload = {
   location: string;
   gender: string | null;
   answers: Record<string, unknown>;
-  profile_image_type: string;
 };
 
 function pickAvatar(gender: string | null) {
@@ -49,7 +48,6 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
         location: payload.location,
         gender: payload.gender,
         answers: payload.answers,
-        profile_image_type: "avatar",
         profile_image_reference: finalImageReference,
         payment_status: "pending",
         report_status: "pending",
@@ -115,7 +113,7 @@ export async function getSubmissionForGeneration(submissionId: string) {
   const { data, error } = await supabaseAdmin
     .from("submissions")
     .select(
-      "id, name, email, age, location, gender, answers, profile_image_type, profile_image_reference, payment_status, report_status, report_json",
+      "id, name, email, age, location, gender, answers, profile_image_reference, payment_status, report_status, report_json",
     )
     .eq("id", submissionId)
     .eq("payment_status", "paid")
@@ -186,21 +184,39 @@ export async function saveSubmissionReview(
     submitted_at: new Date().toISOString(),
   };
 
-  const { data, error } = await supabaseAdmin
+  const { data: submission, error: loadError } = await supabaseAdmin
+    .from("submissions")
+    .select("id, payment_status, review")
+    .eq("id", submissionId)
+    .maybeSingle();
+
+  if (loadError) {
+    throw new Error(loadError.message);
+  }
+
+  if (!submission || submission.payment_status !== "paid") {
+    throw new Error("Report not found");
+  }
+
+  const existing = submission.review as SubmissionReview | null;
+  if (
+    existing &&
+    typeof existing === "object" &&
+    typeof existing.rating === "number"
+  ) {
+    const alreadySubmitted = new Error("Review already submitted");
+    alreadySubmitted.name = "ReviewAlreadySubmitted";
+    throw alreadySubmitted;
+  }
+
+  const { error: saveError } = await supabaseAdmin
     .from("submissions")
     .update({ review: payload })
     .eq("id", submissionId)
-    .eq("payment_status", "paid")
-    .is("review", null)
-    .select("id")
-    .maybeSingle();
+    .eq("payment_status", "paid");
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  if (!data) {
-    throw new Error("Review already submitted or report not found");
+  if (saveError) {
+    throw new Error(saveError.message);
   }
 }
 

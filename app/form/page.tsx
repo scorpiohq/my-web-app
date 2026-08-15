@@ -4,7 +4,7 @@ import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
 import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import CountrySelect from "@/components/CountrySelect";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 function getOptionLetter(index: number): string {
   return String.fromCharCode(65 + index);
@@ -232,7 +232,6 @@ Ex: I traveled to 5 states on a tight budget by figuring out how to cut costs wi
 type FormAnswer = string | string[];
 type FormResponses = Record<string, FormAnswer> & {
   gender?: string;
-  profile_image_type?: string;
 };
 
 function ChoiceOption({
@@ -273,15 +272,75 @@ function OptionsList({
   children: ReactNode;
   scrollable?: boolean;
 }) {
-  if (scrollable) {
-    return (
-      <div className="max-h-[min(38vh,260px)] overflow-y-auto overscroll-contain sm:max-h-[min(42vh,300px)]">
-        <div className="grid gap-1.5 pr-1">{children}</div>
-      </div>
-    );
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [showBar, setShowBar] = useState(true);
+  const [thumb, setThumb] = useState({ top: 0, height: 40 });
+
+  function updateBar() {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const overflow = scrollHeight - clientHeight;
+    const canScroll = overflow > 2;
+    const atBottom = canScroll && scrollTop >= overflow - 2;
+
+    setShowBar(canScroll && !atBottom);
+
+    if (!canScroll) return;
+
+    const height = Math.max(28, (clientHeight / scrollHeight) * clientHeight);
+    const maxTop = Math.max(0, clientHeight - height);
+    const top = maxTop * (scrollTop / overflow);
+
+    setThumb({ top, height });
   }
 
-  return <div className="grid gap-1.5">{children}</div>;
+  useLayoutEffect(() => {
+    if (!scrollable) return;
+
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    updateBar();
+    const frame = requestAnimationFrame(updateBar);
+    const observer = new ResizeObserver(updateBar);
+
+    observer.observe(el);
+    el.addEventListener("scroll", updateBar, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      el.removeEventListener("scroll", updateBar);
+    };
+  }, [scrollable, children]);
+
+  if (!scrollable) {
+    return <div className="grid gap-1.5">{children}</div>;
+  }
+
+  return (
+    <div className="relative">
+      <div
+        ref={scrollerRef}
+        className="form-options-scroll max-h-[min(34vh,220px)] overscroll-contain sm:max-h-[min(36vh,236px)]"
+      >
+        <div className="grid gap-1.5 pr-3">{children}</div>
+      </div>
+      {showBar ? (
+        <div
+          className="pointer-events-none absolute right-0 top-0 h-full w-1.5 rounded-full bg-[#f3e6d4]"
+          aria-hidden="true"
+        >
+          <div
+            className="absolute left-0 w-full rounded-full bg-[#ffa126]"
+            style={{ top: thumb.top, height: thumb.height }}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 function FormExampleHints({ text }: { text: string }) {
@@ -353,7 +412,6 @@ export default function FormPage() {
     setResponses({
       ...responses,
       [current.id]: value,
-      profile_image_type: "avatar",
       gender: value,
     });
   }
@@ -393,7 +451,6 @@ export default function FormPage() {
       age,
       location,
       gender,
-      profile_image_type,
       instructions: _instructions,
       ...restAnswers
     } = responses;
@@ -405,7 +462,6 @@ export default function FormPage() {
       location,
       gender: gender || null,
       answers: restAnswers,
-      profile_image_type: profile_image_type || "avatar",
     };
 
     const transitionStart = Date.now();
@@ -552,8 +608,9 @@ export default function FormPage() {
                     <span>
                       {opt.includes("hit Start") ? (
                         <>
-                          When you&apos;re ready, hit <em>Start</em> and
-                          let&apos;s begin.
+                          When you&apos;re ready, hit <em>Start</em>
+                          {" "}
+                          and let&apos;s begin.
                         </>
                       ) : (
                         opt

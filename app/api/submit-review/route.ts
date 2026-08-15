@@ -52,6 +52,18 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   } catch (error) {
     console.error("Review submission failed:", error);
+
+    if (error instanceof Error && error.name === "ReviewAlreadySubmitted") {
+      return Response.json(
+        { error: "Review already submitted", alreadySubmitted: true },
+        { status: 409 },
+      );
+    }
+
+    if (error instanceof Error && error.message === "Report not found") {
+      return Response.json({ error: "Report not found" }, { status: 404 });
+    }
+
     return Response.json({ error: "Failed to save review" }, { status: 500 });
   }
 }
