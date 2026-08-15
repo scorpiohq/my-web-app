@@ -27,3 +27,33 @@ export function getReportPdfDownloadUrl({
 
   return `/api/download-report-pdf?${params.toString()}`;
 }
+
+export async function downloadReportPdf({
+  userName,
+  submissionId,
+}: {
+  userName: string;
+  submissionId?: string;
+}) {
+  const response = await fetch(getReportPdfDownloadUrl({ userName, submissionId }), {
+    signal: AbortSignal.timeout(90_000),
+  });
+
+  if (!response.ok) {
+    throw new Error("PDF generation failed");
+  }
+
+  const blob = await response.blob();
+  if (!blob.size || blob.type.includes("json")) {
+    throw new Error("PDF generation failed");
+  }
+
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = objectUrl;
+  link.download = getReportPdfFileName(userName);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(objectUrl);
+}

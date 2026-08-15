@@ -12,7 +12,7 @@ const CARD_HEIGHT = 3365;
 const A4_WIDTH_PX = 794;
 const A4_HEIGHT_PX = 1123;
 const PDF_SCALE = Math.min(A4_WIDTH_PX / CARD_WIDTH, A4_HEIGHT_PX / CARD_HEIGHT);
-const PDF_RENDER_DPR = 4;
+const PDF_RENDER_DPR = 2;
 
 function getCenteredMargins() {
   const contentWidth = CARD_WIDTH * PDF_SCALE;

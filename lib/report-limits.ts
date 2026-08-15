@@ -17,7 +17,7 @@ export const STAGE2_LIMITS = {
   list_item: { maxWords: 8, maxChars: 45, minWords: 5, minChars: 30 },
   box_summary: { maxWords: 40, maxChars: 240, minWords: 26, minChars: 160 },
   next_move_item: { maxWords: 8, maxChars: 45, minWords: 5, minChars: 28 },
-  missing_line: { maxWords: 10, maxChars: 52, minWords: 6, minChars: 34 },
+  missing_line: { maxWords: 10, maxChars: 52, minWords: 7, minChars: 44 },
 } as const;
 
 export const DISPLAY_LIMITS = {
@@ -60,6 +60,17 @@ function lengthIssue(text: string, limit: SlotLimit) {
   return null;
 }
 
+const DANGLING_TAIL =
+  /(?:\s+(?:for|while|to|and|or|but|with|of|a|an|the|your|you|in|on|at|as|into|from|by))$/i;
+
+function stripDanglingTail(text: string) {
+  let next = text.trim();
+  while (DANGLING_TAIL.test(next)) {
+    next = next.replace(DANGLING_TAIL, "").trim();
+  }
+  return next;
+}
+
 export function trimToLimit(text: string, limit: SlotLimit) {
   let next = text.trim().replace(/\s+/g, " ");
   if (!next) return "";
@@ -77,7 +88,7 @@ export function trimToLimit(text: string, limit: SlotLimit) {
     }
   }
 
-  return next;
+  return stripDanglingTail(next);
 }
 
 export function parseMissingLines(missingParagraph: string): [string, string, string] {
@@ -86,30 +97,35 @@ export function parseMissingLines(missingParagraph: string): [string, string, st
     return ["", "", ""];
   }
 
-  const fromNewlines = raw
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const words = raw.split(/\s+/).filter(Boolean);
+  const lines: [string, string, string] = ["", "", ""];
+  let lineIndex = 0;
 
-  if (fromNewlines.length >= 3) {
-    return [fromNewlines[0], fromNewlines[1], fromNewlines[2]];
+  for (const word of words) {
+    const current = lines[lineIndex];
+    const candidate = current ? `${current} ${word}` : word;
+    const fits =
+      candidate.length <= STAGE2_LIMITS.missing_line.maxChars &&
+      countWords(candidate) <= STAGE2_LIMITS.missing_line.maxWords;
+
+    if (fits) {
+      lines[lineIndex] = candidate;
+      continue;
+    }
+
+    if (lineIndex < 2) {
+      lineIndex += 1;
+      lines[lineIndex] = word;
+      continue;
+    }
+
+    lines[2] = trimToLimit(
+      `${lines[2]} ${word}`.trim(),
+      STAGE2_LIMITS.missing_line,
+    );
   }
 
-  if (fromNewlines.length === 2) {
-    return [fromNewlines[0], fromNewlines[1], ""];
-  }
-
-  const words = raw.split(/\s+/);
-  if (words.length <= 10) {
-    return [raw, "", ""];
-  }
-
-  const third = Math.ceil(words.length / 3);
-  return [
-    words.slice(0, third).join(" "),
-    words.slice(third, third * 2).join(" "),
-    words.slice(third * 2).join(" "),
-  ];
+  return lines;
 }
 
 function collectArrayViolations(

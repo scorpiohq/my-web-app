@@ -104,7 +104,7 @@ Your prototype template has fixed frames, and each frame has specific **sub-slot
 
 ### Closing
 
-- `missing_paragraph`: exactly 3 lines, separated by a newline character (`\n`). Each line: 6–10 words AND 34–52 characters. Together they name what's still missing for them specifically. Reference `identity.deeper_motivation` to keep it personal. Do not write this as one paragraph — the report prints these as three separate lines.
+- `missing_paragraph`: one continuous thought, split into exactly 3 lines with `\n` only because the line ran out of room. Each line must fill the width: 7–10 words AND 44–52 characters. Wrong: three short separate sentences ("Guidance on the first steps" / "A clear plan..." / "Support to..."). Right: the first line is full, so the sentence continues on line 2, then line 3 — like "A direction, niche, Experiences worth sharing," / "& Enough time to start, The only thing missing" / "now is a system that turns this into reality." Name what's still missing for them specifically. Reference `identity.deeper_motivation`.
 - `gameplan_transition_line`: leave as an empty string. The report page already has a fixed bridge line ("That's why GAMEPLAN is designed to help with").
 - `cta_button_text`: leave as an empty string. The report page already has a fixed button.
 
@@ -121,7 +121,7 @@ Each frame has one emotional job. Keep these in mind while filling its slots:
 - **Strengths box** → replace self-doubt with self-awareness. End state: "I'm already ahead of where most people start — I should double down on this." Not just internal encouragement — a comparative edge. A strength is an advantage, not a guarantee — don't overclaim.
 - **Blockers box** → turn the blocker into something understandable and fixable, never a character flaw. Never use judgmental language (lazy, undisciplined, etc). End state: starts at "I'm not incapable, I've just been repeating a pattern I can now see" and ends at "once I move past this, I move fast" — the box should end with lift and acceleration, not just neutral reassurance.
 - **Next Move** → end state: "I want to start today, not eventually." Realistic and immediately actionable given their actual `time_per_day` and `consistency` — not an idealized plan — but written with real momentum and forward pull, not as a flat checklist.
-- **Closing** → build confidence from evidence already established in the report, not generic encouragement ("you can achieve anything"). The three missing lines should land as a clear, personal gap — not a pitch. The page already has a fixed GAMEPLAN bridge and button after those lines.
+- **Closing** → build confidence from evidence already established in the report, not generic encouragement ("you can achieve anything"). The missing copy should read as one thought that wrapped across three full lines, not three short leftover phrases. The page already has a fixed GAMEPLAN bridge and button after those lines.
 
 ---
 
@@ -143,7 +143,7 @@ Each frame has one emotional job. Keep these in mind while filling its slots:
 
 Go slot by slot through your draft and verify:
 
-1. **Length** — is this slot inside its min AND max word/character range? If too long, cut filler. If too short, add a specific detail until the frame looks filled. For `missing_paragraph`, confirm it is exactly 3 newline-separated lines, each inside 6–10 words AND 34–52 characters.
+1. **Length** — is this slot inside its min AND max word/character range? If too long, cut filler. If too short, add a specific detail until the frame looks filled. For `missing_paragraph`, confirm it is one wrapped thought: exactly 3 newline-separated lines, each 7–10 words AND 44–52 characters. If any line looks like a short leftover sentence, rewrite so the first line fills, then the second, then the third.
 2. **Specificity** — does this slot contain a concrete detail unique to this person? If not, add one or rewrite.
 3. **No form echo** — could the reader recognize this as a checkbox they ticked? If yes, rewrite it as meaning, not the option text.
 4. **Banned phrases** — does this slot contain any banned generic phrase or close variant? If yes, rewrite it.

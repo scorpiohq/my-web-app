@@ -145,7 +145,7 @@ export function ReportTemplate({
               <p className="m-0 text-[72px] font-bold leading-[87px] tracking-[-0.04em]">
                 Personalized Creator Blueprint
               </p>
-              <h1 className="m-[6px_0_0] text-[100px] font-bold leading-[121px] tracking-[-0.04em] text-[#e48217]">
+              <h1 className="m-[6px_0_0] whitespace-nowrap text-[100px] font-bold leading-[121px] tracking-[-0.04em] text-[#e48217]">
                 {data.name.toUpperCase()}
               </h1>
             </header>
@@ -172,10 +172,9 @@ export function ReportTemplate({
               )}
               <div className="absolute left-[683px] top-[37px] w-[1305px]">
                 <div className="grid grid-cols-[1fr_1.35fr] gap-y-[27px] text-[48px] leading-[58px]">
-                  <p className="m-0">
+                  <p className="col-span-2 m-0 whitespace-nowrap">
                     <b>NAME:</b> {data.name}
                   </p>
-                  <span />
                   <p className="m-0">
                     <b>AGE:</b> {data.age}
                   </p>

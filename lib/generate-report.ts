@@ -25,7 +25,7 @@ Rules:
 - Never paste a form answer. Interpret what it means. Wrong: "Willing to invest $300-500." Right: "You'll fund tools instead of waiting."
 - If a slot is too long, rewrite shorter and complete — do not cut mid-thought.
 - If a slot is too short, add interpreted meaning from the same facts until it fills the frame. Do not pad with empty phrases.
-- missing_paragraph: exactly 3 lines separated by newline characters (\\n). Each line 6-10 words AND 34-52 characters.
+- missing_paragraph: one continuous thought wrapped across exactly 3 newline-separated lines. Each line 7-10 words AND 44-52 characters. Fill line 1 first, then wrap to line 2, then line 3. Do not write three short separate sentences.
 - why_fits_bullets: return all 5 items if this field is listed. Items 1-4: 5-8 words AND 30-45 characters. Item 5: 10-15 words AND 62-90 characters.
 - strengths_list / blockers_list: return all 3 items if listed. Each 5-8 words AND 30-45 characters.
 - next_move_bullets: return all 6 items if listed. Each 5-8 words AND 28-45 characters.

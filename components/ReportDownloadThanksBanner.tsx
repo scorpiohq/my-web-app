@@ -1,10 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import ReportDownloadButton from "@/components/ReportDownloadButton";
-import {
-  getReportPdfDownloadUrl,
-  getReportPdfFileName,
-} from "@/lib/client-download-report";
+import { downloadReportPdf } from "@/lib/client-download-report";
 
 type ReportDownloadThanksBannerProps = {
   userName: string;
@@ -23,8 +21,21 @@ export default function ReportDownloadThanksBanner({
 }: ReportDownloadThanksBannerProps) {
   const firstName = userName.trim().split(/\s+/)[0] || "there";
   const isLeft = align === "left";
-  const downloadHref = getReportPdfDownloadUrl({ userName, submissionId });
-  const downloadFileName = getReportPdfFileName(userName);
+  const [linkPhase, setLinkPhase] = useState<"idle" | "loading" | "error">(
+    "idle",
+  );
+
+  async function handleTextDownload() {
+    if (linkPhase === "loading") return;
+
+    setLinkPhase("loading");
+    try {
+      await downloadReportPdf({ userName, submissionId });
+      setLinkPhase("idle");
+    } catch {
+      setLinkPhase("error");
+    }
+  }
 
   return (
     <div
@@ -54,13 +65,18 @@ export default function ReportDownloadThanksBanner({
       >
         Your personalized blueprint is ready. We&apos;ve also got a little gift
         for you,{" "}
-        <a
-          href={downloadHref}
-          download={downloadFileName}
-          className="font-normal text-black underline underline-offset-2"
+        <button
+          type="button"
+          onClick={handleTextDownload}
+          disabled={linkPhase === "loading"}
+          className="font-normal text-black underline underline-offset-2 disabled:cursor-wait"
         >
-          download it here
-        </a>
+          {linkPhase === "loading"
+            ? "preparing your pdf…"
+            : linkPhase === "error"
+              ? "try download again"
+              : "download it here"}
+        </button>
         .
       </p>
       <div
