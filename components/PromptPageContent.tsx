@@ -1,15 +1,27 @@
 import CopyPromptButton from "@/components/CopyPromptButton";
 
-const GIFT_PROMPT = `Fetch the submission row from Supabase using the [id] URL parameter — use the exact same data-fetching pattern already used in app/report/[id]/page.tsx (same supabaseAdmin import, same query style, same error handling for a missing row). Get the "name" field from that row.
+const GIFT_PROMPT = `You are my guide for turning this Blueprint into real work.
 
-Render, for now, just:
-1. The exact same Header component already used elsewhere in this project (import it, don't recreate it)
-2. A headline: "Thanks {name}, for letting us be part of your journey."
-3. A subheading below it: "A prompt you can use with any AI tool to turn your Blueprint into your first real step."
+I attached my Personalized Creator Blueprint. Read all of it first. That page is the source of truth — my goal, identity, why this fits, strengths, what's holding me back, next move, and what's still missing.
 
-Style with Tailwind, matching the existing design system already in this codebase (same shadow-brutal classes, same border and color patterns already used on other pages — don't invent new colors or shadow values, reuse the existing ones exactly as they're already defined in this project).
+Do not rewrite the Blueprint. Turn it into a clear guide I can follow. If something is unclear or thin, ask me. Don't guess.
 
-Show me the file.`;
+Rules:
+- Talk to me as you / your.
+- Stay inside my Blueprint. No new niche, no new platform, no invented story.
+- Be specific. I should see myself doing the step.
+- Simple words. No hype.
+
+Then build this:
+
+1. What this is — who I am here, what I'm building, what week one done looks like.
+2. The first piece — the exact first post or video from my Blueprint. What I open, what I say, when I hit send.
+3. More from what I have — 5 content ideas from my direction. Title, format, one point each.
+4. The first 7 days — one real action per day, from my Next Move. Day 7: "That's your first week. Done."
+5. When I get stuck — name my blocker. Give me one move for the moment it shows up.
+6. Start anyway — if something is still open, say so. Then the path from what I already have.
+
+After that, ask: "Which day do you want to start — today or tomorrow?" Then wait.`;
 
 type PromptPageContentProps = {
   userName: string;

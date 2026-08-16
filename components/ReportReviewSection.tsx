@@ -91,7 +91,7 @@ export default function ReportReviewSection({
   }
 
   return (
-    <section className="mt-6 md:mt-7 xl:mt-8">
+    <section className="mt-[30px]">
       <div className="relative mx-auto max-w-md border-2 border-black bg-[#F3EEE8] px-4 py-6 shadow-[4px_4px_0_0_#000] sm:max-w-lg sm:px-5 sm:py-7">
         <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 border border-black bg-[#e5c4a1] px-2.5 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-black shadow-[2px_2px_0_0_#000] sm:text-[10px]">
           REVIEW

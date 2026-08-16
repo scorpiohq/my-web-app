@@ -66,9 +66,9 @@ export default function ReportPageShell({
         />
       ) : null}
       <div
-        className={`flex-1 px-4 pb-4 sm:px-6 lg:px-8 ${
-          showIntro ? "pt-6 sm:pt-7" : "pt-6 sm:pt-8 lg:pt-10"
-        }`}
+        className={`flex-1 px-4 sm:px-6 lg:px-8 ${
+          showReviews ? "pb-[18px]" : "pb-4"
+        } ${showIntro ? "pt-6 sm:pt-7" : "pt-6 sm:pt-8 lg:pt-10"}`}
       >
         <div className="mx-auto w-full max-w-[1280px]">
           {scaleReport ? (

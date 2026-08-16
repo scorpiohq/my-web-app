@@ -36,7 +36,7 @@ Rules:
 - missing_paragraph: one continuous paragraph, no newline characters. 18-32 words AND 110-175 characters. End by handing off to GAMEPLAN (they still need a system that turns the first post into the week).
 - why_fits_bullets: return all 5 items if listed. Items 1-4: 4-8 words AND 22-45 characters. Item 5: 8-14 words AND 48-85 characters. Pointer style. One line.
 - strengths_list / blockers_list: return all 3 items if listed. Each 4-8 words AND 22-45 characters. Pointer style. One line.
-- next_move_bullets: return all 6 items if listed. Each 4-8 words AND 22-45 characters. Items 5-6 close the week. No extra exaggerated steps.
+- next_move_bullets: return all 6 items if listed. Each 4-8 words AND 22-45 characters. Item 6 is "That's your first week. Done." Never "stop there."
 - Paragraphs and box summaries should land near their character ceiling, not leave empty space.
 - Do not include gameplan_transition_line or cta_button_text.
 

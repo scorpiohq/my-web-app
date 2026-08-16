@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import ReportDownloadButton from "@/components/ReportDownloadButton";
+import { Highlight } from "@/components/testimonial-data";
 import { downloadReportPdf } from "@/lib/client-download-report";
 
 type ReportDownloadThanksBannerProps = {
@@ -69,10 +70,10 @@ export default function ReportDownloadThanksBanner({
         Your personalized blueprint is ready. We&apos;ve also got a little gift
         for you,{" "}
         {giftHref === false ? (
-          <span className="underline underline-offset-2">download it here</span>
+          <Highlight>download it here</Highlight>
         ) : giftHref ? (
           <Link href={giftHref} className="underline underline-offset-2">
-            download it here
+            <Highlight>download it here</Highlight>
           </Link>
         ) : (
           <button
@@ -81,11 +82,13 @@ export default function ReportDownloadThanksBanner({
             disabled={linkPhase === "loading"}
             className="font-normal text-black underline underline-offset-2 disabled:cursor-wait"
           >
-            {linkPhase === "loading"
-              ? "preparing your pdf…"
-              : linkPhase === "error"
-                ? "try download again"
-                : "download it here"}
+            {linkPhase === "loading" ? (
+              "preparing your pdf…"
+            ) : linkPhase === "error" ? (
+              "try download again"
+            ) : (
+              <Highlight>download it here</Highlight>
+            )}
           </button>
         )}
         .

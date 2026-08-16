@@ -141,7 +141,7 @@ Capitalize the first word. End the thought.
 
 ### Next Move
 
-- `next_move_bullets`: exactly 6 pointer lines, each 4–8 words AND 22–45 characters. A finished first-week plan they can tick off. Item 1: open/create the account on their platform. Items 2–4: the first piece, broken into small complete actions (`first_piece`). Items 5–6: **close the week** — one last small action, then a finish line ("That's week one. Stop there."). Use `&` if needed. Do not invent extra exaggerated steps.
+- `next_move_bullets`: exactly 6 pointer lines, each 4–8 words AND 22–45 characters. A finished first-week plan they can tick off. Item 1: open/create the account on their platform. Items 2–4: the first piece, broken into small complete actions (`first_piece`). Item 5: one last small action. Item 6: close the week with "That's your first week. Done." Never write "stop there" or "stop." The close marks a complete week, not a shutdown. Use `&` if needed. Do not invent extra exaggerated steps.
 
 ### Closing
 

@@ -82,7 +82,13 @@ export function mapSubmissionToReportData(
     strengthsDescription: asString(stage2.strengths_summary),
     blockers: asStringArray(stage2.blockers_list, 3),
     blockersDescription: asString(stage2.blockers_summary),
-    nextMoves: asStringArray(stage2.next_move_bullets, 6),
+    nextMoves: asStringArray(stage2.next_move_bullets, 6).map((move, index, list) => {
+      if (index !== list.length - 1) return move;
+      if (/\bstop there\b/i.test(move)) {
+        return "That's your first week. Done.";
+      }
+      return move;
+    }),
     gameplanCopyLine1,
     gameplanCopyLine2,
     gameplanCopyLine3,
