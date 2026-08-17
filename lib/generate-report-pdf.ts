@@ -48,11 +48,17 @@ function getLocalChromeExecutablePath() {
 
 async function launchBrowser(): Promise<Browser> {
   if (process.env.VERCEL === "1") {
-    const chromium = await import("@sparticuz/chromium");
+    const chromium = (await import("@sparticuz/chromium")).default;
+    chromium.setGraphicsMode = false;
+
     return puppeteer.launch({
-      args: chromium.default.args,
-      executablePath: await chromium.default.executablePath(),
-      headless: true,
+      args: puppeteer.defaultArgs({
+        args: chromium.args,
+        headless: "shell",
+      }),
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: "shell",
     });
   }
 
@@ -183,8 +189,8 @@ export async function generateReportPdf(
     });
 
     await page.goto(targetUrl, {
-      waitUntil: "networkidle0",
-      timeout: 120_000,
+      waitUntil: "load",
+      timeout: 45_000,
     });
 
     await waitForReportAssets(page, baseUrl);

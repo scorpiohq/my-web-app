@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
 import { ReportTemplate } from "@/app/report-preview/page";
+import ReportPrintTrigger from "@/components/ReportPrintTrigger";
 import {
   mapSubmissionToReportData,
   type StoredReportJson,
@@ -21,23 +23,45 @@ function getGameplanHref(origin: string | undefined, submissionId?: string) {
   return base ? `${base}${path}` : path;
 }
 
+function ExportFrame({
+  shouldPrint,
+  children,
+}: {
+  shouldPrint: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div className="report-print-sheet">
+      {shouldPrint ? <ReportPrintTrigger /> : null}
+      <div className="report-print-fit">
+        <div className="report-export-mode bg-white">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default async function ReportExportPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submission_id?: string; origin?: string }>;
+  searchParams: Promise<{
+    submission_id?: string;
+    origin?: string;
+    print?: string;
+  }>;
 }) {
-  const { submission_id: submissionId, origin } = await searchParams;
+  const { submission_id: submissionId, origin, print } = await searchParams;
   const gameplanHref = getGameplanHref(origin, submissionId);
+  const shouldPrint = print === "1";
 
   if (!submissionId) {
     return (
-      <div className="report-export-mode bg-white">
+      <ExportFrame shouldPrint={shouldPrint}>
         <ReportTemplate
           data={previewReportData}
           gameplanHref={gameplanHref}
           exportMode
         />
-      </div>
+      </ExportFrame>
     );
   }
 
@@ -57,12 +81,12 @@ export default async function ReportExportPage({
   );
 
   return (
-    <div className="report-export-mode bg-white">
+    <ExportFrame shouldPrint={shouldPrint}>
       <ReportTemplate
         data={reportData}
         gameplanHref={gameplanHref}
         exportMode
       />
-    </div>
+    </ExportFrame>
   );
 }

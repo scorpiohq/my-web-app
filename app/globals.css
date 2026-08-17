@@ -114,6 +114,42 @@ body {
 
 .report-export-mode #report-pdf-source img {
   image-rendering: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.report-print-sheet {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #fff;
+}
+
+.report-print-fit {
+  flex: none;
+  width: 2214px;
+  height: 3365px;
+  zoom: 0.33373;
+}
+
+@supports not (zoom: 1) {
+  .report-print-sheet {
+    position: relative;
+    display: block;
+  }
+
+  .report-print-fit {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    zoom: unset;
+    transform: translateX(-50%) scale(0.33373);
+    transform-origin: top center;
+  }
 }
 
 .btn-brutal {
@@ -402,4 +438,61 @@ body {
 .progress-status-hidden {
   opacity: 0;
   transform: translateY(6px);
+}
+
+@media print {
+  @page {
+    size: 2214px 3365px;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 2214px !important;
+    min-width: 2214px !important;
+    max-width: 2214px !important;
+    height: 3365px !important;
+    min-height: 3365px !important;
+    max-height: 3365px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .report-print-sheet,
+  .report-print-fit,
+  .report-export-mode,
+  .report-export-mode img {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .report-print-sheet {
+    display: block !important;
+    width: 2214px !important;
+    height: 3365px !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .report-print-fit {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    width: 2214px !important;
+    height: 3365px !important;
+    margin: 0 !important;
+    zoom: 1 !important;
+    transform: none !important;
+  }
+
+  .report-export-mode img {
+    image-rendering: auto;
+  }
 }

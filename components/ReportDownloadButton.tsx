@@ -38,23 +38,21 @@ export default function ReportDownloadButton({
       {isLarge ? (
         <>
           <span className="text-[11px] font-bold leading-none tracking-wide sm:text-xs md:text-[13px]">
-            {phase === "loading"
-              ? "PREPARING PDF…"
-              : phase === "error"
-                ? "TRY DOWNLOAD AGAIN"
-                : "DOWNLOAD YOUR BLUEPRINT"}
+            {phase === "error"
+              ? "TRY DOWNLOAD AGAIN"
+              : "DOWNLOAD YOUR BLUEPRINT"}
           </span>
           <span className="mt-0.5 text-[8px] font-semibold leading-none sm:mt-1 sm:text-[9px] md:text-[10px]">
-            {phase === "loading" ? "this can take 15 seconds" : "as pdf"}
+            {phase === "error" ? "allow pop-ups" : "Save as PDF"}
           </span>
         </>
       ) : (
         <>
           <span className="text-[4.5px] font-bold leading-none md:text-[8.5px] xl:text-[14px]">
-            {phase === "loading" ? "PREPARING" : phase === "error" ? "RETRY" : "DOWNLOAD"}
+            {phase === "error" ? "RETRY" : "DOWNLOAD YOUR BLUEPRINT"}
           </span>
           <span className="text-[2.8px] font-semibold leading-none md:text-[5px] xl:text-[8px]">
-            {phase === "loading" ? "please wait" : "as pdf"}
+            {phase === "error" ? "allow pop-ups" : "Save as PDF"}
           </span>
         </>
       )}
