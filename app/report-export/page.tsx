@@ -16,12 +16,16 @@ function getGameplanHref(origin: string | undefined, submissionId?: string) {
   const path = submissionId
     ? `/gameplan?submission_id=${encodeURIComponent(submissionId)}`
     : "/gameplan";
-  const base = (origin || process.env.NEXT_PUBLIC_APP_URL || "").replace(
-    /\/$/,
-    "",
-  );
 
-  return base ? `${base}${path}` : path;
+  if (!origin) {
+    return path;
+  }
+
+  try {
+    return new URL(path, origin).href;
+  } catch {
+    return path;
+  }
 }
 
 function ExportFrame({
@@ -56,7 +60,6 @@ export default async function ReportExportPage({
   }>;
 }) {
   const { submission_id: submissionId, origin, print } = await searchParams;
-  const gameplanHref = getGameplanHref(origin, submissionId);
   const shouldPrint = print === "1";
 
   if (!submissionId) {
@@ -64,7 +67,7 @@ export default async function ReportExportPage({
       <ExportFrame shouldPrint={shouldPrint}>
         <ReportTemplate
           data={previewReportData}
-          gameplanHref={gameplanHref}
+          gameplanHref={getGameplanHref(origin)}
           exportMode
         />
       </ExportFrame>
@@ -90,7 +93,7 @@ export default async function ReportExportPage({
     <ExportFrame shouldPrint={shouldPrint}>
       <ReportTemplate
         data={reportData}
-        gameplanHref={gameplanHref}
+        gameplanHref={getGameplanHref(origin, submission.public_id)}
         exportMode
       />
     </ExportFrame>

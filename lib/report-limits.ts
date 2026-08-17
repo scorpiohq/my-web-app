@@ -61,7 +61,7 @@ function lengthIssue(text: string, limit: SlotLimit) {
 }
 
 const DANGLING_TAIL =
-  /(?:\s+(?:for|while|to|and|or|but|with|of|a|an|the|your|you|in|on|at|as|into|from|by))$/i;
+  /(?:\s+(?:for|while|to|and|or|but|with|of|a|an|the|your|you|my|mine|our|in|on|at|as|into|from|by)|[&/])$/i;
 
 function stripDanglingTail(text: string) {
   let next = text.trim();
@@ -79,31 +79,52 @@ function lastCompleteSentence(text: string) {
   return text.slice(0, last.index + 1).trim();
 }
 
+export function isFinishedThought(text: string) {
+  const next = text.trim();
+  if (!next) return false;
+  return !DANGLING_TAIL.test(next);
+}
+
+function longestFittingSentences(text: string, limit: SlotLimit) {
+  const sentences = text.match(/[^.!?]+[.!?]+(?:\s+)?/g);
+  if (!sentences) return "";
+
+  let acc = "";
+  for (const sentence of sentences) {
+    const trial = `${acc} ${sentence}`.trim();
+    if (exceedsLimit(trial, limit)) break;
+    acc = trial;
+  }
+  return acc;
+}
+
+function longestFittingWords(text: string, limit: SlotLimit) {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  while (words.length > 0) {
+    const candidate = words.join(" ");
+    if (!exceedsLimit(candidate, limit) && isFinishedThought(candidate)) {
+      return candidate;
+    }
+    words.pop();
+  }
+  return "";
+}
+
 export function trimToLimit(text: string, limit: SlotLimit) {
-  let next = text.trim().replace(/\s+/g, " ");
+  const next = text.trim().replace(/\s+/g, " ");
   if (!next) return "";
 
-  const words = next.split(" ");
-  if (words.length > limit.maxWords) {
-    next = words.slice(0, limit.maxWords).join(" ");
+  if (!exceedsLimit(next, limit) && isFinishedThought(next)) {
+    return next;
   }
 
-  if (next.length > limit.maxChars) {
-    next = next.slice(0, limit.maxChars).trim();
-    const lastSpace = next.lastIndexOf(" ");
-    if (lastSpace > 12) {
-      next = next.slice(0, lastSpace).trim();
-    }
+  const sentences = longestFittingSentences(next, limit);
+  if (sentences && isFinishedThought(sentences) && !exceedsLimit(sentences, limit)) {
+    return sentences;
   }
 
-  next = stripDanglingTail(next);
-
-  if (!/[.!?]$/.test(next)) {
-    const complete = lastCompleteSentence(next);
-    if (complete && countWords(complete) >= 4) {
-      next = complete;
-    }
-  }
+  const byWords = longestFittingWords(next, limit);
+  if (byWords) return byWords;
 
   return stripDanglingTail(next);
 }
@@ -277,22 +298,27 @@ export function findIncompleteSentenceViolations(
     if (typeof value !== "string" || !value.trim()) continue;
     const text =
       key === "missing_paragraph" ? value.replace(/\s+/g, " ").trim() : value.trim();
-    if (DANGLING_TAIL.test(text) || !/[.!?]$/.test(text)) {
+    const needsPeriod = key !== "goal_line" && key !== "creator_identity_title";
+    const incomplete =
+      !isFinishedThought(text) || (needsPeriod && !/[.!?]$/.test(text));
+    if (incomplete) {
       violations.push({
         path: key,
         value: text,
-        reason: "sentence is incomplete — rewrite as a finished thought",
+        reason:
+          "sentence is incomplete — rewrite as a finished thought that fits the slot. Use shorter wording if needed. Do not cut the last words off.",
       });
     }
   }
 
   for (const slot of collectStage2Slots(stage2)) {
     if (!slot.path.includes("[")) continue;
-    if (DANGLING_TAIL.test(slot.value.trim())) {
+    if (!isFinishedThought(slot.value.trim())) {
       violations.push({
         path: slot.path,
         value: slot.value,
-        reason: "sentence is incomplete — rewrite as a finished thought",
+        reason:
+          "line is incomplete — rewrite as a finished pointer that fits. Use shorter wording if needed. Do not cut the last words off.",
       });
     }
   }

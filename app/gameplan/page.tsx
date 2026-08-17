@@ -53,7 +53,7 @@ export default async function GameplanPage({
   return (
     <ReportPageShell
       userName={userName}
-      submissionId={submissionId}
+      submissionId={submission?.public_id}
       showIntro={false}
       showReviews={false}
       scaleReport={false}

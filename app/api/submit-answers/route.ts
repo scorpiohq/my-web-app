@@ -5,8 +5,11 @@ import { createPendingSubmission, type SubmissionPayload } from "@/lib/submissio
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as SubmissionPayload;
-    const submissionId = await createPendingSubmission(body);
-    return NextResponse.json({ success: true, data: { id: submissionId } });
+    const submission = await createPendingSubmission(body);
+    return NextResponse.json({
+      success: true,
+      data: { id: submission.publicId },
+    });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to save submission";

@@ -32,7 +32,7 @@ export default async function ThankYouPage({
             <Link
               href={
                 submissionId
-                  ? `/progress?submission_id=${submissionId}`
+                  ? `/progress?submission_id=${encodeURIComponent(submissionId)}`
                   : "/progress"
               }
               className="btn-brutal btn-brutal-primary w-full px-8 py-3 text-center text-sm font-semibold text-black"

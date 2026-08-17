@@ -22,7 +22,9 @@ function getPromptHref(userName: string, submissionId?: string) {
 }
 
 function getReportHref(submissionId?: string) {
-  return submissionId ? `/report/${submissionId}` : "/report-preview";
+  return submissionId
+    ? `/report/${encodeURIComponent(submissionId)}`
+    : "/report-preview";
 }
 
 type ReportPageShellProps = {

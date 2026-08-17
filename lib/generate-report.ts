@@ -27,7 +27,9 @@ Rules:
 - Never paste a form answer. Interpret what it means. Wrong: "Willing to invest $300-500." Right: "You'll fund tools instead of waiting."
 - Help them see the first piece of content they would make. Use first_content_picture from CONTEXT.
 - If writing_inputs are thin or empty, do not invent a life story. Be honest that this part is still open, then show the way forward. Never scold. Never say they didn't share enough.
-- If a slot is too long, rewrite shorter and complete — do not cut mid-thought. A finished short sentence beats a broken long one.
+- If a slot is too long, REWRITE it with shorter wording so a complete thought fits. Do not truncate. Never end on in/my/and/to/for/& or a half phrase.
+- If a slot already fits and is a finished thought, leave it unchanged.
+- Different words are allowed and expected when that is what makes the line fit.
 - Compact rules are for LIST LINES only (why_fits_bullets 1-4, strengths_list, blockers_list, next_move_bullets): one line, no extra clause, drop "personal" next to you/your, use & instead of and if tight.
 - Paragraphs (niche_explanation, why_fits_paragraph, summaries, missing_paragraph, goal_line) have room. Keep them personal and full. you/your/personal are fine there.
 - If a slot is too short, add a true detail from CONTEXT (topic, format, platform, first_piece) until it fills the frame. Do not pad with empty phrases.
@@ -196,19 +198,18 @@ export async function generateReportForSubmission(
       JSON.stringify(stage1, null, 2),
     )) as Stage2ReportJson;
 
-    const overflows = findStage2Violations(stage2);
-    const voiceIssues = findVoiceViolations(stage2, submission.name);
-    const echoIssues = findFormEchoViolations(stage2, submission.answers);
-    const incompleteIssues = findIncompleteSentenceViolations(stage2);
-    const shapeIssues = findCopyShapeViolations(stage2);
-    const issues = [
-      ...overflows,
-      ...voiceIssues,
-      ...echoIssues,
-      ...incompleteIssues,
-      ...shapeIssues,
+    const collectIssues = (draft: Stage2ReportJson) => [
+      ...findStage2Violations(draft),
+      ...findVoiceViolations(draft, submission.name),
+      ...findFormEchoViolations(draft, submission.answers),
+      ...findIncompleteSentenceViolations(draft),
+      ...findCopyShapeViolations(draft),
     ];
-    if (issues.length > 0) {
+
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const issues = collectIssues(stage2);
+      if (issues.length === 0) break;
+
       const retry = await runPromptToJson(
         STAGE2_RETRY_PROMPT,
         buildRetryUserPrompt(issues, stage2, stage1),

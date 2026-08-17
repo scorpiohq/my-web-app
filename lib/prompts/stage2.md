@@ -34,7 +34,7 @@ When cutting Stage 1's fuller text down to a slot's word/character limit:
 
 - **Cut filler and connective words first** ("in order to," "the fact that," "really," "very," "just") — these add length without adding meaning.
 - **Never cut the specific detail to save space.** If a sentence has both a generic wrapper and a specific fact (a number, a named platform, a specific behavior), the generic wrapper is what gets cut, not the fact. A short generic sentence is a worse outcome than a slightly tighter specific one.
-- **Rewrite, don't just truncate.** Don't chop a sentence off mid-thought to hit a limit — rephrase it as a shorter, complete sentence that still says something specific. If you cannot fit two ideas, keep one complete idea. A finished short sentence beats a broken long one.
+- **Rewrite, don't just truncate.** If a slot is too long, rewrite it as a shorter complete sentence with different wording so it still fits. Never chop the last words off. A finished short sentence beats a broken long one. If it already fits and is complete, leave it.
 - After cutting, the slot should still **fill the frame** when you have real material. Use the space to show the scene or the next step — not to decorate. Aim for the high end of each limit with meaning from Stage 1, especially `first_content_picture`.
 - Never pad with empty phrases ("this matters," "this is important," "you have what it takes"). If you need more words and writing was thin, add another true detail from topic, format, platform, time, or blocker — never a made-up story.
 

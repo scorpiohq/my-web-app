@@ -35,6 +35,17 @@ function pickAvatar(gender: string | null) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+function isPublicAccessId(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    value,
+  );
+}
+
+export type CreatedSubmission = {
+  id: string;
+  publicId: string;
+};
+
 export async function createPendingSubmission(payload: SubmissionPayload) {
   const finalImageReference = pickAvatar(payload.gender);
 
@@ -51,16 +62,20 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
         profile_image_reference: finalImageReference,
         payment_status: "pending",
         report_status: "pending",
+        public_id: crypto.randomUUID(),
       },
     ])
-    .select("id")
+    .select("id, public_id")
     .single();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  return String(data.id);
+  return {
+    id: String(data.id),
+    publicId: String(data.public_id),
+  };
 }
 
 export async function markSubmissionPaid(submissionId: string) {
@@ -130,31 +145,40 @@ export async function getSubmissionForGeneration(submissionId: string) {
   };
 }
 
-export async function getSubmissionReportStatus(submissionId: string) {
+export async function getSubmissionReportStatus(publicId: string) {
+  if (!isPublicAccessId(publicId)) {
+    return null;
+  }
+
   const { data, error } = await supabaseAdmin
     .from("submissions")
-    .select("id, payment_status, report_status")
-    .eq("id", submissionId)
+    .select("public_id, payment_status, report_status")
+    .eq("public_id", publicId)
     .single();
 
   if (error || !data) {
     return null;
   }
 
-  return data as {
-    id: string;
-    payment_status: string;
-    report_status: ReportStatus;
+  return {
+    id: String(data.public_id),
+    public_id: String(data.public_id),
+    payment_status: data.payment_status,
+    report_status: data.report_status as ReportStatus,
   };
 }
 
-export async function getSubmissionForReportPage(submissionId: string) {
+export async function getSubmissionForReportPage(publicId: string) {
+  if (!isPublicAccessId(publicId)) {
+    return null;
+  }
+
   const { data, error } = await supabaseAdmin
     .from("submissions")
     .select(
-      "id, name, age, location, profile_image_reference, payment_status, report_status, report_json",
+      "public_id, name, age, location, profile_image_reference, payment_status, report_status, report_json",
     )
-    .eq("id", submissionId)
+    .eq("public_id", publicId)
     .eq("payment_status", "paid")
     .single();
 
@@ -175,9 +199,13 @@ export type SubmissionReview = {
 };
 
 export async function saveSubmissionReview(
-  submissionId: string,
+  publicId: string,
   review: Pick<SubmissionReview, "rating" | "comment">,
 ) {
+  if (!isPublicAccessId(publicId)) {
+    throw new Error("Report not found");
+  }
+
   const payload: SubmissionReview = {
     rating: review.rating,
     comment: review.comment,
@@ -187,7 +215,7 @@ export async function saveSubmissionReview(
   const { data: submission, error: loadError } = await supabaseAdmin
     .from("submissions")
     .select("id, payment_status, review")
-    .eq("id", submissionId)
+    .eq("public_id", publicId)
     .maybeSingle();
 
   if (loadError) {
@@ -212,7 +240,7 @@ export async function saveSubmissionReview(
   const { error: saveError } = await supabaseAdmin
     .from("submissions")
     .update({ review: payload })
-    .eq("id", submissionId)
+    .eq("id", submission.id)
     .eq("payment_status", "paid");
 
   if (saveError) {
@@ -220,7 +248,25 @@ export async function saveSubmissionReview(
   }
 }
 
+function isLocalHost(host: string) {
+  const hostname = host.split(":")[0];
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 export function getAppBaseUrl(request?: Request) {
+  if (request) {
+    const hostHeader =
+      request.headers.get("x-forwarded-host") || request.headers.get("host");
+    const host = hostHeader?.split(",")[0]?.trim();
+    const protocol =
+      request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ||
+      (host && isLocalHost(host) ? "http" : "https");
+
+    if (host) {
+      return `${protocol}://${host}`;
+    }
+  }
+
   const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
   if (configuredUrl) {
     const normalized = configuredUrl.replace(/\/$/, "");
@@ -228,18 +274,6 @@ export function getAppBaseUrl(request?: Request) {
       return normalized;
     }
     return `https://${normalized}`;
-  }
-
-  if (request) {
-    const host =
-      request.headers.get("x-forwarded-host") || request.headers.get("host");
-    const protocol = request.headers.get("x-forwarded-proto") || "https";
-
-    if (host) {
-      return `${protocol}://${host}`;
-    }
-
-    return new URL(request.url).origin;
   }
 
   return "http://127.0.0.1:3000";

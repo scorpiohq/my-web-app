@@ -24,7 +24,7 @@ export default function SignInPage() {
     setLoading(false);
 
     if (result.found) {
-      router.push(`/report/${result.id}`);
+      router.push(`/report/${encodeURIComponent(result.id)}`);
     } else {
       setError(
         "Access denied — either you entered the wrong email, or you haven\u2019t made your blueprint yet.",

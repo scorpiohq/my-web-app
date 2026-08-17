@@ -20,7 +20,7 @@ export default async function ReportPage({
   }
 
   if (submission.report_status !== "ready" || !submission.report_json) {
-    redirect(`/progress?submission_id=${id}`);
+    redirect(`/progress?submission_id=${encodeURIComponent(id)}`);
   }
 
   const reportData = mapSubmissionToReportData(
@@ -31,11 +31,11 @@ export default async function ReportPage({
   return (
     <ReportPageShell
       userName={submission.name || "Creator"}
-      submissionId={id}
+      submissionId={submission.public_id}
     >
       <ReportTemplate
         data={reportData}
-        gameplanHref={`/gameplan?submission_id=${id}`}
+        gameplanHref={`/gameplan?submission_id=${encodeURIComponent(submission.public_id)}`}
       />
     </ReportPageShell>
   );

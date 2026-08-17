@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const submissionId = await createPendingSubmission({
+    const submission = await createPendingSubmission({
       name: body.name.trim(),
       email: body.email.trim().toLowerCase(),
       age: Number(body.age),
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     });
 
     const appUrl = getAppBaseUrl(request);
-    const redirectUrl = `${appUrl}/form/thank-you?submission_id=${submissionId}`;
+    const redirectUrl = `${appUrl}/form/thank-you?submission_id=${submission.publicId}`;
 
     try {
       new URL(redirectUrl);
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const checkoutUrl = await createBlueprintCheckout({
-      submissionId,
+      submissionId: submission.id,
       email: body.email.trim().toLowerCase(),
       name: body.name.trim(),
       redirectUrl,
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       checkoutUrl,
-      submissionId,
+      submissionId: submission.publicId,
     });
   } catch (error) {
     const message =
