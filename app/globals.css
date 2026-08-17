@@ -362,18 +362,18 @@ body {
   box-shadow: none;
 }
 
-@keyframes checkout-progress {
+@keyframes checkout-progress-fill {
   from {
-    transform: translateX(-100%);
+    width: 0%;
   }
   to {
-    transform: translateX(250%);
+    width: 100%;
   }
 }
 
-.checkout-progress-bar {
-  width: 40%;
-  animation: checkout-progress 1.1s ease-in-out infinite;
+.checkout-progress-fill {
+  width: 0%;
+  animation: checkout-progress-fill 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes report-card-float {
@@ -473,6 +473,22 @@ body {
 .progress-status-hidden {
   opacity: 0;
   transform: translateY(6px);
+}
+
+@keyframes progress-countdown-pop {
+  from {
+    opacity: 0.35;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.progress-countdown-number {
+  display: block;
+  animation: progress-countdown-pop 0.28s ease;
 }
 
 .report-pdf-save {

@@ -1,10 +1,15 @@
-export default function ReportPreviewStack({ ready = false }: { ready?: boolean }) {
+import type { ReactNode } from "react";
+
+export default function ReportPreviewStack({
+  ready = false,
+  stamp,
+}: {
+  ready?: boolean;
+  stamp?: ReactNode;
+}) {
   return (
-    <div
-      className="relative mx-auto flex h-[168px] w-full max-w-[320px] items-start justify-center sm:h-[188px] sm:max-w-[360px]"
-      aria-hidden="true"
-    >
-      <div className="relative h-full w-[250px] sm:w-[270px]">
+    <div className="relative mx-auto flex h-[168px] w-full max-w-[320px] items-start justify-center overflow-visible sm:h-[188px] sm:max-w-[360px]">
+      <div className="relative h-full w-[250px] sm:w-[270px]" aria-hidden="true">
         <div
           className={`absolute left-0 top-5 sm:top-6 ${ready ? "" : "report-card-float report-card-float-delay-1"}`}
         >
@@ -39,7 +44,7 @@ export default function ReportPreviewStack({ ready = false }: { ready?: boolean 
         <div className="absolute left-1/2 top-9 -translate-x-1/2 sm:top-10">
           <div className={ready ? "" : "report-card-float"}>
             <div
-              className={`w-[200px] rotate-[-2deg] rounded-md border border-[#D9D9D9] bg-white p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.08)] transition-transform duration-500 sm:w-[220px] ${
+              className={`relative w-[200px] rotate-[-2deg] rounded-md border border-[#D9D9D9] bg-white p-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.08)] transition-transform duration-500 sm:w-[220px] ${
                 ready ? "scale-105" : ""
               }`}
             >
@@ -58,6 +63,11 @@ export default function ReportPreviewStack({ ready = false }: { ready?: boolean 
                 <div className="h-1.5 w-full rounded bg-[#F3F3F3]" />
                 <div className="h-1.5 w-[85%] rounded bg-[#F3F3F3]" />
               </div>
+              {stamp ? (
+                <div className="absolute left-1/2 top-[58%] z-10 -translate-x-1/2 -translate-y-1/2">
+                  {stamp}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

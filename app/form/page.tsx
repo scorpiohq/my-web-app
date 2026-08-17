@@ -479,7 +479,7 @@ export default function FormPage() {
       }
 
       const elapsed = Date.now() - transitionStart;
-      const remaining = Math.max(0, 900 - elapsed);
+      const remaining = Math.max(0, 1700 - elapsed);
       await new Promise((resolve) => setTimeout(resolve, remaining));
 
       window.location.assign(result.checkoutUrl);

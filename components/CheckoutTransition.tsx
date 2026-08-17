@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function CheckoutTransition() {
@@ -19,26 +20,45 @@ export default function CheckoutTransition() {
       <div className="absolute inset-0 grid-bg opacity-40" aria-hidden="true" />
 
       <div
-        className={`relative z-10 w-full max-w-[300px] transition-all duration-700 sm:max-w-[320px] ${
+        className={`relative z-10 w-full max-w-[340px] transition-all duration-700 sm:max-w-[360px] ${
           visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}
       >
-        <div className="border-2 border-black bg-white px-5 py-6 shadow-[6px_6px_0_0_#000] sm:px-6 sm:py-7">
-          <p className="text-lg font-semibold leading-snug text-black sm:text-xl">
-            Almost there
-          </p>
-          <p className="mt-1 text-xs leading-snug text-[#6B6B6B] sm:text-sm">
-            Redirecting you to secure checkout to complete your $24 Blueprint
-            purchase.
-          </p>
-
-          <div className="mt-5 h-1.5 overflow-hidden border border-black bg-[#F3F3F3]">
-            <div className="checkout-progress-bar h-full bg-[#FFC940]" />
+        <div className="border-2 border-black bg-white shadow-[6px_6px_0_0_#000]">
+          <div className="flex h-9 items-center border-b-2 border-black bg-[#EDEDED] px-3">
+            <div className="flex items-center gap-[6px]" aria-hidden="true">
+              <span className="h-[11px] w-[11px] rounded-full bg-[#FF5F57]" />
+              <span className="h-[11px] w-[11px] rounded-full bg-[#FEBC2E]" />
+              <span className="h-[11px] w-[11px] rounded-full bg-[#28C840]" />
+            </div>
           </div>
 
-          <p className="mt-4 text-center text-xs text-[#999]">
-            Your answers are saved — payment unlocks your report.
-          </p>
+          <div className="px-5 py-6 sm:px-6 sm:py-7">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-lg font-semibold leading-snug text-black sm:text-xl">
+                Almost there!!
+              </p>
+              <Image
+                src="/logo-dp.svg"
+                alt="Your Blueprint"
+                width={36}
+                height={36}
+                className="h-8 w-8 shrink-0 sm:h-9 sm:w-9"
+              />
+            </div>
+
+            <p className="mt-2 text-xs leading-snug text-[#6B6B6B] sm:text-sm">
+              Secure your checkout to complete…
+            </p>
+
+            <div className="mt-5 h-1.5 overflow-hidden border border-black bg-[#F3F3F3]">
+              <div className="checkout-progress-fill h-full bg-[#FFC940]" />
+            </div>
+
+            <p className="mt-4 whitespace-nowrap text-left text-[11px] text-[#999] sm:text-xs">
+              Your answers are saved, pay to unlock your report.
+            </p>
+          </div>
         </div>
       </div>
     </div>
