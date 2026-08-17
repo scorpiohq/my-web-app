@@ -15,7 +15,7 @@ export default function ReportPageFooter() {
           />
         </Link>
 
-        <p className="text-sm text-black/70">© Your Blueprint, 2026. All rights reserved.</p>
+        <p className="text-sm text-black/70">©Your Blueprint, 2026. All rights reserved.</p>
       </div>
     </footer>
   );
