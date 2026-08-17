@@ -5,7 +5,7 @@ import HeroSamplePreviewTrigger from "@/components/HeroSamplePreviewTrigger";
 
 export default function Hero() {
   return (
-    <section className="grid-bg px-6 py-12 sm:px-8 sm:py-16 lg:py-20">
+    <section id="hero" className="grid-bg px-6 py-12 sm:px-8 sm:py-16 lg:py-20">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 xl:gap-16">
         {/* Copy — centered on mobile, left on desktop */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
