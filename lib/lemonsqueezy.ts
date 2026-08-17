@@ -146,8 +146,10 @@ export function getGameplanVariantId() {
 }
 
 export async function createGameplanCheckout({
+  submissionId,
   redirectUrl,
 }: {
+  submissionId?: string;
   redirectUrl: string;
 }) {
   const variantId = getGameplanVariantId();
@@ -158,6 +160,7 @@ export async function createGameplanCheckout({
   return createLemonCheckout({
     variantId,
     variantEnvName: "LEMONSQUEEZY_GAMEPLAN_VARIANT_ID",
+    submissionId,
     redirectUrl,
     receiptButtonText: "Continue",
     receiptThankYouNote:

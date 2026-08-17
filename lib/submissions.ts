@@ -78,6 +78,37 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
   };
 }
 
+export async function markGameplanPurchased(submissionId: string) {
+  const { error } = await supabaseAdmin
+    .from("submissions")
+    .update({ gameplan_purchased_at: new Date().toISOString() })
+    .eq("id", submissionId)
+    .is("gameplan_purchased_at", null);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getPaidSubmissionInternalId(publicId: string) {
+  if (!isPublicAccessId(publicId)) {
+    return null;
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select("id")
+    .eq("public_id", publicId)
+    .eq("payment_status", "paid")
+    .maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return String(data.id);
+}
+
 export async function markSubmissionPaid(submissionId: string) {
   const { error } = await supabaseAdmin
     .from("submissions")

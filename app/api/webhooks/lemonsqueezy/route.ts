@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { getGameplanVariantId } from "@/lib/lemonsqueezy";
 import {
+  markGameplanPurchased,
   markSubmissionPaid,
   triggerReportGeneration,
 } from "@/lib/submissions";
@@ -73,11 +74,22 @@ export async function POST(request: Request) {
     payload.meta?.custom_data?.product === "gameplan" ||
     (gameplanVariantId != null && variantId === gameplanVariantId);
 
+  const submissionId = payload.meta?.custom_data?.submission_id;
+
   if (isGameplan) {
+    if (submissionId) {
+      try {
+        await markGameplanPurchased(submissionId);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to update Gameplan";
+        return NextResponse.json({ error: message }, { status: 500 });
+      }
+    }
+
     return NextResponse.json({ received: true });
   }
 
-  const submissionId = payload.meta?.custom_data?.submission_id;
   if (!submissionId) {
     return NextResponse.json(
       { error: "Missing submission_id in webhook custom data" },
