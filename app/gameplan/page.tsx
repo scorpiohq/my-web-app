@@ -1,5 +1,6 @@
 import Backstory from "@/components/Backstory";
 import FAQ from "@/components/FAQ";
+import GameplanCheckoutButton from "@/components/GameplanCheckoutButton";
 import GameplanInside from "@/components/GameplanInside";
 import Pricing from "@/components/Pricing";
 import ReportPageShell from "@/components/ReportPageShell";
@@ -100,6 +101,12 @@ export default async function GameplanPage({
         salePrice="$69"
         offerBadge="SECURE YOUR SLOT!"
         buttonLabel="SECURE YOUR SLOT →"
+        checkoutButton={
+          <GameplanCheckoutButton
+            label="SECURE YOUR SLOT →"
+            publicId={submission?.public_id || submissionId}
+          />
+        }
         showIntro={false}
         features={[
           "Complete GAMEPLAN",

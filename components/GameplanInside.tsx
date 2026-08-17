@@ -8,7 +8,7 @@ const items: {
 }[] = [
   {
     badge: "01",
-    title: "A Complete Step-by-Step GAMEPLAN",
+    title: "Your Complete GAMEPLAN",
     description:
       "→ Everything you need to turn your Blueprint into reality, No fluff, No filler. Every step is actionable, not just informative. This isn't here to teach you and let you forget it. It's here to get you moving.",
     status: "in-progress",

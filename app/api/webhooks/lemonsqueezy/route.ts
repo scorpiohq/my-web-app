@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
+import { getGameplanVariantId } from "@/lib/lemonsqueezy";
 import {
   markSubmissionPaid,
   triggerReportGeneration,
@@ -41,6 +42,14 @@ export async function POST(request: Request) {
       event_name?: string;
       custom_data?: {
         submission_id?: string;
+        product?: string;
+      };
+    };
+    data?: {
+      attributes?: {
+        first_order_item?: {
+          variant_id?: number | string;
+        };
       };
     };
   };
@@ -53,6 +62,18 @@ export async function POST(request: Request) {
 
   const eventName = payload.meta?.event_name;
   if (eventName !== "order_created") {
+    return NextResponse.json({ received: true });
+  }
+
+  const variantId = Number(
+    payload.data?.attributes?.first_order_item?.variant_id,
+  );
+  const gameplanVariantId = getGameplanVariantId();
+  const isGameplan =
+    payload.meta?.custom_data?.product === "gameplan" ||
+    (gameplanVariantId != null && variantId === gameplanVariantId);
+
+  if (isGameplan) {
     return NextResponse.json({ received: true });
   }
 

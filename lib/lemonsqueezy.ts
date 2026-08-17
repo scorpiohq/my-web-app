@@ -46,26 +46,39 @@ function formatLemonSqueezyError(error: unknown) {
   return error.message;
 }
 
-export async function createBlueprintCheckout({
+async function createLemonCheckout({
+  variantId,
+  variantEnvName,
   submissionId,
   email,
   name,
   redirectUrl,
+  receiptButtonText,
+  receiptThankYouNote,
 }: {
-  submissionId: string;
-  email: string;
-  name: string;
-  redirectUrl: string;
+  variantId: number;
+  variantEnvName: string;
+  submissionId?: string;
+  email?: string;
+  name?: string;
+  redirectUrl?: string;
+  receiptButtonText: string;
+  receiptThankYouNote: string;
 }) {
   configureLemonSqueezy();
 
   const storeId = Number(requireEnv("LEMONSQUEEZY_STORE_ID"));
-  const variantId = Number(requireEnv("LEMONSQUEEZY_VARIANT_ID"));
   const testMode = process.env.LEMONSQUEEZY_TEST_MODE === "true";
 
   if (!Number.isFinite(storeId) || !Number.isFinite(variantId)) {
-    throw new Error("LEMONSQUEEZY_STORE_ID and LEMONSQUEEZY_VARIANT_ID must be numbers");
+    throw new Error(
+      `LEMONSQUEEZY_STORE_ID and ${variantEnvName} must be numbers`,
+    );
   }
+
+  const custom = submissionId
+    ? { submission_id: String(submissionId) }
+    : undefined;
 
   const checkout = await createCheckout(storeId, variantId, {
     testMode,
@@ -75,16 +88,14 @@ export async function createBlueprintCheckout({
       logo: true,
     },
     checkoutData: {
-      email,
-      name,
-      custom: {
-        submission_id: String(submissionId),
-      },
+      ...(email ? { email } : {}),
+      ...(name ? { name } : {}),
+      ...(custom ? { custom } : {}),
     },
     productOptions: {
-      redirectUrl,
-      receiptButtonText: "View your progress",
-      receiptThankYouNote: "Thanks for your purchase. Your Blueprint is on the way.",
+      ...(redirectUrl ? { redirectUrl } : {}),
+      receiptButtonText,
+      receiptThankYouNote,
     },
   });
 
@@ -98,4 +109,58 @@ export async function createBlueprintCheckout({
   }
 
   return checkoutUrl;
+}
+
+export async function createBlueprintCheckout({
+  submissionId,
+  email,
+  name,
+  redirectUrl,
+}: {
+  submissionId: string;
+  email: string;
+  name: string;
+  redirectUrl: string;
+}) {
+  return createLemonCheckout({
+    variantId: Number(requireEnv("LEMONSQUEEZY_VARIANT_ID")),
+    variantEnvName: "LEMONSQUEEZY_VARIANT_ID",
+    submissionId,
+    email,
+    name,
+    redirectUrl,
+    receiptButtonText: "View your progress",
+    receiptThankYouNote:
+      "Thanks for your purchase. Your Blueprint is on the way.",
+  });
+}
+
+export function getGameplanVariantId() {
+  const raw = process.env.LEMONSQUEEZY_GAMEPLAN_VARIANT_ID?.trim();
+  if (!raw) {
+    return null;
+  }
+
+  const variantId = Number(raw);
+  return Number.isFinite(variantId) ? variantId : null;
+}
+
+export async function createGameplanCheckout({
+  redirectUrl,
+}: {
+  redirectUrl: string;
+}) {
+  const variantId = getGameplanVariantId();
+  if (!variantId) {
+    throw new Error("LEMONSQUEEZY_GAMEPLAN_VARIANT_ID is not set");
+  }
+
+  return createLemonCheckout({
+    variantId,
+    variantEnvName: "LEMONSQUEEZY_GAMEPLAN_VARIANT_ID",
+    redirectUrl,
+    receiptButtonText: "Continue",
+    receiptThankYouNote:
+      "Thanks. Your Gameplan slot is locked in. We'll email you when it's ready.",
+  });
 }

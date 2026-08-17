@@ -58,21 +58,28 @@ function SuccessCheck() {
 export default function PaymentThankYouTicket({
   publicId,
   paidAt,
+  product = "blueprint",
 }: {
   publicId?: string;
   paidAt?: string;
+  product?: "blueprint" | "gameplan";
 }) {
   const [visible, setVisible] = useState(false);
   const [when, setWhen] = useState("");
+  const isGameplan = product === "gameplan";
 
   useEffect(() => {
-    setWhen(formatWhen(paidAt));
+    setWhen(formatWhen(isGameplan ? undefined : paidAt));
     requestAnimationFrame(() => setVisible(true));
-  }, [paidAt]);
+  }, [paidAt, isGameplan]);
 
-  const progressHref = publicId
-    ? `/progress?submission_id=${encodeURIComponent(publicId)}`
-    : "/progress";
+  const nextHref = publicId
+    ? isGameplan
+      ? `/report/${encodeURIComponent(publicId)}`
+      : `/progress?submission_id=${encodeURIComponent(publicId)}`
+    : isGameplan
+      ? "/signin"
+      : "/progress";
 
   return (
     <div
@@ -86,7 +93,9 @@ export default function PaymentThankYouTicket({
         Payment Successful
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-[#8A8A8A]">
-        You're in. Your Blueprint is being built right now.
+        {isGameplan
+          ? "Your spot is locked in. We'll keep you updated on Gameplan every step of the way — reach out anytime if you need us."
+          : "You're in. Your Blueprint is being built right now."}
       </p>
 
       <dl className="mt-8 space-y-5">
@@ -100,15 +109,17 @@ export default function PaymentThankYouTicket({
         </div>
         <div>
           <dt className="text-xs text-[#9A9A9A]">Amount</dt>
-          <dd className="mt-1 text-sm text-black">$18.00</dd>
+          <dd className="mt-1 text-sm text-black">
+            {isGameplan ? "$69.00" : "$18.00"}
+          </dd>
         </div>
       </dl>
 
       <Link
-        href={progressHref}
+        href={nextHref}
         className="btn-brutal btn-brutal-secondary mt-10 inline-block px-5 py-2.5 text-sm font-medium text-black"
       >
-        View progress →
+        {isGameplan ? "Back to your report →" : "View progress →"}
       </Link>
     </div>
   );

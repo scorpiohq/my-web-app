@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function CheckoutTransition() {
+export default function CheckoutTransition({
+  note = "Your answers are saved, pay to unlock your report.",
+}: {
+  note?: string;
+}) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -11,7 +15,7 @@ export default function CheckoutTransition() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-12">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-12 text-left">
       <div
         className={`absolute inset-0 bg-white transition-opacity duration-700 ${
           visible ? "opacity-100" : "opacity-0"
@@ -47,7 +51,7 @@ export default function CheckoutTransition() {
               />
             </div>
 
-            <p className="mt-2 text-xs leading-snug text-[#6B6B6B] sm:text-sm">
+            <p className="mt-2 text-left text-xs leading-snug text-[#6B6B6B] sm:text-sm">
               Secure your checkout to complete…
             </p>
 
@@ -55,8 +59,8 @@ export default function CheckoutTransition() {
               <div className="checkout-progress-fill h-full bg-[#FFC940]" />
             </div>
 
-            <p className="mt-4 whitespace-nowrap text-left text-[11px] text-[#999] sm:text-xs">
-              Your answers are saved, pay to unlock your report.
+            <p className="mt-4 text-left text-[11px] leading-snug text-[#999] sm:text-xs">
+              {note}
             </p>
           </div>
         </div>

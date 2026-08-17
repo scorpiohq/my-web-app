@@ -4,10 +4,11 @@ import { getSubmissionForThankYou } from "@/lib/submissions";
 export default async function ThankYouPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submission_id?: string }>;
+  searchParams: Promise<{ submission_id?: string; product?: string }>;
 }) {
   const params = await searchParams;
   const submissionId = params.submission_id?.trim();
+  const product = params.product === "gameplan" ? "gameplan" : "blueprint";
   const submission = submissionId
     ? await getSubmissionForThankYou(submissionId)
     : null;
@@ -17,6 +18,7 @@ export default async function ThankYouPage({
       <PaymentThankYouTicket
         publicId={submission?.public_id || submissionId}
         paidAt={submission?.created_at}
+        product={product}
       />
     </div>
   );

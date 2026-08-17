@@ -65,6 +65,7 @@ type PricingProps = {
   timelineSteps?: TimelineStep[];
   showIntro?: boolean;
   features?: string[];
+  checkoutButton?: ReactNode;
 };
 
 export default function Pricing({
@@ -75,6 +76,7 @@ export default function Pricing({
   timelineSteps = defaultTimelineSteps,
   showIntro = true,
   features = defaultFeatures,
+  checkoutButton,
 }: PricingProps) {
   const stepCount = timelineSteps.length;
   const lineLeft = `${100 / (stepCount * 2)}%`;
@@ -138,13 +140,15 @@ export default function Pricing({
             </ul>
 
             <div className="mx-auto mt-8 w-full max-w-md">
-              <Link
-                href="/form"
-                className="btn-brutal btn-brutal-primary inline-block w-full px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
-                style={{ fontFamily: "var(--font-hero)" }}
-              >
-                {buttonLabel}
-              </Link>
+              {checkoutButton ?? (
+                <Link
+                  href="/form"
+                  className="btn-brutal btn-brutal-primary inline-block w-full px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
+                  style={{ fontFamily: "var(--font-hero)" }}
+                >
+                  {buttonLabel}
+                </Link>
+              )}
 
               <div className="mt-5 flex w-full flex-col items-center">
                 <div className="flex w-full items-center gap-2.5">
