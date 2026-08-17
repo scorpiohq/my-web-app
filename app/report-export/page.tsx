@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ReportTemplate } from "@/app/report-preview/page";
 import ReportIosPdfSave from "@/components/ReportIosPdfSave";
+import ReportPreviewFit from "@/components/ReportPreviewFit";
 import ReportPrintTrigger from "@/components/ReportPrintTrigger";
 import {
   mapSubmissionToReportData,
@@ -35,6 +36,7 @@ function ExportFrame({
     <div className="report-print-page">
       {shouldPrint ? <ReportPrintTrigger /> : null}
       {shouldPrint ? <ReportIosPdfSave /> : null}
+      <ReportPreviewFit />
       <div className="report-print-preview">
         <div className="report-print-sheet">
           <div className="report-print-fit">

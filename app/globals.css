@@ -136,17 +136,31 @@ body {
 
 @media screen {
   .report-print-preview {
-    --report-preview-scale: min(1, calc(100vw / 210mm));
-    display: flex;
-    justify-content: center;
+    --report-preview-scale: calc(100vw / 2214px);
     width: 100%;
-    height: calc(297mm * var(--report-preview-scale));
     overflow: hidden;
+    background: #fff;
+    height: calc(3365px * 100vw / 2214px);
   }
 
   .report-print-preview .report-print-sheet {
+    display: block;
+    width: 2214px;
+    height: 3365px;
+    margin: 0;
     transform: scale(var(--report-preview-scale));
-    transform-origin: top center;
+    transform-origin: top left;
+  }
+
+  .report-print-preview .report-print-fit {
+    zoom: 1;
+    transform: none;
+    position: static;
+    top: auto;
+    left: auto;
+    margin: 0;
+    width: 2214px;
+    height: 3365px;
   }
 }
 

@@ -1,10 +1,48 @@
 import { toCanvas } from "html-to-image";
 import { jsPDF } from "jspdf";
 
+const REPORT_WIDTH = 2214;
+const REPORT_HEIGHT = 3365;
+const PAGE_WIDTH_MM = 210;
+const PAGE_HEIGHT_MM = 297;
+
 function getPdfFileName() {
   const heading = document.querySelector("#report-pdf-source h1");
   const name = heading?.textContent?.trim().replace(/\s+/g, "-").toLowerCase();
   return name ? `${name}-blueprint.pdf` : "your-blueprint.pdf";
+}
+
+function toAbsoluteUrl(href: string) {
+  try {
+    return new URL(href, window.location.origin).href;
+  } catch {
+    return href;
+  }
+}
+
+function addReportLinks(pdf: jsPDF, source: HTMLElement) {
+  const sourceRect = source.getBoundingClientRect();
+  if (sourceRect.width === 0 || sourceRect.height === 0) return;
+
+  const links = source.querySelectorAll("a[href]");
+
+  for (const link of links) {
+    if (!(link instanceof HTMLAnchorElement)) continue;
+
+    const href = toAbsoluteUrl(link.href || link.getAttribute("href") || "");
+    if (!href.startsWith("http")) continue;
+
+    const rect = link.getBoundingClientRect();
+    const x =
+      ((rect.left - sourceRect.left) / sourceRect.width) * PAGE_WIDTH_MM;
+    const y = ((rect.top - sourceRect.top) / sourceRect.height) * PAGE_HEIGHT_MM;
+    const width = (rect.width / sourceRect.width) * PAGE_WIDTH_MM;
+    const height = (rect.height / sourceRect.height) * PAGE_HEIGHT_MM;
+
+    if (width < 2 || height < 2) continue;
+
+    pdf.link(x, y, width, height, { url: href });
+  }
 }
 
 export async function captureReportPdfBlob() {
@@ -14,11 +52,13 @@ export async function captureReportPdfBlob() {
     throw new Error("Report is not ready yet.");
   }
 
+  await document.fonts.ready;
+
   const canvas = await toCanvas(source, {
     cacheBust: true,
     pixelRatio: 1,
-    width: 2214,
-    height: 3365,
+    width: REPORT_WIDTH,
+    height: REPORT_HEIGHT,
     backgroundColor: "#ffffff",
   });
 
@@ -30,7 +70,8 @@ export async function captureReportPdfBlob() {
   });
 
   const image = canvas.toDataURL("image/jpeg", 0.86);
-  pdf.addImage(image, "JPEG", 0, 0, 210, 297, undefined, "FAST");
+  pdf.addImage(image, "JPEG", 0, 0, PAGE_WIDTH_MM, PAGE_HEIGHT_MM, undefined, "FAST");
+  addReportLinks(pdf, source);
 
   return {
     blob: pdf.output("blob"),
