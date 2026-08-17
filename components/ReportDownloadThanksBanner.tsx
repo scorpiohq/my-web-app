@@ -51,7 +51,7 @@ export default function ReportDownloadThanksBanner({
     >
       {showEarlyBirdBadge ? (
         <span className="mb-6 inline-block border border-black bg-[#F6E9D8] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-8 sm:text-xs">
-          ✰ CLAIM YOUR EARLY BIRD DISCOUNT!
+          🚨 ONLY FOR FIRST 100 CREATORS
         </span>
       ) : null}
       <p

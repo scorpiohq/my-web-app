@@ -54,28 +54,56 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
-export default function FAQ() {
+type FAQItem = {
+  question: string;
+  answer: string;
+};
+
+type FAQProps = {
+  items?: FAQItem[];
+  excludeQuestions?: string[];
+  heading?: string;
+  showDescription?: boolean;
+};
+
+export default function FAQ({
+  items = faqs,
+  excludeQuestions = [],
+  heading,
+  showDescription = true,
+}: FAQProps) {
   const [openIndex, setOpenIndex] = useState(0);
+  const visibleFaqs = items.filter(
+    (faq) => !excludeQuestions.includes(faq.question),
+  );
 
   return (
     <section className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
         <h2
-          className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
+          className={`max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
+            showDescription ? "mb-5" : "mb-10 sm:mb-12"
+          }`}
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          COMMON QUESTIONS
-          <br />
-          ANSWERED CLEARLY
+          {heading ?? (
+            <>
+              COMMON QUESTIONS
+              <br />
+              ANSWERED CLEARLY
+            </>
+          )}
         </h2>
 
-        <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-          Here are clear answers to the most common questions we get from
-          creators coaches and teams using the platform.
-        </p>
+        {showDescription ? (
+          <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
+            Here are clear answers to the most common questions we get from
+            creators coaches and teams using the platform.
+          </p>
+        ) : null}
 
         <div className="flex w-full flex-col gap-4 sm:gap-5">
-          {faqs.map((faq, index) => {
+          {visibleFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
 
             return (
@@ -102,7 +130,7 @@ export default function FAQ() {
 
                 {isOpen && (
                   <div className="border-t border-black/10 px-5 pb-5 pt-1 sm:px-6 sm:pb-6">
-                    <p className="text-sm leading-relaxed text-[#6B6B6B] sm:text-base">
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-[#6B6B6B] sm:text-base">
                       {faq.answer}
                     </p>
                   </div>

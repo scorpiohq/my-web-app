@@ -1,10 +1,49 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 
-const features = [
+const defaultFeatures = [
   "One Personalized Report",
   "Ready in Under 3 Minutes",
   "Lifetime Access",
   "Instant PDF Download",
+];
+
+type TimelineStep = {
+  price: string;
+  label: ReactNode;
+  active?: boolean;
+  soldOut?: boolean;
+};
+
+const defaultTimelineSteps: TimelineStep[] = [
+  {
+    price: "$12",
+    label: (
+      <>
+        SOLD OUT
+        <br />
+        (IN PRE-ORDERS)
+      </>
+    ),
+    soldOut: true,
+  },
+  {
+    price: "$18",
+    label: (
+      <>
+        <span className="font-bold text-black">35</span> SPOTS LEFT
+      </>
+    ),
+    active: true,
+  },
+  {
+    price: "$30",
+    label: (
+      <>
+        NEXT 50 USERS
+      </>
+    ),
+  },
 ];
 
 function CheckIcon() {
@@ -18,42 +57,67 @@ function CheckIcon() {
   );
 }
 
-export default function Pricing() {
+type PricingProps = {
+  originalPrice?: string;
+  salePrice?: string;
+  offerBadge?: string;
+  buttonLabel?: string;
+  timelineSteps?: TimelineStep[];
+  showIntro?: boolean;
+  features?: string[];
+};
+
+export default function Pricing({
+  originalPrice = "$30",
+  salePrice = "$18",
+  offerBadge = "Early-Bird Discount",
+  buttonLabel = "GET YOUR BLUEPRINT →",
+  timelineSteps = defaultTimelineSteps,
+  showIntro = true,
+  features = defaultFeatures,
+}: PricingProps) {
+  const stepCount = timelineSteps.length;
+  const lineLeft = `${100 / (stepCount * 2)}%`;
+  const lineWidth = `${100 - 100 / stepCount}%`;
   return (
     <section id="pricing" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-        <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
-          PRICING
-        </span>
+        {showIntro ? (
+          <>
+            <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
+              PRICING
+            </span>
 
-        <h2
-          className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
-          style={{ fontFamily: "var(--font-hero)" }}
-        >
-          Pay Once, No Subscription.
-        </h2>
+            <h2
+              className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
+              style={{ fontFamily: "var(--font-hero)" }}
+            >
+              Pay Once, No Subscription.
+            </h2>
 
-        <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-          Get your Blueprint today & Start your journey with what you have, and
-          in the way that actually works for you.
-        </p>
+            <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
+              Get your Blueprint today & Start your journey with what you have,
+              and in the way that actually works for you.
+            </p>
+          </>
+        ) : null}
 
         <div className="w-full border-2 border-black bg-white shadow-[8px_8px_0_0_#000]">
           <div className="px-6 pt-10 pb-4 sm:px-10 sm:pt-12 sm:pb-5">
             <div className="relative mb-2 flex flex-col items-center">
               <span className="mb-3 inline-block border border-black bg-[#E5C4A1] px-3 py-1 text-xs font-semibold tracking-wide text-black shadow-[2px_2px_0_0_#000]">
-                Early-Bird Discount
+                {offerBadge}
               </span>
 
               <div className="flex items-end justify-center gap-1 sm:gap-1.5">
                 <p className="pb-2 text-2xl font-medium text-[#999] line-through sm:pb-3 sm:text-3xl">
-                  $30
+                  {originalPrice}
                 </p>
                 <p
                   className="text-[clamp(3.5rem,12vw,5.5rem)] leading-none text-black"
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
-                  $18
+                  {salePrice}
                 </p>
               </div>
 
@@ -79,7 +143,7 @@ export default function Pricing() {
                 className="btn-brutal btn-brutal-primary inline-block w-full px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
                 style={{ fontFamily: "var(--font-hero)" }}
               >
-                GET YOUR BLUEPRINT →
+                {buttonLabel}
               </Link>
 
               <div className="mt-5 flex w-full flex-col items-center">
@@ -161,52 +225,47 @@ export default function Pricing() {
             <div className="relative mx-auto max-w-lg">
               <div
                 className="absolute top-[5px] h-0.5 bg-[#D0D0D0]"
-                style={{ left: "16.666%", width: "66.666%" }}
+                style={{ left: lineLeft, width: lineWidth }}
                 aria-hidden="true"
               />
 
-              <div className="grid grid-cols-3">
-                <div className="flex flex-col items-center text-center">
-                  <div className="relative z-10 mb-3 h-2.5 w-2.5 border border-black bg-[#C8C8C8]" />
-                  <p
-                    className="text-base text-[#999] line-through sm:text-lg"
-                    style={{ fontFamily: "var(--font-hero)" }}
+              <div
+                className="grid"
+                style={{ gridTemplateColumns: `repeat(${stepCount}, minmax(0, 1fr))` }}
+              >
+                {timelineSteps.map((step) => (
+                  <div
+                    key={step.price}
+                    className="flex flex-col items-center text-center"
                   >
-                    $12
-                  </p>
-                  <p className="mt-1 text-[10px] leading-tight text-[#999] sm:text-xs">
-                    SOLD OUT
-                    <br />
-                    (IN PRE-ORDERS)
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-center text-center">
-                  <div className="relative z-10 mb-3 h-3 w-3 border-2 border-black bg-[#FFC940] shadow-[2px_2px_0_0_#000]" />
-                  <p
-                    className="text-2xl text-black sm:text-3xl"
-                    style={{ fontFamily: "var(--font-hero)" }}
-                  >
-                    $18
-                  </p>
-                  <p className="mt-1 text-[10px] leading-tight text-[#333] sm:text-xs">
-                    <span className="font-bold text-black">35</span> SPOTS
-                    LEFT
-                  </p>
-                </div>
-
-                <div className="flex flex-col items-center text-center">
-                  <div className="relative z-10 mb-3 h-2.5 w-2.5 border border-black bg-[#C8C8C8]" />
-                  <p
-                    className="text-base text-[#999] sm:text-lg"
-                    style={{ fontFamily: "var(--font-hero)" }}
-                  >
-                    $30
-                  </p>
-                  <p className="mt-1 text-[10px] leading-tight text-[#999] sm:text-xs">
-                    NEXT 50 USERS
-                  </p>
-                </div>
+                    <div
+                      className={
+                        step.active
+                          ? "relative z-10 mb-3 h-3 w-3 border-2 border-black bg-[#FFC940] shadow-[2px_2px_0_0_#000]"
+                          : "relative z-10 mb-3 h-2.5 w-2.5 border border-black bg-[#C8C8C8]"
+                      }
+                    />
+                    <p
+                      className={
+                        step.active
+                          ? "text-2xl text-black sm:text-3xl"
+                          : step.soldOut
+                            ? "text-base text-[#999] line-through sm:text-lg"
+                            : "text-base text-[#999] sm:text-lg"
+                      }
+                      style={{ fontFamily: "var(--font-hero)" }}
+                    >
+                      {step.price}
+                    </p>
+                    <p
+                      className={`mt-1 text-[10px] leading-tight sm:text-xs ${
+                        step.active ? "text-[#333]" : "text-[#999]"
+                      }`}
+                    >
+                      {step.label}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

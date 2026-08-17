@@ -49,6 +49,12 @@ const appleGaramond = localFont({
   display: "swap",
 });
 
+const bethanyElingston = localFont({
+  src: "../public/Bethany Elingston.otf",
+  variable: "--font-bethany",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Your Blueprint",
   description:
@@ -67,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

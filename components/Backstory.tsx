@@ -3,9 +3,13 @@ import Image from "next/image";
 
 type BackstoryProps = {
   stacked?: boolean;
+  hideHeading?: boolean;
 };
 
-export default function Backstory({ stacked = false }: BackstoryProps) {
+export default function Backstory({
+  stacked = false,
+  hideHeading = false,
+}: BackstoryProps) {
   const heading = stacked ? (
     <h2
       className="m-0 text-[28px] font-normal italic leading-[1.2] text-black sm:text-[36px]"
@@ -19,7 +23,33 @@ export default function Backstory({ stacked = false }: BackstoryProps) {
     </h2>
   );
 
-  const body = (
+  const stackedBody = (
+    <div className="space-y-5 text-base leading-relaxed text-[#4A4A4A] sm:text-[17px] sm:leading-[1.75]">
+      <p>
+        <strong className="font-semibold text-black">
+          It&apos;s not finished yet. I won&apos;t pretend it is.
+        </strong>
+      </p>
+      <p>I&apos;m building it right now, properly, not rushing it out.</p>
+      <p>
+        It&apos;ll be ready in the next two weeks. No fake promises, no vague
+        &quot;coming soon.&quot;
+      </p>
+      <p>
+        <strong className="font-semibold text-black">
+          The first 100 people who reserve it get it for{" "}
+          <span className="font-medium text-[#999] line-through">$149</span>{" "}
+          $69.
+        </strong>
+      </p>
+      <p>
+        Once those 100 spots are gone, the price goes to $149.
+      </p>
+      <p>Permanently. No discounts, no exceptions.</p>
+    </div>
+  );
+
+  const homepageBody = (
     <div className="space-y-5 text-base leading-relaxed text-[#4A4A4A] sm:text-[17px] sm:leading-[1.75]">
       <p>Hey there…</p>
 
@@ -113,9 +143,9 @@ export default function Backstory({ stacked = false }: BackstoryProps) {
 
   if (stacked) {
     return (
-      <section id="backstory" className="max-w-2xl pt-10 sm:pt-14">
-        {heading}
-        <div className="mt-6 sm:mt-8">{body}</div>
+      <section id="backstory" className="max-w-2xl pt-8 sm:pt-10">
+        {hideHeading ? null : heading}
+        <div className={hideHeading ? "" : "mt-6 sm:mt-8"}>{stackedBody}</div>
       </section>
     );
   }
@@ -124,7 +154,7 @@ export default function Backstory({ stacked = false }: BackstoryProps) {
     <section id="backstory" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-20">
         {heading}
-        {body}
+        {homepageBody}
       </div>
     </section>
   );
