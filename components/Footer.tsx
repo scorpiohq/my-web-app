@@ -88,7 +88,7 @@ export default function Footer() {
           </a>
         </div>
 
-        <p className="text-sm text-black/70">© 2026. All rights reserved.</p>
+        <p className="text-sm text-black/70">© Your Blueprint, 2026. All rights reserved.</p>
       </div>
     </footer>
   );
