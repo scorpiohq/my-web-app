@@ -1,10 +1,27 @@
 "use client";
 
 import { useEffect } from "react";
+import {
+  enableA4PrintLayout,
+  enableHiresPrintLayout,
+  isIosDevice,
+  shouldUseHiresPrint,
+} from "@/lib/report-print-device";
 
 export default function ReportPrintTrigger() {
   useEffect(() => {
+    if (isIosDevice()) {
+      enableA4PrintLayout();
+      return;
+    }
+
     let cancelled = false;
+
+    if (shouldUseHiresPrint()) {
+      enableHiresPrintLayout();
+    } else {
+      enableA4PrintLayout();
+    }
 
     async function printReport() {
       await document.fonts.ready;
@@ -34,6 +51,7 @@ export default function ReportPrintTrigger() {
       };
 
       window.addEventListener("afterprint", closeAfterPrint, { once: true });
+      document.body.offsetHeight;
       window.setTimeout(() => {
         if (!cancelled) window.print();
       }, 200);

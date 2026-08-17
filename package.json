@@ -12,6 +12,8 @@
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@sparticuz/chromium": "^149.0.0",
     "@supabase/supabase-js": "^2.112.0",
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.2.1",
     "next": "16.2.12",
     "puppeteer-core": "^25.5.0",
     "react": "19.2.4",

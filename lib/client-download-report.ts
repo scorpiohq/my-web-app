@@ -1,3 +1,5 @@
+import { isIosDevice } from "@/lib/report-print-device";
+
 export function getReportPrintUrl(submissionId?: string) {
   const params = new URLSearchParams({ print: "1" });
 
@@ -15,6 +17,12 @@ export async function downloadReportPdf({
   submissionId?: string;
 }) {
   const url = getReportPrintUrl(submissionId);
+
+  if (isIosDevice()) {
+    window.location.assign(url);
+    return;
+  }
+
   const printWindow = window.open(url, "blueprint-print");
 
   if (!printWindow) {
