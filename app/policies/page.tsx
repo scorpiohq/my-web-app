@@ -46,7 +46,7 @@ const sections = [
     title: "Support",
     paragraphs: [
       "You're not alone in this.",
-      "DM us on Instagram @yourblueprnt — we usually reply within 1–2 hours.",
+      "DM us on Instagram @yourbluepriint — we usually reply within 1–2 hours.",
       "Or email andy@yourblueprint.in — we'll get back to you within a few hours.",
       "Support covers access issues, payment problems, or anything related to your Blueprint. If you need help, we've got you.",
     ],

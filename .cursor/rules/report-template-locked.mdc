@@ -9,7 +9,7 @@ The personalized creator report template is **complete and approved**.
 
 ## Locked file
 
-- `app/report-preview/page.tsx` — `ReportTemplate`, `ReportData`, and all layout/spacing/styling
+- `app/2610report-preview/page.tsx` — `ReportTemplate`, `ReportData`, and all layout/spacing/styling
 
 ## Rules
 

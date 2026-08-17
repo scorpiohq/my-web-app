@@ -62,7 +62,7 @@ export default function Footer() {
 
         <div className="mb-8 flex items-center gap-4 sm:mb-10">
           <a
-            href="https://instagram.com/yourblueprnt"
+            href="https://instagram.com/yourbluepriint"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
@@ -71,7 +71,7 @@ export default function Footer() {
             <InstagramIcon />
           </a>
           <a
-            href="https://www.threads.com/@yourblueprnt"
+            href="https://www.threads.com/yourbluepriint"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"

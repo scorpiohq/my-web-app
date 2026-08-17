@@ -6,6 +6,6 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Report template (locked)
 
-The final report template lives in `app/report-preview/page.tsx` (`ReportTemplate` + `ReportData`).
+The final report template lives in `app/2610report-preview/page.tsx` (`ReportTemplate` + `ReportData`).
 
 **Do not edit** layout, spacing, styling, or copy unless the user explicitly asks for report template changes.
