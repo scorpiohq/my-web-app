@@ -192,6 +192,28 @@ export async function getSubmissionForReportPage(publicId: string) {
   };
 }
 
+export async function getSubmissionForThankYou(publicId: string) {
+  if (!isPublicAccessId(publicId)) {
+    return null;
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select("public_id, name, created_at")
+    .eq("public_id", publicId)
+    .maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    public_id: String(data.public_id),
+    name: String(data.name || "Creator"),
+    created_at: String(data.created_at || ""),
+  };
+}
+
 export type SubmissionReview = {
   rating: number;
   comment: string;
