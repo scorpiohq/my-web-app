@@ -7,15 +7,13 @@ import {
 } from "@/lib/client-capture-report-pdf";
 import { isIosDevice } from "@/lib/report-print-device";
 
-export default function ReportIosPdfSave() {
+export default function ReportPdfSave() {
   const [phase, setPhase] = useState<"idle" | "saving" | "error">("idle");
-  const [visible, setVisible] = useState(false);
+  const [ios, setIos] = useState(false);
 
   useEffect(() => {
-    setVisible(isIosDevice());
+    setIos(isIosDevice());
   }, []);
-
-  if (!visible) return null;
 
   async function handleSave() {
     if (phase === "saving") return;
@@ -35,7 +33,7 @@ export default function ReportIosPdfSave() {
   }
 
   return (
-    <div className="report-ios-save">
+    <div className="report-pdf-save">
       <button type="button" onClick={handleSave} disabled={phase === "saving"}>
         {phase === "error"
           ? "Try save again"
@@ -43,7 +41,11 @@ export default function ReportIosPdfSave() {
             ? "Saving PDF…"
             : "Save PDF"}
       </button>
-      <p>Tap Save PDF, then Save to Files.</p>
+      <p>
+        {ios
+          ? "Tap Save PDF, then Save to Files."
+          : "Click Save PDF to download the report."}
+      </p>
     </div>
   );
 }

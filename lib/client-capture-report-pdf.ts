@@ -1,5 +1,6 @@
 import { toCanvas } from "html-to-image";
 import { jsPDF } from "jspdf";
+import { isIosDevice } from "@/lib/report-print-device";
 
 const REPORT_WIDTH = 2214;
 const REPORT_HEIGHT = 3365;
@@ -54,6 +55,19 @@ export async function captureReportPdfBlob() {
 
   await document.fonts.ready;
 
+  const images = Array.from(source.querySelectorAll("img"));
+  await Promise.all(
+    images.map((image) => {
+      if (image.complete) {
+        return image.decode?.().catch(() => undefined) ?? Promise.resolve();
+      }
+      return new Promise<void>((resolve) => {
+        image.addEventListener("load", () => resolve(), { once: true });
+        image.addEventListener("error", () => resolve(), { once: true });
+      });
+    }),
+  );
+
   const canvas = await toCanvas(source, {
     cacheBust: true,
     pixelRatio: 1,
@@ -82,7 +96,7 @@ export async function captureReportPdfBlob() {
 export async function shareOrOpenPdf(blob: Blob, fileName: string) {
   const file = new File([blob], fileName, { type: "application/pdf" });
 
-  if (navigator.canShare?.({ files: [file] })) {
+  if (isIosDevice() && navigator.canShare?.({ files: [file] })) {
     await navigator.share({
       files: [file],
       title: "Your Blueprint",
@@ -91,5 +105,11 @@ export async function shareOrOpenPdf(blob: Blob, fileName: string) {
   }
 
   const url = URL.createObjectURL(blob);
-  window.location.assign(url);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
