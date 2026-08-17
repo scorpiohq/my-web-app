@@ -12,11 +12,11 @@ export async function POST(request: Request) {
   const { data, error } = await supabaseAdmin
     .from("submissions")
     .select("id")
-    .eq("email", email)
+    .ilike("email", email)
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  if (error && error.code !== "PGRST116") {
+  if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
