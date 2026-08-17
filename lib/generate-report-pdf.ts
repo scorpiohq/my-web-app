@@ -52,11 +52,10 @@ async function launchBrowser(): Promise<Browser> {
     chromium.setGraphicsMode = false;
 
     return puppeteer.launch({
-      args: puppeteer.defaultArgs({
+      args: await puppeteer.defaultArgs({
         args: chromium.args,
         headless: "shell",
       }),
-      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: "shell",
     });
