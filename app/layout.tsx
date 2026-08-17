@@ -56,12 +56,43 @@ const bethanyElingston = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
+      ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
+      : "https://yourblueprint.in",
+  ),
   title: "Your Blueprint",
   description:
     "Your Blueprint to start your social media journey — with what you have, from where you are.",
+  applicationName: "Your Blueprint",
   icons: {
     icon: "/logo-dp.svg",
     apple: "/logo-dp.svg",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://yourblueprint.in",
+    siteName: "Your Blueprint",
+    title: "Your Blueprint",
+    description:
+      "Your Blueprint to start your social media journey — with what you have, from where you are.",
+    images: [
+      {
+        url: "https://yourblueprint.in/og-image.png",
+        width: 1230,
+        height: 630,
+        alt: "Your Blueprint",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Your Blueprint",
+    description:
+      "Your Blueprint to start your social media journey — with what you have, from where you are.",
+    images: ["https://yourblueprint.in/og-image.png"],
   },
 };
 
