@@ -1,4 +1,5 @@
 import PaymentThankYouTicket from "@/components/PaymentThankYouTicket";
+import ClearFormDraftOnMount from "@/components/ClearFormDraftOnMount";
 import { getSubmissionForThankYou } from "@/lib/submissions";
 
 export default async function ThankYouPage({
@@ -15,6 +16,7 @@ export default async function ThankYouPage({
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12">
+      <ClearFormDraftOnMount />
       <PaymentThankYouTicket
         publicId={submission?.public_id || submissionId}
         paidAt={submission?.created_at}

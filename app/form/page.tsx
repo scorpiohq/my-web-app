@@ -4,6 +4,7 @@ import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
 import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import CountrySelect from "@/components/CountrySelect";
+import { readFormDraft, writeFormDraft } from "@/lib/form-draft";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 function getOptionLetter(index: number): string {
@@ -234,6 +235,29 @@ type FormResponses = Record<string, FormAnswer> & {
   gender?: string;
 };
 
+function hasAnswerForStep(
+  question: (typeof questions)[number],
+  responses: FormResponses,
+) {
+  if (question.type === "intro") return true;
+
+  if (question.type === "image_choice") {
+    return Boolean(
+      (typeof responses.gender === "string" && responses.gender.trim()) ||
+        (typeof responses[question.id] === "string" &&
+          String(responses[question.id]).trim()),
+    );
+  }
+
+  const value = responses[question.id];
+
+  if (question.type === "multi_select") {
+    return Array.isArray(value) && value.length > 0;
+  }
+
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 function ChoiceOption({
   label,
   letter,
@@ -373,6 +397,7 @@ function FormExampleHints({ text }: { text: string }) {
 }
 
 export default function FormPage() {
+  const [ready, setReady] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [formVisible, setFormVisible] = useState(false);
   const [step, setStep] = useState(0);
@@ -384,6 +409,25 @@ export default function FormPage() {
   const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
+    const draft = readFormDraft();
+    if (draft) {
+      const safeStep = Math.min(
+        Math.max(0, draft.step),
+        questions.length - 1,
+      );
+      setResponses(draft.responses as FormResponses);
+      setStep(safeStep);
+      setShowIntro(false);
+    }
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready || showIntro) return;
+    writeFormDraft({ step, responses });
+  }, [ready, showIntro, step, responses]);
+
+  useEffect(() => {
     if (!showIntro) {
       requestAnimationFrame(() => setFormVisible(true));
     }
@@ -393,6 +437,7 @@ export default function FormPage() {
   const isLast = step === questions.length - 1;
   const optionCount = current.options?.length ?? 0;
   const scrollOptions = optionCount > 5;
+  const canContinue = hasAnswerForStep(current, responses);
 
   function setAnswer(value: FormAnswer) {
     setResponses({ ...responses, [current.id]: value });
@@ -430,6 +475,7 @@ export default function FormPage() {
   }
 
   function goNext() {
+    if (!canContinue || isNavigating || submitting) return;
     if (isLast) {
       handleSubmit();
     } else {
@@ -492,6 +538,10 @@ export default function FormPage() {
           : "Something went wrong starting checkout.",
       );
     }
+  }
+
+  if (!ready) {
+    return <div className="min-h-screen bg-white" />;
   }
 
   if (showIntro) {
@@ -687,7 +737,7 @@ export default function FormPage() {
             <button
               type="button"
               onClick={goNext}
-              disabled={submitting || isNavigating}
+              disabled={!canContinue || submitting || isNavigating}
               className="form-action-btn rounded-md bg-[#FFA126] px-8 py-3 text-base font-medium text-white disabled:opacity-60"
             >
               {isLast
