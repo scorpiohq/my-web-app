@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 const VIDEO_SRC = "/blueprint-intro.mp4";
-const POSTER_SRC = "/video-section-poster.png";
+const POSTER_SRC = "/video-section-poster.jpg";
 
 export default function VideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
