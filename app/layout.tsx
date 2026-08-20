@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Bebas_Neue, Geist, Geist_Mono, Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -110,6 +111,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />
         {children}
+        <Analytics />
       </body>
     </html>
   );
