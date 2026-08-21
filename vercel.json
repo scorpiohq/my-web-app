@@ -17,7 +17,7 @@
   "crons": [
     {
       "path": "/api/cron/abandoned-checkout",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 12 * * *"
     }
   ]
 }
