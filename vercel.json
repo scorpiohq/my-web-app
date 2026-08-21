@@ -9,6 +9,15 @@
     "app/api/download-report-pdf/route.ts": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "app/api/cron/abandoned-checkout/route.ts": {
+      "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/abandoned-checkout",
+      "schedule": "*/5 * * * *"
+    }
+  ]
 }
