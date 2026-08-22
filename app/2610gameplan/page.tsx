@@ -101,6 +101,7 @@ export default async function GameplanPage({
         salePrice="$69"
         offerBadge="SECURE YOUR SLOT!"
         buttonLabel="SECURE YOUR SLOT →"
+        showInstantPdfRow={false}
         checkoutButton={
           <GameplanCheckoutButton
             label="SECURE YOUR SLOT →"

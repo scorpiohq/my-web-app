@@ -14,19 +14,21 @@ export default function Hero() {
           </span>
 
           <h1
-            className="mb-5 max-w-none text-[clamp(1.5rem,4.5vw,3rem)] leading-[0.95] tracking-wide text-black sm:mb-6"
+            className="mb-5 text-[clamp(1.5rem,4.5vw,3rem)] leading-[0.95] tracking-wide text-black sm:mb-6"
             style={{ fontFamily: "var(--font-hero)" }}
           >
-            <span className="block whitespace-nowrap">Your Blueprint to Start,</span>
-            <span className="block whitespace-nowrap">
-              your Social Media Journey..
-            </span>
+            <span className="block">Starting your social media</span>
+            <span className="block">journey, just got easier.</span>
           </h1>
 
-          <p className="mb-7 max-w-md text-base leading-relaxed text-[#6B6B6B] sm:mb-8 sm:text-lg lg:max-w-lg">
-            Start your journey, the way you want,
-            <br />
-            with what you have, from where you are.
+          <p className="mb-7 max-w-md text-[14px] leading-relaxed text-[#6B6B6B] sm:mb-8 sm:max-w-2xl">
+            Answer 18 honest questions and get a personalized Blueprint&nbsp;—
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            built around your goals, your interests, and your situation,
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            so you know exactly where to start.
           </p>
 
           <HeroSamplePreviewTrigger />

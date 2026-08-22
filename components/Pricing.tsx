@@ -1,11 +1,13 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useEffect, useId, useState } from "react";
 
 const defaultFeatures = [
   "One Personalized Report",
   "Ready in Under 3 Minutes",
   "Lifetime Access",
-  "Instant PDF Download",
 ];
 
 type TimelineStep = {
@@ -31,18 +33,14 @@ const defaultTimelineSteps: TimelineStep[] = [
     price: "$18",
     label: (
       <>
-        <span className="font-bold text-black">35</span> SPOTS LEFT
+        <span className="font-bold text-black">29</span> SPOTS LEFT
       </>
     ),
     active: true,
   },
   {
     price: "$30",
-    label: (
-      <>
-        NEXT 50 USERS
-      </>
-    ),
+    label: <>NEXT 50 USERS</>,
   },
 ];
 
@@ -57,6 +55,77 @@ function CheckIcon() {
   );
 }
 
+function EmptyCircleIcon() {
+  return (
+    <span
+      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-black bg-white"
+      aria-hidden="true"
+    />
+  );
+}
+
+function PumpArrow() {
+  return (
+    <span className="pricing-pump-arrow shrink-0" aria-hidden="true">
+      <svg
+        width="22"
+        height="16"
+        viewBox="0 0 22 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 6.5h12.5V2.2L21 8l-8.5 5.8V9.5H0V6.5z"
+          fill="#E11D2E"
+          stroke="#000"
+          strokeWidth="1.2"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
+function BonusGiftGraphic() {
+  return (
+    <div className="bonus-gift-stage" aria-hidden="true">
+      <div className="bonus-gift-scale">
+        <div className="bonus-gift-stack">
+          <div className="bonus-gift-sheet bonus-gift-sheet-left" />
+          <div className="bonus-gift-sheet bonus-gift-sheet-right" />
+          <div className="bonus-gift-sheet bonus-gift-sheet-front">
+            <div className="bonus-gift-dots">
+              <span className="bonus-gift-dot" />
+              <span className="bonus-gift-dot" />
+              <span className="bonus-gift-dot" />
+              <span className="bonus-gift-dot" />
+            </div>
+            <div className="bonus-gift-lines">
+              <span className="bonus-gift-line" />
+              <span className="bonus-gift-line" />
+              <span className="bonus-gift-line" />
+            </div>
+          </div>
+          <div className="bonus-gift-badge">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3.5c-.7 0-1.9.3-2.7 1.1-.9.9-1.1 2-1 2.9H7.2C6 7.5 5 8.5 5 9.8v1.2h14V9.8c0-1.3-1-2.3-2.2-2.3h-1.1c.1-.9-.1-2-1-2.9C13.9 3.8 12.7 3.5 12 3.5Zm-2.2 2.4c.4-.4 1.1-.7 2.2-.7s1.8.3 2.2.7c.4.4.5.9.5 1.3h-5.4c0-.4.1-.9.5-1.3ZM5 12.5v6.2C5 19.5 5.9 20.5 7 20.5h4V12.5H5Zm8 0v8h4c1.1 0 2-1 2-1.8v-6.2h-6Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type PricingProps = {
   originalPrice?: string;
   salePrice?: string;
@@ -66,6 +135,7 @@ type PricingProps = {
   showIntro?: boolean;
   features?: string[];
   checkoutButton?: ReactNode;
+  showInstantPdfRow?: boolean;
 };
 
 export default function Pricing({
@@ -77,10 +147,40 @@ export default function Pricing({
   showIntro = true,
   features = defaultFeatures,
   checkoutButton,
+  showInstantPdfRow = true,
 }: PricingProps) {
+  const [bonusGiftOpen, setBonusGiftOpen] = useState(false);
+  const [bonusGiftClaimed, setBonusGiftClaimed] = useState(false);
+  const titleId = useId();
   const stepCount = timelineSteps.length;
   const lineLeft = `${100 / (stepCount * 2)}%`;
   const lineWidth = `${100 - 100 / stepCount}%`;
+  const resolvedButtonLabel = bonusGiftClaimed
+    ? "Get My Blueprint + Bonus Gift →"
+    : buttonLabel;
+
+  useEffect(() => {
+    if (!bonusGiftOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setBonusGiftOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [bonusGiftOpen]);
+
+  const claimBonusGift = () => {
+    setBonusGiftClaimed(true);
+    setBonusGiftOpen(false);
+  };
+
   return (
     <section id="pricing" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
@@ -128,7 +228,11 @@ export default function Pricing({
               </p>
             </div>
 
-            <ul className="mx-auto mt-8 max-w-sm space-y-3 text-left">
+            <ul
+              className={`mx-auto mt-8 max-w-sm space-y-3 text-left ${
+                showInstantPdfRow ? "relative pl-8 sm:pl-9" : ""
+              }`}
+            >
               {features.map((feature) => (
                 <li key={feature} className="flex items-start gap-3">
                   <CheckIcon />
@@ -137,6 +241,68 @@ export default function Pricing({
                   </span>
                 </li>
               ))}
+
+              {showInstantPdfRow ? (
+                <>
+                  <li className="flex items-start gap-3">
+                    <CheckIcon />
+                    <span className="text-sm text-[#333] sm:text-base">
+                      Instant PDF Download
+                    </span>
+                  </li>
+                  <li className="list-none pt-1" aria-hidden="true">
+                    <div className="h-px w-full bg-[#E5E5E5]" />
+                  </li>
+                  <li className="relative">
+                    {!bonusGiftClaimed ? (
+                      <span className="pointer-events-none absolute -left-8 top-0.5 sm:-left-9">
+                        <PumpArrow />
+                      </span>
+                    ) : null}
+                    {bonusGiftClaimed ? (
+                      <div className="flex w-full items-start justify-between gap-3">
+                        <span className="flex min-w-0 items-start gap-3">
+                          <CheckIcon />
+                          <span className="text-sm text-[#333] sm:text-base">
+                            Bonus Gift Included
+                          </span>
+                        </span>
+                        <span className="flex shrink-0 items-baseline gap-1.5 pt-0.5">
+                          <span className="text-sm font-medium text-[#999] line-through sm:text-base">
+                            $9
+                          </span>
+                          <span className="text-sm font-semibold text-black sm:text-base">
+                            $0
+                          </span>
+                        </span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setBonusGiftOpen(true)}
+                        className="group flex w-full items-start justify-between gap-3 text-left transition hover:opacity-90"
+                        aria-haspopup="dialog"
+                        aria-expanded={bonusGiftOpen}
+                      >
+                        <span className="flex min-w-0 items-start gap-3">
+                          <EmptyCircleIcon />
+                          <span className="text-sm text-[#333] underline decoration-transparent underline-offset-2 transition group-hover:decoration-[#333] sm:text-base">
+                            Claim your Bonus Gift 🎁*
+                          </span>
+                        </span>
+                        <span className="flex shrink-0 items-baseline gap-1.5 pt-0.5">
+                          <span className="text-sm font-medium text-[#999] line-through sm:text-base">
+                            $9
+                          </span>
+                          <span className="text-sm font-semibold text-black sm:text-base">
+                            $0
+                          </span>
+                        </span>
+                      </button>
+                    )}
+                  </li>
+                </>
+              ) : null}
             </ul>
 
             <div className="mx-auto mt-8 w-full max-w-md">
@@ -146,7 +312,7 @@ export default function Pricing({
                   className="btn-brutal btn-brutal-primary inline-block w-full px-6 py-4 text-sm font-bold tracking-wide text-black sm:text-base"
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
-                  {buttonLabel}
+                  {resolvedButtonLabel}
                 </Link>
               )}
 
@@ -235,7 +401,9 @@ export default function Pricing({
 
               <div
                 className="grid"
-                style={{ gridTemplateColumns: `repeat(${stepCount}, minmax(0, 1fr))` }}
+                style={{
+                  gridTemplateColumns: `repeat(${stepCount}, minmax(0, 1fr))`,
+                }}
               >
                 {timelineSteps.map((step) => (
                   <div
@@ -275,6 +443,65 @@ export default function Pricing({
           </div>
         </div>
       </div>
+
+      {bonusGiftOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+        >
+          <button
+            type="button"
+            aria-label="Close bonus gift"
+            className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"
+            onClick={() => setBonusGiftOpen(false)}
+          />
+
+          <div className="relative z-10 flex max-h-[min(92dvh,720px)] w-full max-w-[400px] flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] sm:max-h-[min(90dvh,760px)] sm:max-w-[420px] sm:rounded-[24px]">
+            <button
+              type="button"
+              onClick={() => setBonusGiftOpen(false)}
+              className="absolute right-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white text-lg leading-none text-black shadow-[0_2px_8px_rgba(0,0,0,0.1)] transition hover:bg-[#f8f8f8] sm:right-3 sm:top-3 sm:h-9 sm:w-9"
+              aria-label="Close"
+            >
+              ×
+            </button>
+
+            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5 sm:px-6 sm:pb-7 sm:pt-7">
+              <div className="mb-3 max-w-[90%] shrink-0 text-left sm:mb-4">
+                <h2
+                  id={titleId}
+                  className="text-base font-semibold tracking-tight text-[#1a1a1a] sm:text-xl"
+                >
+                  Your Bonus Gift 🎁
+                </h2>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-[#6B6B6B] sm:mt-2 sm:text-[15px]">
+                  A simple prompt file that transforms your blueprint into
+                  practical, step-by-step actions.
+                </p>
+              </div>
+
+              <p className="mb-3 shrink-0 text-left text-[13px] leading-relaxed text-[#333] sm:mb-5 sm:text-[15px]">
+                Worth <span className="font-semibold text-black">$9</span>. Free
+                for Early Bird users.
+              </p>
+
+              <div className="mx-auto w-full shrink sm:max-w-none">
+                <BonusGiftGraphic />
+              </div>
+
+              <button
+                type="button"
+                onClick={claimBonusGift}
+                className="btn-brutal btn-brutal-primary mt-4 w-full shrink-0 px-5 py-3 text-sm font-semibold text-black sm:mt-5 sm:px-6 sm:py-3.5"
+              >
+                Add My Free Gift →
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
