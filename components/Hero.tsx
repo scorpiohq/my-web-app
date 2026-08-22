@@ -21,7 +21,7 @@ export default function Hero() {
             <span className="block">journey, just got easier.</span>
           </h1>
 
-          <p className="mb-7 max-w-md text-[14px] leading-relaxed text-[#6B6B6B] sm:mb-8 sm:max-w-2xl">
+          <p className="mb-7 max-w-md text-[14px] leading-relaxed text-[#6B6B6B] sm:mb-8 sm:max-w-2xl sm:text-lg">
             Answer 18 honest questions and get a personalized Blueprint&nbsp;—
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
