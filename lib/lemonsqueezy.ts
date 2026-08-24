@@ -84,7 +84,7 @@ async function createLemonCheckout({
     testMode,
     checkoutOptions: {
       embed: false,
-      media: false,
+      media: true,
       logo: true,
     },
     checkoutData: {
