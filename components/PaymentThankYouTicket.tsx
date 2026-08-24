@@ -110,7 +110,7 @@ export default function PaymentThankYouTicket({
         <div>
           <dt className="text-xs text-[#9A9A9A]">Amount</dt>
           <dd className="mt-1 text-sm text-black">
-            {isGameplan ? "$69.00" : "$18.00"}
+            {isGameplan ? "$69.00" : "$9.00"}
           </dd>
         </div>
       </dl>

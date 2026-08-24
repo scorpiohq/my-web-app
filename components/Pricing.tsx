@@ -19,18 +19,12 @@ type TimelineStep = {
 
 const defaultTimelineSteps: TimelineStep[] = [
   {
-    price: "$12",
-    label: (
-      <>
-        SOLD OUT
-        <br />
-        (IN PRE-ORDERS)
-      </>
-    ),
+    price: "$5",
+    label: <>SOLD OUT</>,
     soldOut: true,
   },
   {
-    price: "$18",
+    price: "$9",
     label: (
       <>
         <span className="font-bold text-black">29</span> SPOTS LEFT
@@ -39,7 +33,7 @@ const defaultTimelineSteps: TimelineStep[] = [
     active: true,
   },
   {
-    price: "$30",
+    price: "$15",
     label: <>NEXT 50 USERS</>,
   },
 ];
@@ -139,8 +133,8 @@ type PricingProps = {
 };
 
 export default function Pricing({
-  originalPrice = "$30",
-  salePrice = "$18",
+  originalPrice = "$18",
+  salePrice = "$9",
   offerBadge = "Early-Bird Discount",
   buttonLabel = "GET YOUR BLUEPRINT →",
   timelineSteps = defaultTimelineSteps,
