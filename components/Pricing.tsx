@@ -188,7 +188,7 @@ export default function Pricing({
               className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
               style={{ fontFamily: "var(--font-hero)" }}
             >
-              Pay Once, No Subscription.
+              ONE-TIME PAYMENT
             </h2>
 
             <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">

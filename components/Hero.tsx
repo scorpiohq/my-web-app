@@ -9,8 +9,44 @@ export default function Hero() {
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 xl:gap-16">
         {/* Copy — centered on mobile, left on desktop */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-          <span className="mb-6 inline-block border border-black bg-[#F6E9D8] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-8 sm:text-xs">
-            ✰ CLAIM YOUR EARLY BIRD DISCOUNT!
+          <span className="mb-6 inline-flex items-center gap-2 border border-black bg-[#F6E9D8] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-8 sm:text-xs">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              className="shrink-0"
+            >
+              <circle
+                cx="9"
+                cy="8"
+                r="2.6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <circle
+                cx="16"
+                cy="9"
+                r="2.2"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <path
+                d="M3.8 18.5c.6-2.8 2.6-4.3 5.2-4.3s4.6 1.5 5.2 4.3"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M14.2 14.8c1.5-.5 3-.3 4.2.7.8.7 1.3 1.7 1.5 2.9"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+            29 OF 100 SPOTS REMAINING
           </span>
 
           <h1
