@@ -5,7 +5,7 @@ import HeroSamplePreviewTrigger from "@/components/HeroSamplePreviewTrigger";
 
 export default function Hero() {
   return (
-    <section id="hero" className="grid-bg px-6 py-12 sm:px-8 sm:py-16 lg:py-20">
+    <section id="hero" className="grid-bg px-6 pt-12 pb-0 sm:px-8 sm:pt-16 lg:pt-20">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 xl:gap-16">
         {/* Copy — centered on mobile, left on desktop */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
@@ -46,7 +46,7 @@ export default function Hero() {
                 strokeLinecap="round"
               />
             </svg>
-            29 OF 100 SPOTS REMAINING
+            21 OF 100 SPOTS REMAINING
           </span>
 
           <h1
@@ -57,13 +57,9 @@ export default function Hero() {
             <span className="block">journey, just got easier.</span>
           </h1>
 
-          <p className="mb-7 max-w-md text-[14px] leading-relaxed text-[#6B6B6B] sm:mb-8 sm:max-w-2xl sm:text-lg">
-            Answer 18 honest questions and get a personalized Blueprint&nbsp;—
-            <br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>
+          <p className="mb-7 w-full max-w-xl text-[14px] leading-relaxed text-[#6B6B6B] sm:mb-8 sm:max-w-2xl sm:text-lg lg:max-w-none">
+            Answer 18 simple questions and get a personalized Blueprint —
             built around your goals, your interests, and your situation,
-            <br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>
             so you know exactly where to start.
           </p>
 

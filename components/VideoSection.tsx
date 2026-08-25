@@ -24,7 +24,7 @@ export default function VideoSection() {
   }
 
   return (
-    <section className="grid-bg px-6 py-10 sm:px-8 sm:py-12">
+    <section className="grid-bg px-6 pt-[88px] pb-10 sm:px-8 sm:pt-24 sm:pb-12">
       <div className="mx-auto w-full max-w-5xl">
         <div className="w-full overflow-hidden border-2 border-black bg-white shadow-[8px_8px_0_0_#000]">
           <div className="relative aspect-[16/9] w-full bg-black">

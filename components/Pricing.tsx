@@ -27,7 +27,7 @@ const defaultTimelineSteps: TimelineStep[] = [
     price: "$9",
     label: (
       <>
-        <span className="font-bold text-black">29</span> SPOTS LEFT
+        <span className="font-bold text-black">21</span> SPOTS LEFT
       </>
     ),
     active: true,
@@ -133,9 +133,9 @@ type PricingProps = {
 };
 
 export default function Pricing({
-  originalPrice = "$18",
+  originalPrice,
   salePrice = "$9",
-  offerBadge = "Early-Bird Discount",
+  offerBadge = "SIMPLE PRICING",
   buttonLabel = "GET YOUR BLUEPRINT →",
   timelineSteps = defaultTimelineSteps,
   showIntro = true,
@@ -188,12 +188,12 @@ export default function Pricing({
               className="mb-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black"
               style={{ fontFamily: "var(--font-hero)" }}
             >
-              ONE-TIME PAYMENT
+              FIND YOUR DIRECTION. START TODAY.
             </h2>
 
             <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-              Get your Blueprint today & Start your journey with what you have,
-              and in the way that actually works for you.
+              Answer a few thoughtful questions and receive a personalized
+              Blueprint in just a few minutes.
             </p>
           </>
         ) : null}
@@ -201,14 +201,18 @@ export default function Pricing({
         <div className="w-full border-2 border-black bg-white shadow-[8px_8px_0_0_#000]">
           <div className="px-6 pt-10 pb-4 sm:px-10 sm:pt-12 sm:pb-5">
             <div className="relative mb-2 flex flex-col items-center">
-              <span className="mb-3 inline-block border border-black bg-[#E5C4A1] px-3 py-1 text-xs font-semibold tracking-wide text-black shadow-[2px_2px_0_0_#000]">
-                {offerBadge}
-              </span>
+              {offerBadge ? (
+                <span className="mb-3 inline-block border border-black bg-[#E5C4A1] px-3 py-1 text-xs font-semibold tracking-wide text-black shadow-[2px_2px_0_0_#000]">
+                  {offerBadge}
+                </span>
+              ) : null}
 
               <div className="flex items-end justify-center gap-1 sm:gap-1.5">
-                <p className="pb-2 text-2xl font-medium text-[#999] line-through sm:pb-3 sm:text-3xl">
-                  {originalPrice}
-                </p>
+                {originalPrice ? (
+                  <p className="pb-2 text-2xl font-medium text-[#999] line-through sm:pb-3 sm:text-3xl">
+                    {originalPrice}
+                  </p>
+                ) : null}
                 <p
                   className="text-[clamp(3.5rem,12vw,5.5rem)] leading-none text-black"
                   style={{ fontFamily: "var(--font-hero)" }}
@@ -217,8 +221,8 @@ export default function Pricing({
                 </p>
               </div>
 
-              <p className="mt-3 text-xs font-semibold tracking-[0.15em] text-[#6B6B6B]">
-                ONE-TIME PAYMENT
+              <p className="mt-3 text-sm text-[#6B6B6B]">
+                One-Time Purchase
               </p>
             </div>
 

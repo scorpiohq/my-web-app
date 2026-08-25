@@ -4,10 +4,31 @@ import { useState } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "#how-it-works", label: "How it work" },
+  { href: "#how-it-works", label: "How it works", arrow: true },
+  { href: "/reviews", label: "Reviews" },
   { href: "#pricing", label: "Pricing" },
-  { href: "#backstory", label: "The BackStory" },
 ];
+
+function NavArrow() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+      className="ml-1.5 inline-block shrink-0 translate-y-[1.5px]"
+    >
+      <path
+        d="M3 9L9 3M9 3H4.5M9 3V7.5"
+        stroke="#F0A512"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,9 +45,10 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[15px] font-medium text-black transition hover:text-black/70"
+              className="inline-flex items-center text-[15px] font-medium text-black transition hover:text-black/70"
             >
               {link.label}
+              {"arrow" in link && link.arrow ? <NavArrow /> : null}
             </Link>
           ))}
         </div>
@@ -72,10 +94,11 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-2 py-3 text-sm font-medium text-black transition hover:bg-black/5"
+                  className="inline-flex items-center px-2 py-3 text-sm font-medium text-black transition hover:bg-black/5"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
+                  {"arrow" in link && link.arrow ? <NavArrow /> : null}
                 </Link>
               ))}
             </div>
