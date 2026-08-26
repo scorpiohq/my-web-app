@@ -21,6 +21,14 @@ export const GO_LINKS: GoLink[] = [
     utm_campaign: "launch",
   },
   {
+    slug: "threads-bio",
+    name: "Threads personal bio",
+    where: "Personal Threads profile / bio link",
+    utm_source: "threads",
+    utm_medium: "social",
+    utm_campaign: "personal_bio",
+  },
+  {
     slug: "threads-brand",
     name: "Threads brand page",
     where: "Threads brand profile / bio link",
