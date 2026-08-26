@@ -24,8 +24,12 @@ export default function VideoSection() {
   }
 
   return (
-    <section className="grid-bg px-6 pt-[88px] pb-10 sm:px-8 sm:pt-24 sm:pb-12">
-      <div className="mx-auto w-full max-w-5xl">
+    <section className="grid-bg px-6 pt-0 pb-10 sm:px-8 sm:pb-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
+        <span className="-mt-6 mb-7 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:text-xs">
+          VIDEO TUTORIAL
+        </span>
+
         <div className="w-full overflow-hidden border-2 border-black bg-white shadow-[8px_8px_0_0_#000]">
           <div className="relative aspect-[16/9] w-full bg-black">
             <video

@@ -3,7 +3,11 @@ import { Highlight } from "@/components/testimonial-data";
 import HeroReportPreview from "@/components/HeroReportPreview";
 import HeroSamplePreviewTrigger from "@/components/HeroSamplePreviewTrigger";
 
-export default function Hero() {
+export default function Hero({
+  spotsRemaining = 19,
+}: {
+  spotsRemaining?: number;
+}) {
   return (
     <section id="hero" className="grid-bg px-6 pt-12 pb-0 sm:px-8 sm:pt-16 lg:pt-20">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12 xl:gap-16">
@@ -46,7 +50,7 @@ export default function Hero() {
                 strokeLinecap="round"
               />
             </svg>
-            21 OF 100 SPOTS REMAINING
+            {spotsRemaining} OF 100 SPOTS REMAINING
           </span>
 
           <h1

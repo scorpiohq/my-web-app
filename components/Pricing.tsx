@@ -17,26 +17,29 @@ type TimelineStep = {
   soldOut?: boolean;
 };
 
-const defaultTimelineSteps: TimelineStep[] = [
-  {
-    price: "$5",
-    label: <>SOLD OUT</>,
-    soldOut: true,
-  },
-  {
-    price: "$9",
-    label: (
-      <>
-        <span className="font-bold text-black">21</span> SPOTS LEFT
-      </>
-    ),
-    active: true,
-  },
-  {
-    price: "$15",
-    label: <>NEXT 50 USERS</>,
-  },
-];
+function buildTimelineSteps(spotsRemaining: number): TimelineStep[] {
+  return [
+    {
+      price: "$5",
+      label: <>SOLD OUT</>,
+      soldOut: true,
+    },
+    {
+      price: "$9",
+      label: (
+        <>
+          <span className="font-bold text-black">{spotsRemaining}</span>{" "}
+          SPOTS LEFT
+        </>
+      ),
+      active: true,
+    },
+    {
+      price: "$15",
+      label: <>NEXT 50 USERS</>,
+    },
+  ];
+}
 
 function CheckIcon() {
   return (
@@ -126,6 +129,7 @@ type PricingProps = {
   offerBadge?: string;
   buttonLabel?: string;
   timelineSteps?: TimelineStep[];
+  spotsRemaining?: number;
   showIntro?: boolean;
   features?: string[];
   checkoutButton?: ReactNode;
@@ -137,7 +141,8 @@ export default function Pricing({
   salePrice = "$9",
   offerBadge = "SIMPLE PRICING",
   buttonLabel = "GET YOUR BLUEPRINT →",
-  timelineSteps = defaultTimelineSteps,
+  timelineSteps,
+  spotsRemaining = 19,
   showIntro = true,
   features = defaultFeatures,
   checkoutButton,
@@ -146,7 +151,9 @@ export default function Pricing({
   const [bonusGiftOpen, setBonusGiftOpen] = useState(false);
   const [bonusGiftClaimed, setBonusGiftClaimed] = useState(false);
   const titleId = useId();
-  const stepCount = timelineSteps.length;
+  const resolvedTimelineSteps =
+    timelineSteps ?? buildTimelineSteps(spotsRemaining);
+  const stepCount = resolvedTimelineSteps.length;
   const lineLeft = `${100 / (stepCount * 2)}%`;
   const lineWidth = `${100 - 100 / stepCount}%`;
   const resolvedButtonLabel = bonusGiftClaimed
@@ -403,7 +410,7 @@ export default function Pricing({
                   gridTemplateColumns: `repeat(${stepCount}, minmax(0, 1fr))`,
                 }}
               >
-                {timelineSteps.map((step) => (
+                {resolvedTimelineSteps.map((step) => (
                   <div
                     key={step.price}
                     className="flex flex-col items-center text-center"

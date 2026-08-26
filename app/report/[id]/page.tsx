@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { ReportTemplate } from "@/app/2610report-preview/page";
+import { ReportTemplate } from "@/app/261005-report-preview/page";
 import ReportPageShell from "@/components/ReportPageShell";
 import {
   mapSubmissionToReportData,
@@ -35,7 +35,7 @@ export default async function ReportPage({
     >
       <ReportTemplate
         data={reportData}
-        gameplanHref={`/2610gameplan?submission_id=${encodeURIComponent(submission.public_id)}`}
+        gameplanHref={`/261005-gameplan?submission_id=${encodeURIComponent(submission.public_id)}`}
       />
     </ReportPageShell>
   );

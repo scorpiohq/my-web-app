@@ -101,7 +101,7 @@ function ReportCard({
 
 export function ReportTemplate({
   data,
-  gameplanHref = "/2610gameplan",
+  gameplanHref = "/261005-gameplan",
   exportMode = false,
 }: {
   data: ReportData;

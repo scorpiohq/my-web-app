@@ -11,9 +11,13 @@ import Testimonials from "@/components/Testimonials";
 import VideoSection from "@/components/VideoSection";
 import { getSpotsRemaining } from "@/lib/spots";
 
+/**
+ * Trial copy of the live landing page — edit experiments here.
+ * Production homepage remains at `/`.
+ */
 export const revalidate = 60;
 
-export default async function Home() {
+export default async function LandingTrialPage() {
   const spotsRemaining = await getSpotsRemaining();
 
   return (

@@ -12,107 +12,173 @@ import {
 type StoryBlock = {
   id: string;
   content: ReactNode | ((revealed: boolean) => ReactNode);
+  /** Full-line text color */
+  color?: string;
 };
 
+const ACCENT = "#FF9100";
+
+function Accent({
+  revealed,
+  children,
+}: {
+  revealed: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <span style={revealed ? { color: ACCENT } : undefined}>{children}</span>
+  );
+}
+
+/**
+ * One block = one visual line (as in the reference).
+ * Breaks stay intentional across screen sizes; font scales down on mobile.
+ */
 const blocks: StoryBlock[] = [
   { id: "1", content: "Everybody wants to start on social media." },
   { id: "2", content: "Who doesn't?" },
-  { id: "3", content: "Make money online." },
-  { id: "4", content: "Have freedom over your time and life." },
-  { id: "5", content: "Travel the places you've always wanted to." },
-  { id: "6", content: "Spend time with the people you love." },
+  { id: "3", content: "Make money online.", color: ACCENT },
+  {
+    id: "4",
+    content: "Have freedom over your time and life.",
+    color: ACCENT,
+  },
+  {
+    id: "5",
+    content: "Travel the places you've always wanted to.",
+    color: ACCENT,
+  },
+  {
+    id: "6",
+    content: "Spend time with the people you love.",
+    color: ACCENT,
+  },
   {
     id: "7",
-    content:
-      "Almost everyone, at some point in their life, has thought about starting.",
+    content: "Almost everyone, at some point in their life,",
   },
-  { id: "8", content: "But most never actually do." },
+  { id: "8", content: "has thought about starting." },
   {
     id: "9",
-    content:
-      "Not because they lack motivation or they're chasing perfection. It's not even about money.",
-  },
-  { id: "10", content: "Still, they never start." },
-  {
-    id: "11",
     content: (revealed) => (
       <>
-        It&apos;s because they wanted to - but never had{" "}
-        <span className={revealed ? "text-[#FFA126]" : undefined}>clarity</span>{" "}
-        on where to actually begin.
+        But most <Accent revealed={revealed}>never actually do.</Accent>
       </>
     ),
   },
   {
-    id: "12",
-    content: <em>“Where do I even start?”</em>,
+    id: "10",
+    content: "Not because they lack motivation. Not because they're",
   },
-  { id: "13", content: "That's the real first question. Before anything else." },
+  {
+    id: "11",
+    content: "chasing perfection. It's not even about the money anymore.",
+  },
+  {
+    id: "12",
+    content: "It's because they wanted to, but never had",
+  },
+  { id: "13", content: "clarity on where to actually begin." },
   {
     id: "14",
-    content:
-      "Main reason people stay stuck isn't discipline, or consistency, or even skill.",
+    content: (revealed) => (
+      <em>
+        <Accent revealed={revealed}>“Where do I even start?”</Accent>
+      </em>
+    ),
+    color: ACCENT,
   },
   {
     id: "15",
-    content:
-      "Everyone has knowledge, some already applying it, some still figuring it out.",
+    content: "That's the real first barrier. Before anything else.",
   },
-  { id: "16", content: "Real reason is: you don't know where to start." },
+  {
+    id: "16",
+    content: "Most people already have the knowledge. Some are",
+  },
   {
     id: "17",
-    content:
-      "Because not everyone has the same situation. Not everyone has the same interests.",
+    content: "applying it, Some are still figuring it out.",
   },
   {
     id: "18",
     content: (revealed) => (
       <>
-        That&apos;s why I built{" "}
-        <span className={revealed ? "font-semibold text-[#FFA126]" : undefined}>
-          Your Blueprint
-        </span>{" "}
-        - a simple way to help you start your journey.
+        The real problem is simpler:{" "}
+        <Accent revealed={revealed}>you don&apos;t know where to start.</Accent>
       </>
     ),
   },
   {
     id: "19",
-    content:
-      "All you have to do is answer 18 simple questions - about you, your goals, your passions, and the situation you're actually in.",
+    content: (revealed) => (
+      <>
+        That&apos;s why I built{" "}
+        <Accent revealed={revealed}>Your Blueprint.</Accent>
+      </>
+    ),
   },
   {
     id: "20",
-    content: "The tool builds your personalized Blueprint from there.",
+    content: "A simple tool to help you figure out exactly that.",
   },
   {
     id: "21",
-    content:
-      "So you can finally take the step you've been waiting on for years.",
+    content: (revealed) => (
+      <>
+        Just Answer <Accent revealed={revealed}>18 Simple questions</Accent> —
+        about you, your goals,
+      </>
+    ),
   },
   {
     id: "22",
-    content: "Think of it like a compass for exactly the moment you're stuck.",
+    content: "your interests, and where you're right now.",
   },
-  { id: "23", content: "Let's start your journey. Together." },
+  {
+    id: "23",
+    content: (revealed) => (
+      <>
+        From there, it builds{" "}
+        <Accent revealed={revealed}>a Personalized Blueprint</Accent>, around
+        you.
+      </>
+    ),
+  },
+  {
+    id: "24",
+    content: "So instead of wondering what your first step should be...",
+  },
+  {
+    id: "25",
+    content: "you'll know exactly where to begin.",
+    color: ACCENT,
+  },
+  {
+    id: "26",
+    content: "Think of it as a compass, for the moment you feel stuck.",
+  },
+  { id: "27", content: "Let's start your journey. Together." },
 ];
 
-/** Plot beats — lines in a beat share one reveal. */
+/** Reveal groups — matching the story beats. */
 const BEATS: number[][] = [
-  [0, 1],
-  [2, 3, 4],
-  [5, 6],
-  [7, 8],
-  [9, 10],
-  [11, 12],
-  [13, 14, 15],
-  [16, 17],
-  [18, 19],
-  [20, 21],
-  [22], // closing line
+  [0, 1], // hook (static)
+  [2, 3, 4, 5], // desires
+  [6, 7, 8], // almost everyone + never do
+  [9, 10], // not because
+  [11, 12], // clarity
+  [13, 14], // the question
+  [15, 16, 17], // knowledge + real problem
+  [18, 19], // Your Blueprint
+  [20, 21], // 18 questions
+  [22], // Personalized Blueprint
+  [23, 24, 25], // first step / begin / compass
+  [26], // closing + button
 ];
 
 const DIM = 0.08;
+const STATIC_HOOK_INDICES = new Set([0, 1]);
 
 function smoothstep(t: number) {
   const x = Math.min(1, Math.max(0, t));
@@ -126,7 +192,6 @@ function renderContent(
   return typeof content === "function" ? content(revealed) : content;
 }
 
-/** Opacity for a beat from its anchor line’s place in the viewport. */
 function beatOpacityFromAnchor(
   anchor: HTMLElement,
   vh: number,
@@ -136,24 +201,21 @@ function beatOpacityFromAnchor(
 
   const rect = anchor.getBoundingClientRect();
   const focusY = vh * 0.48;
-  // Narrow band = upcoming stays hidden; still enough runway to feel gradual
   const fadeStart = vh * 0.72;
   const fadeEnd = focusY;
-
   const y = rect.top + rect.height / 2;
 
   if (y <= fadeEnd) return 1;
   if (y >= fadeStart) return DIM;
 
   const t = (y - fadeEnd) / (fadeStart - fadeEnd);
-  // Ease so it rises slowly then finishes
   return DIM + (1 - DIM) * (1 - smoothstep(t));
 }
 
 export default function ScrollRevealStory() {
   const lineRefs = useRef<(HTMLElement | null)[]>([]);
   const [opacities, setOpacities] = useState<number[]>(() =>
-    blocks.map(() => DIM),
+    blocks.map((_, i) => (STATIC_HOOK_INDICES.has(i) ? 1 : DIM)),
   );
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -161,11 +223,30 @@ export default function ScrollRevealStory() {
     const vh = window.innerHeight;
     const next = new Array(blocks.length).fill(DIM);
 
-    for (const beat of BEATS) {
+    for (const index of STATIC_HOOK_INDICES) next[index] = 1;
+
+    if (reducedMotion) {
+      next.fill(1);
+      setOpacities(next);
+      return;
+    }
+
+    let previousComplete = true;
+    for (let beatIndex = 0; beatIndex < BEATS.length; beatIndex++) {
+      const beat = BEATS[beatIndex];
+      if (beatIndex === 0) continue;
+
+      if (!previousComplete) {
+        for (const index of beat) next[index] = DIM;
+        continue;
+      }
+
       const anchor = lineRefs.current[beat[0]];
       if (!anchor) continue;
-      const opacity = beatOpacityFromAnchor(anchor, vh, reducedMotion);
+
+      const opacity = beatOpacityFromAnchor(anchor, vh, false);
       for (const index of beat) next[index] = opacity;
+      previousComplete = opacity >= 0.95;
     }
 
     setOpacities((prev) => {
@@ -194,7 +275,6 @@ export default function ScrollRevealStory() {
       raf = requestAnimationFrame(update);
     };
 
-    // First paint after refs attach
     raf = requestAnimationFrame(update);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
@@ -207,50 +287,68 @@ export default function ScrollRevealStory() {
 
   return (
     <section
-      className="grid-bg px-6 pt-[20vh] pb-[35vh] sm:px-8"
+      className="grid-bg overflow-x-hidden px-5 pt-16 pb-[120px] sm:px-8 sm:pt-20 sm:pb-36 md:pt-24"
       aria-label="Why you need a Blueprint"
     >
-      <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 sm:gap-5">
-        {blocks.map((block, index) => {
-          const opacity = opacities[index] ?? DIM;
-          const revealed = opacity > 0.7;
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 sm:gap-4 md:gap-5">
+        {BEATS.map((beat, beatIndex) => (
+          <div
+            key={`beat-${beatIndex}`}
+            className="flex w-full flex-col items-center gap-3 sm:gap-4 md:gap-5"
+          >
+            {beat.map((index) => {
+              const block = blocks[index];
+              const isStatic = STATIC_HOOK_INDICES.has(index);
+              const opacity = isStatic ? 1 : (opacities[index] ?? DIM);
+              const revealed = isStatic || opacity > 0.7;
+              const color = block.color ?? "#000000";
 
-          return (
-            <p
-              key={block.id}
-              ref={(el) => {
-                lineRefs.current[index] = el;
-              }}
-              className="w-full text-center font-mono text-base leading-relaxed text-black sm:text-lg md:text-xl md:leading-relaxed"
-              style={{
-                opacity,
-                filter: opacity < 0.4 ? "blur(1.5px)" : "none",
-              }}
-            >
-              {renderContent(block.content, revealed)}
-            </p>
-          );
-        })}
+              return (
+                <p
+                  key={block.id}
+                  ref={(el) => {
+                    lineRefs.current[index] = el;
+                  }}
+                  className="w-full max-w-full text-center font-mono text-[13px] leading-snug break-words sm:w-max sm:text-[15px] sm:leading-relaxed sm:whitespace-nowrap md:text-lg md:leading-relaxed"
+                  style={
+                    isStatic
+                      ? { color }
+                      : {
+                          color,
+                          opacity,
+                          filter: opacity < 0.4 ? "blur(1.5px)" : "blur(0px)",
+                          transition:
+                            "opacity 480ms ease-out, filter 480ms ease-out",
+                        }
+                  }
+                >
+                  {renderContent(block.content, revealed)}
+                </p>
+              );
+            })}
 
-        {(() => {
-          const lastOpacity = opacities[blocks.length - 1] ?? DIM;
-          const revealed = lastOpacity > 0.7;
-          return (
-            <div
-              className="flex w-full justify-center pt-4"
-              style={{ opacity: lastOpacity }}
-            >
-              <Link
-                href="/form"
-                className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
-                tabIndex={revealed ? 0 : -1}
-                aria-hidden={!revealed}
+            {beatIndex === BEATS.length - 1 ? (
+              <div
+                className="flex w-full justify-center pt-4"
+                style={{
+                  opacity: opacities[blocks.length - 1] ?? DIM,
+                  transition: "opacity 480ms ease-out",
+                }}
               >
-                Get your Blueprint →
-              </Link>
-            </div>
-          );
-        })()}
+                <Link
+                  href="/form"
+                  className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
+                  tabIndex={
+                    (opacities[blocks.length - 1] ?? DIM) > 0.7 ? 0 : -1
+                  }
+                  aria-hidden={(opacities[blocks.length - 1] ?? DIM) <= 0.7}
+                >
+                  Get your Blueprint →
+                </Link>
+              </div>
+            ) : null}
+          </div>
+        ))}
       </div>
     </section>
   );

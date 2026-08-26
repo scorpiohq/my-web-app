@@ -86,7 +86,7 @@ export default function BlueprintProgressScreen({
     : STATUS_MESSAGES[statusIndex];
   const reportHref = submissionId
     ? `/report/${encodeURIComponent(submissionId)}`
-    : "/2610report-preview";
+    : "/261005-report-preview";
 
   useEffect(() => {
     if (!runWait) {
