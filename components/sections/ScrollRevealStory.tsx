@@ -336,7 +336,7 @@ export default function ScrollRevealStory() {
                 }}
               >
                 <Link
-                  href="/form"
+                  href="/#pricing"
                   className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
                   tabIndex={
                     (opacities[blocks.length - 1] ?? DIM) > 0.7 ? 0 : -1
