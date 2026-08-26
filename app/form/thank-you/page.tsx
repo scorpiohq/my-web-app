@@ -1,5 +1,6 @@
 import PaymentThankYouTicket from "@/components/PaymentThankYouTicket";
 import ClearFormDraftOnMount from "@/components/ClearFormDraftOnMount";
+import PurchaseTracking from "@/components/PurchaseTracking";
 import { getSubmissionForThankYou } from "@/lib/submissions";
 
 export default async function ThankYouPage({
@@ -13,12 +14,14 @@ export default async function ThankYouPage({
   const submission = submissionId
     ? await getSubmissionForThankYou(submissionId)
     : null;
+  const publicId = submission?.public_id || submissionId;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12">
       <ClearFormDraftOnMount />
+      <PurchaseTracking product={product} publicId={publicId} />
       <PaymentThankYouTicket
-        publicId={submission?.public_id || submissionId}
+        publicId={publicId}
         paidAt={submission?.created_at}
         product={product}
       />
