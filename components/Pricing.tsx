@@ -137,7 +137,7 @@ type PricingProps = {
 };
 
 export default function Pricing({
-  originalPrice,
+  originalPrice = "$18",
   salePrice = "$9",
   offerBadge = "SIMPLE PRICING",
   buttonLabel = "GET YOUR BLUEPRINT →",
@@ -228,7 +228,7 @@ export default function Pricing({
                 </p>
               </div>
 
-              <p className="mt-3 text-sm text-[#6B6B6B]">
+              <p className="mt-2 text-sm text-[#6B6B6B]">
                 One-Time Purchase
               </p>
             </div>
