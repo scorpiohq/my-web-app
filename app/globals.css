@@ -28,8 +28,8 @@ body {
 .grid-bg {
   background-color: #f8f8f8;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.028) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

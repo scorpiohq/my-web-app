@@ -4,17 +4,17 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 export const TOTAL_BLUEPRINT_SPOTS = 100;
 
 /**
- * Counter starts at 19 from this paid baseline.
+ * Counter starts at 12 from this paid baseline.
  * Each new paid submission after this decreases spots by 1.
  * (You were at ~2 paid when this was set — 100 − 2 = 98 on the old formula.)
  */
-const SPOTS_AT_BASELINE = 19;
+const SPOTS_AT_BASELINE = 12;
 const PAID_BASELINE = 2;
 
 const FALLBACK_SPOTS_REMAINING = SPOTS_AT_BASELINE;
 
 /**
- * Spots left from the 19 baseline, decreasing as paid count rises.
+ * Spots left from the 12 baseline, decreasing as paid count rises.
  */
 export async function getSpotsRemaining(): Promise<number> {
   try {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Bebas_Neue, Geist, Geist_Mono, Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import HashScroll from "@/components/HashScroll";
 import UtmCapture from "@/components/UtmCapture";
 import "./globals.css";
 
@@ -111,6 +112,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />
         <UtmCapture />
+        <HashScroll />
         {children}
       </body>
     </html>

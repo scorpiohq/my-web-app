@@ -118,17 +118,6 @@ export default async function GameplanPage({
           "100+ Digital Product Ideas",
           "Lifetime Access, with Future Updates",
         ]}
-        timelineSteps={[
-          {
-            price: "$69",
-            label: "Only 100 Slots",
-            active: true,
-          },
-          {
-            price: "$149",
-            label: "Regular price",
-          },
-        ]}
       />
       <FAQ items={gameplanFaqs} heading="FAQs" showDescription={false} />
     </ReportPageShell>

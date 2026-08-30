@@ -16,22 +16,27 @@ const faqs = [
   {
     question: "IS THIS REALLY PERSONALIZED?",
     answer:
-      "Yes. Every blueprint is created using your answers, making it unique to your goals, interests, strengths, and current situation. No two blueprints are exactly the same.",
+      "Yes. It's built entirely from your answers, not a template, two rounds of AI reasoning go into understanding your situation before your Blueprint is generated. No two Blueprints are the same.",
+  },
+  {
+    question: "IS MY INFORMATION KEPT PRIVATE?",
+    answer:
+      "Yes. Your answers are only used to generate your Blueprint. We don't sell your data or share it with third parties.",
   },
   {
     question: "HOW LONG DOES IT TAKE?",
     answer:
-      "The questionnaire takes about 1–3 minutes, and your personalized blueprint is usually ready within minutes after payment.",
+      "The questionnaire takes about 1–3 minutes, and your personalized Blueprint is usually ready within seconds after payment.",
   },
   {
     question: "WHAT HAPPENS AFTER I RECEIVE MY BLUEPRINT?",
     answer:
-      "You'll be able to view and download your blueprint as a PDF. If you'd like help putting it into action, you'll also have the option to continue with the Step-by-step Gameplan.",
+      "You'll be able to view and download your Blueprint as a PDF, instantly, with lifetime access to revisit it anytime.",
   },
   {
     question: "DO YOU OFFER REFUNDS?",
     answer:
-      "Since every blueprint is personalized and created specifically for you, refunds generally aren't available once it has been generated. If you experience a technical issue or don't receive your blueprint, we'll make it right.",
+      "Yes. If your Blueprint doesn't give you a clear next step, email us within 7 days of purchase for a full refund.",
   },
 ];
 
@@ -82,23 +87,22 @@ export default function FAQ({
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
         <h2
           className={`max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
-            showDescription ? "mb-5" : "mb-10 sm:mb-12"
+            showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
           }`}
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          {heading ?? (
-            <>
-              COMMON QUESTIONS
-              <br />
-              ANSWERED CLEARLY
-            </>
-          )}
+          {heading ?? "Frequently asked."}
         </h2>
 
         {showDescription ? (
           <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-            Here are clear answers to the most common questions we get from
-            creators coaches and teams using the platform.
+            Still have questions? Email{" "}
+            <a
+              href="mailto:hello@yourblueprint.in"
+              className="font-medium text-black underline underline-offset-2 transition-colors hover:text-[#555]"
+            >
+              hello@yourblueprint.in
+            </a>
           </p>
         ) : null}
 

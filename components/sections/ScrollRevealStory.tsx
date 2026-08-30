@@ -14,6 +14,8 @@ type StoryBlock = {
   content: ReactNode | ((revealed: boolean) => ReactNode);
   /** Full-line text color */
   color?: string;
+  /** Allow wrapping instead of forcing a single line (for long beats) */
+  allowWrap?: boolean;
 };
 
 const ACCENT = "#FF9100";
@@ -35,52 +37,17 @@ function Accent({
  * Breaks stay intentional across screen sizes; font scales down on mobile.
  */
 const blocks: StoryBlock[] = [
-  { id: "1", content: "Everybody wants to start on social media." },
-  { id: "2", content: "Who doesn't?" },
-  { id: "3", content: "Make money online.", color: ACCENT },
-  {
-    id: "4",
-    content: "Have freedom over your time and life.",
-    color: ACCENT,
-  },
-  {
-    id: "5",
-    content: "Travel the places you've always wanted to.",
-    color: ACCENT,
-  },
-  {
-    id: "6",
-    content: "Spend time with the people you love.",
-    color: ACCENT,
-  },
-  {
-    id: "7",
-    content: "Almost everyone, at some point in their life,",
-  },
-  { id: "8", content: "has thought about starting." },
-  {
-    id: "9",
-    content: (revealed) => (
-      <>
-        But most <Accent revealed={revealed}>never actually do.</Accent>
-      </>
-    ),
-  },
+  { id: "1", content: "Everybody thinks about starting on social media." },
+  { id: "2", content: "At some point, everyone does." },
+  { id: "3", content: "But most people don't." },
+  { id: "4", content: "Not because they're lazy." },
+  { id: "5", content: "Not because they don't have anything to say." },
+  { id: "6", content: "It's not even really about the money." },
+  { id: "7", content: "It's because they open their phone..." },
+  { id: "8", content: "think \"okay, what do I even post\"..." },
+  { id: "9", content: "and close it again." },
   {
     id: "10",
-    content: "Not because they lack motivation. Not because they're",
-  },
-  {
-    id: "11",
-    content: "chasing perfection. It's not even about the money anymore.",
-  },
-  {
-    id: "12",
-    content: "It's because they wanted to, but never had",
-  },
-  { id: "13", content: "clarity on where to actually begin." },
-  {
-    id: "14",
     content: (revealed) => (
       <em>
         <Accent revealed={revealed}>“Where do I even start?”</Accent>
@@ -88,29 +55,27 @@ const blocks: StoryBlock[] = [
     ),
     color: ACCENT,
   },
+  { id: "11", content: "That question is the whole barrier." },
+  {
+    id: "12",
+    content: "Everything else — consistency, growth, monetizing — comes after it.",
+  },
+  { id: "13", content: "And nobody answers it for you." },
+  { id: "14", content: "Most people already have the knowledge." },
   {
     id: "15",
-    content: "That's the real first barrier. Before anything else.",
+    content: "Some are applying it. Some are still figuring it out.",
   },
-  {
-    id: "16",
-    content: "Most people already have the knowledge. Some are",
-  },
+  { id: "16", content: "The real problem is simpler:" },
   {
     id: "17",
-    content: "applying it, Some are still figuring it out.",
+    content: (revealed) => (
+      <Accent revealed={revealed}>You don&apos;t know where to start.</Accent>
+    ),
+    color: ACCENT,
   },
   {
     id: "18",
-    content: (revealed) => (
-      <>
-        The real problem is simpler:{" "}
-        <Accent revealed={revealed}>you don&apos;t know where to start.</Accent>
-      </>
-    ),
-  },
-  {
-    id: "19",
     content: (revealed) => (
       <>
         That&apos;s why I built{" "}
@@ -119,62 +84,50 @@ const blocks: StoryBlock[] = [
     ),
   },
   {
-    id: "20",
-    content: "A simple tool to help you figure out exactly that.",
-  },
-  {
-    id: "21",
-    content: (revealed) => (
+    id: "19",
+    allowWrap: true,
+    content: (
       <>
-        Just Answer <Accent revealed={revealed}>18 Simple questions</Accent> —
-        about you, your goals,
+        Answer 18 questions, about you, your goals,
+        <br />
+        your interests, where you&apos;re right now.
       </>
     ),
   },
   {
-    id: "22",
-    content: "your interests, and where you're right now.",
+    id: "20",
+    content: (revealed) => (
+      <>
+        From there, it builds a <Accent revealed={revealed}>Blueprint</Accent>. Around you.
+      </>
+    ),
   },
+  { id: "21", content: "Not a generic blueprint." },
+  { id: "22", content: "Yours Blueprint", color: ACCENT },
   {
     id: "23",
     content: (revealed) => (
       <>
-        From there, it builds{" "}
-        <Accent revealed={revealed}>a Personalized Blueprint</Accent>, around
-        you.
+        So instead of guessing your first move...{" "}
+        <Accent revealed={revealed}>you&apos;ll know it.</Accent>
       </>
     ),
   },
-  {
-    id: "24",
-    content: "So instead of wondering what your first step should be...",
-  },
-  {
-    id: "25",
-    content: "you'll know exactly where to begin.",
-    color: ACCENT,
-  },
-  {
-    id: "26",
-    content: "Think of it as a compass, for the moment you feel stuck.",
-  },
-  { id: "27", content: "Let's start your journey. Together." },
 ];
 
 /** Reveal groups — matching the story beats. */
 const BEATS: number[][] = [
   [0, 1], // hook (static)
-  [2, 3, 4, 5], // desires
-  [6, 7, 8], // almost everyone + never do
-  [9, 10], // not because
-  [11, 12], // clarity
-  [13, 14], // the question
-  [15, 16, 17], // knowledge + real problem
-  [18, 19], // Your Blueprint
-  [20, 21], // 18 questions
-  [22], // Personalized Blueprint
-  [23, 24, 25], // first step / begin / compass
-  [26], // closing + button
+  [2], // But most people don't
+  [3, 4, 5], // Not because...
+  [6, 7, 8], // phone open -> think -> close
+  [9, 10], // Where do I even start? + whole barrier
+  [11, 12], // comes after + nobody answers
+  [13, 14], // knowledge + applying/figuring
+  [15, 16], // real problem + you don't know where to start
+  [17, 18], // built Your Blueprint + 18 questions
+  [19, 20, 21], // builds a Blueprint + not generic + Yours
+  [22], // know your first move + CTA button
 ];
 
 const DIM = 0.08;
@@ -309,7 +262,11 @@ export default function ScrollRevealStory() {
                   ref={(el) => {
                     lineRefs.current[index] = el;
                   }}
-                  className="w-full max-w-full text-center font-mono text-[13px] leading-snug break-words sm:w-max sm:text-[15px] sm:leading-relaxed sm:whitespace-nowrap md:text-lg md:leading-relaxed"
+                  className={
+                    block.allowWrap
+                      ? "w-full max-w-xl text-center font-mono text-[13px] leading-snug sm:text-[15px] sm:leading-relaxed md:text-lg md:leading-relaxed"
+                      : "w-full max-w-full text-center font-mono text-[13px] leading-snug break-words sm:w-max sm:text-[15px] sm:leading-relaxed sm:whitespace-nowrap md:text-lg md:leading-relaxed"
+                  }
                   style={
                     isStatic
                       ? { color }
@@ -337,13 +294,13 @@ export default function ScrollRevealStory() {
               >
                 <Link
                   href="/#pricing"
-                  className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
+                  className="btn-brutal btn-brutal-primary inline-block min-w-[200px] px-8 py-4 text-base font-bold tracking-wide text-black text-center sm:min-w-[220px] sm:px-9 sm:py-4 sm:text-base md:text-[17px]"
                   tabIndex={
                     (opacities[blocks.length - 1] ?? DIM) > 0.7 ? 0 : -1
                   }
                   aria-hidden={(opacities[blocks.length - 1] ?? DIM) <= 0.7}
                 >
-                  Get your Blueprint →
+                  GET YOUR BLUEPRINT →
                 </Link>
               </div>
             ) : null}
