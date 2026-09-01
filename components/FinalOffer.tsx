@@ -15,7 +15,7 @@ export default function FinalOffer() {
   return (
     <section className="grid-bg px-4 py-14 sm:px-8 sm:py-20">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] md:gap-10 lg:gap-12">
-        <div className="mx-auto w-full max-w-[250px] sm:max-w-[280px] md:mx-0 md:max-w-[310px] lg:max-w-[330px]">
+        <div className="mx-auto w-full max-w-[250px] sm:max-w-[280px] md:mx-0 md:max-w-[310px] md:translate-x-5 lg:max-w-[330px] lg:translate-x-6">
           <img
             src="/sticker-report.svg?v=2"
             alt="Personalized Creator Blueprint"

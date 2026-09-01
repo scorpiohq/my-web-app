@@ -301,7 +301,7 @@ function GiantStepNumber({ value }: { value: string }) {
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
+    <section id="how-it-works" className="grid-bg -mt-[18px] px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center">
         <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
           HOW IT WORKS

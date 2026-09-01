@@ -4,31 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "/#how-it-works", label: "How it works", arrow: true },
+  { href: "/#how-it-works", label: "How it works" },
   { href: "/reviews", label: "Reviews" },
   { href: "/#pricing", label: "Pricing" },
 ];
-
-function NavArrow() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden="true"
-      className="ml-1.5 inline-block shrink-0 translate-y-[1.5px]"
-    >
-      <path
-        d="M3 9L9 3M9 3H4.5M9 3V7.5"
-        stroke="#F0A512"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,7 +27,6 @@ export default function Header() {
               className="inline-flex items-center text-[15px] font-medium text-black transition hover:text-black/70"
             >
               {link.label}
-              {"arrow" in link && link.arrow ? <NavArrow /> : null}
             </Link>
           ))}
         </div>
@@ -98,7 +76,6 @@ export default function Header() {
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
-                  {"arrow" in link && link.arrow ? <NavArrow /> : null}
                 </Link>
               ))}
             </div>

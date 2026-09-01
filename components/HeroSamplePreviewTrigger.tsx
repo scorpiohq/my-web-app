@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import HeroReportPreview from "@/components/HeroReportPreview";
 
 export default function HeroSamplePreviewTrigger() {
   const [open, setOpen] = useState(false);
@@ -39,12 +39,12 @@ export default function HeroSamplePreviewTrigger() {
         onClick={() => setOpen(true)}
         className="mb-5 text-sm font-medium text-black underline underline-offset-4 transition hover:text-black/70 sm:text-base lg:hidden"
       >
-        See what you&apos;ll get 👀
+        See how yours will look 👀
       </button>
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 lg:hidden"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -52,33 +52,55 @@ export default function HeroSamplePreviewTrigger() {
           <button
             type="button"
             aria-label="Close sample preview"
-            className="absolute inset-0 bg-black/15 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-black/20"
             onClick={() => setOpen(false)}
           />
 
-          <div className="relative z-10 w-full max-w-[340px] rounded-2xl bg-white px-5 pb-6 pt-8 shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:max-w-[440px] sm:px-8 sm:pb-8 sm:pt-10">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white text-lg leading-none text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition hover:bg-[#f8f8f8]"
-              aria-label="Close"
-            >
-              ×
-            </button>
+          <div className="relative z-10 flex max-h-[min(90dvh,620px)] w-full max-w-[min(92vw,300px)] flex-col border-2 border-black bg-white px-3.5 py-4 shadow-[6px_6px_0_0_#000] sm:max-w-[min(90vw,340px)] sm:px-5 sm:py-5">
+            <div className="mb-3 flex shrink-0 items-start justify-between gap-3 sm:mb-4">
+              <Image
+                src="/logo.svg"
+                alt="Your Blueprint"
+                width={140}
+                height={32}
+                className="h-6 w-auto sm:h-7"
+              />
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="flex h-7 w-7 shrink-0 items-center justify-center border border-black bg-white text-base leading-none text-black shadow-[2px_2px_0_0_#000] transition hover:bg-[#f8f8f8]"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
 
             <h2 id={titleId} className="sr-only">
               Sample Blueprint preview
             </h2>
 
-            <div className="flex flex-col items-center gap-5 sm:gap-6">
-              <HeroReportPreview rotated={false} size="modal" />
+            <div className="flex min-h-0 flex-1 flex-col items-center text-center">
+              <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+                <img
+                  src="/sticker-report.svg?v=2"
+                  alt="Personalized Creator Blueprint sample"
+                  width={2456}
+                  height={3983}
+                  className="mx-auto h-auto max-h-[min(48dvh,260px)] w-auto max-w-full object-contain sm:max-h-[min(52dvh,300px)]"
+                />
+              </div>
+
+              <p className="mt-2.5 max-w-[240px] shrink-0 text-[10px] leading-snug text-[#6B6B6B] sm:mt-3 sm:text-[11px]">
+                *This is a Sample. Yours will be built entirely around your own
+                answers.
+              </p>
 
               <Link
                 href="/form"
-                className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-semibold text-black"
+                className="btn-brutal btn-brutal-primary mt-3 inline-flex w-full shrink-0 items-center justify-center px-4 py-2.5 text-sm font-semibold text-black sm:mt-4 sm:py-3"
                 onClick={() => setOpen(false)}
               >
-                Get your Blueprint →
+                Let&apos;s build yours →
               </Link>
             </div>
           </div>
