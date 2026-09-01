@@ -74,10 +74,12 @@ export default function Hero({
             </div>
 
             <img
-              src="/sticker-report.svg?v=2"
+              src="/sticker-report.png"
               alt="Personalized Creator Blueprint preview"
-              width={2456}
-              height={3983}
+              width={800}
+              height={1297}
+              fetchPriority="high"
+              decoding="async"
               className="relative z-0 h-auto w-full object-contain"
             />
           </div>

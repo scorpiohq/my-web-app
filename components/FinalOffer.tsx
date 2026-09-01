@@ -17,10 +17,12 @@ export default function FinalOffer() {
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] md:gap-10 lg:gap-12">
         <div className="mx-auto w-full max-w-[250px] sm:max-w-[280px] md:mx-0 md:max-w-[310px] md:translate-x-5 lg:max-w-[330px] lg:translate-x-6">
           <img
-            src="/sticker-report.svg?v=2"
+            src="/sticker-report.png"
             alt="Personalized Creator Blueprint"
-            width={2456}
-            height={3983}
+            width={800}
+            height={1297}
+            loading="lazy"
+            decoding="async"
             className="h-auto w-full object-contain"
           />
         </div>

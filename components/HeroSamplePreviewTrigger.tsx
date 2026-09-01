@@ -82,10 +82,10 @@ export default function HeroSamplePreviewTrigger() {
             <div className="flex min-h-0 flex-1 flex-col items-center text-center">
               <div className="flex min-h-0 w-full flex-1 items-center justify-center">
                 <img
-                  src="/sticker-report.svg?v=2"
+                  src="/sticker-report.png"
                   alt="Personalized Creator Blueprint sample"
-                  width={2456}
-                  height={3983}
+                  width={800}
+                  height={1297}
                   className="mx-auto h-auto max-h-[min(48dvh,260px)] w-auto max-w-full object-contain sm:max-h-[min(52dvh,300px)]"
                 />
               </div>
