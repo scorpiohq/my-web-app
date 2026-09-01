@@ -65,7 +65,7 @@ export const metadata: Metadata = {
       : "https://yourblueprint.in",
   ),
   title: {
-    default: "Your Blueprint | Personalized Social Media Starting Plan",
+    default: "Your Blueprint | Start Your Social Media Journey",
     template: "%s | Your Blueprint",
   },
   description:
@@ -80,12 +80,12 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "https://yourblueprint.in",
     siteName: "Your Blueprint",
-    title: "Your Blueprint | Personalized Social Media Starting Plan",
+    title: "Your Blueprint | Start Your Social Media Journey",
     description:
       "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
     images: [
       {
-        url: "https://yourblueprint.in/og-image.png",
+        url: "https://yourblueprint.in/og-image.png?v=2",
         width: 1230,
         height: 630,
         alt: "Your Blueprint",
@@ -95,10 +95,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Blueprint | Personalized Social Media Starting Plan",
+    title: "Your Blueprint | Start Your Social Media Journey",
     description:
       "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
-    images: ["https://yourblueprint.in/og-image.png"],
+    images: ["https://yourblueprint.in/og-image.png?v=2"],
   },
 };
 
