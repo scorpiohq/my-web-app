@@ -64,9 +64,12 @@ export const metadata: Metadata = {
       ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
       : "https://yourblueprint.in",
   ),
-  title: "Your Blueprint",
+  title: {
+    default: "Your Blueprint | Personalized Social Media Starting Plan",
+    template: "%s | Your Blueprint",
+  },
   description:
-    "Your Blueprint to start your social media journey — with what you have, from where you are.",
+    "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
   applicationName: "Your Blueprint",
   icons: {
     icon: "/logo-dp.svg",
@@ -77,9 +80,9 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "https://yourblueprint.in",
     siteName: "Your Blueprint",
-    title: "Your Blueprint",
+    title: "Your Blueprint | Personalized Social Media Starting Plan",
     description:
-      "Your Blueprint to start your social media journey — with what you have, from where you are.",
+      "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
     images: [
       {
         url: "https://yourblueprint.in/og-image.png",
@@ -92,9 +95,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Blueprint",
+    title: "Your Blueprint | Personalized Social Media Starting Plan",
     description:
-      "Your Blueprint to start your social media journey — with what you have, from where you are.",
+      "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
     images: ["https://yourblueprint.in/og-image.png"],
   },
 };
