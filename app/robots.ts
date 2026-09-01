@@ -1,11 +1,9 @@
 import type { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
-      ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
-      : "https://yourblueprint.in";
+/** Canonical public domain for SEO (not the Vercel preview URL). */
+const SITE_URL = "https://yourblueprint.in";
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
@@ -20,7 +18,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

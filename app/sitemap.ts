@@ -1,40 +1,38 @@
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
-      ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
-      : "https://yourblueprint.in";
+/** Canonical public domain for SEO (not the Vercel preview URL). */
+const SITE_URL = "https://yourblueprint.in";
 
+export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   return [
     {
-      url: `${baseUrl}/`,
+      url: `${SITE_URL}/`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/reviews`,
+      url: `${SITE_URL}/reviews`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/form`,
+      url: `${SITE_URL}/form`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/signin`,
+      url: `${SITE_URL}/signin`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/policies`,
+      url: `${SITE_URL}/policies`,
       lastModified: now,
       changeFrequency: "yearly",
       priority: 0.3,
