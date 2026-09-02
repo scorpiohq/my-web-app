@@ -34,6 +34,7 @@ const questions = [
     text: "What\u2019s your email?",
     type: "text",
     placeholder: "e.g. sam@email.com",
+    inputMode: "email" as const,
     note: "We\u2019ll use this to send your report and let you sign back in anytime.",
   },
   {
@@ -133,6 +134,7 @@ const questions = [
     id: "stop_scroll",
     text: "What kind of posts or videos always make you stop scrolling?",
     type: "multi_select",
+    note: "You can choose multiple options.",
     options: [
       "People sharing their personal journey",
       "Step-by-step tutorials",
@@ -151,17 +153,17 @@ const questions = [
     id: "talk_forever",
     text: "What is something you could talk about, teach, or share for months without getting bored?",
     type: "long_text",
-    placeholder: `Ex: Business. I think about it 24/7 — how companies grow, how people make their first sale, how to escape a 9-to-5. I never get tired of this.
+    placeholder: `like: Business. I think about it 24/7 — how companies grow, how people make their first sale, how to escape a 9-to-5. I never get tired of this.
 
-Ex: Fitness and nutrition. I could talk about workouts, diet mistakes, and mindset around body image forever — it's just part of who I am now.`,
+like: Fitness and nutrition. I could talk about workouts, diet mistakes, and mindset around body image forever — it's just part of who I am now.`,
   },
   {
     id: "real_experience",
     text: "What\u2019s something you\u2019ve experienced, achieved, or figured out that could genuinely help someone else?",
     type: "long_text",
-    placeholder: `Ex: I lost 22kg over a year without any crash diet, just consistency. I can help people who feel lost and think they need to starve themselves to see results.
+    placeholder: `like: I lost 22kg over a year without any crash diet, just consistency. I can help people who feel lost and think they need to starve themselves to see results.
 
-Ex: I traveled to 5 states on a tight budget by figuring out how to cut costs without cutting the experience. I can help people travel more without needing a big income.`,
+like: I traveled to 5 states on a tight budget by figuring out how to cut costs without cutting the experience. I can help people travel more without needing a big income.`,
   },
   {
     id: "platform",
@@ -235,6 +237,16 @@ type FormResponses = Record<string, FormAnswer> & {
   gender?: string;
 };
 
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
+function isValidAge(value: string) {
+  if (!/^\d{1,3}$/.test(value.trim())) return false;
+  const age = Number(value.trim());
+  return Number.isInteger(age) && age >= 13 && age <= 100;
+}
+
 function hasAnswerForStep(
   question: (typeof questions)[number],
   responses: FormResponses,
@@ -255,7 +267,12 @@ function hasAnswerForStep(
     return Array.isArray(value) && value.length > 0;
   }
 
-  return typeof value === "string" && value.trim().length > 0;
+  if (typeof value !== "string" || !value.trim()) return false;
+
+  if (question.id === "email") return isValidEmail(value);
+  if (question.id === "age") return isValidAge(value);
+
+  return true;
 }
 
 function ChoiceOption({
@@ -279,7 +296,13 @@ function ChoiceOption({
           : "border border-transparent bg-[#FFFAF3] hover:bg-[#FFF6EB]"
       }`}
     >
-      <span className="form-option-text flex h-6 w-6 shrink-0 items-center justify-center rounded border border-[#FFA126] text-xs text-[#FFA126]">
+      <span
+        className={`form-option-text flex h-6 w-6 shrink-0 items-center justify-center rounded border text-xs transition-colors duration-300 ${
+          selected
+            ? "border-[#FFA126] bg-[#FFA126] text-white"
+            : "border-[#FFA126] bg-transparent text-[#FFA126]"
+        }`}
+      >
         {letter}
       </span>
       <span className="form-option-text text-sm leading-snug text-[#FFA126] sm:text-[15px]">
@@ -370,29 +393,45 @@ function OptionsList({
 function FormExampleHints({ text }: { text: string }) {
   const items = text
     .split(/\n\n+/)
-    .map((item) => item.trim())
+    .map((item) =>
+      item
+        .trim()
+        .replace(/^Ex:\s*/i, "like: ")
+        .replace(/^like:\s*/i, "like: "),
+    )
     .filter(Boolean);
 
-  if (items.length <= 1) {
-    return (
-      <p className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 text-sm leading-relaxed text-[#999]">
-        {text}
-      </p>
-    );
-  }
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (items.length <= 1) return;
+
+    let hideTimer = 0;
+    const rotateTimer = window.setInterval(() => {
+      setVisible(false);
+      hideTimer = window.setTimeout(() => {
+        setIndex((current) => (current + 1) % items.length);
+        setVisible(true);
+      }, 320);
+    }, 4000);
+
+    return () => {
+      window.clearInterval(rotateTimer);
+      window.clearTimeout(hideTimer);
+    };
+  }, [items.length]);
+
+  const current = items[index] || items[0] || text;
 
   return (
-    <ul className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 space-y-2.5 text-sm text-[#999]">
-      {items.map((item) => (
-        <li key={item} className="flex items-start gap-2.5 text-left leading-relaxed">
-          <span
-            className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#CFCFCF]"
-            aria-hidden="true"
-          />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
+    <p
+      className="form-step-item form-step-item-3 form-placeholder-text mt-1.5 min-h-[3.25rem] text-sm leading-relaxed text-[#999] transition-opacity duration-300 ease-out sm:min-h-[2.75rem]"
+      style={{ opacity: visible ? 1 : 0 }}
+      aria-live="polite"
+    >
+      {current}
+    </p>
   );
 }
 
@@ -487,6 +526,29 @@ export default function FormPage() {
     navigateTo(step - 1, "back");
   }
 
+  const goNextRef = useRef(goNext);
+  goNextRef.current = goNext;
+
+  // Enter / mobile keyboard Go → continue (Typeform-style)
+  useEffect(() => {
+    if (showIntro || !formVisible) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+
+      const target = event.target as HTMLElement | null;
+      const countryRoot = target?.closest?.("[data-country-select]");
+      if (countryRoot?.getAttribute("data-open") === "true") return;
+      if (target?.closest?.('[role="listbox"]')) return;
+
+      event.preventDefault();
+      goNextRef.current();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [showIntro, formVisible]);
+
   async function handleSubmit() {
     setSubmitting(true);
     setShowCheckoutTransition(true);
@@ -560,7 +622,7 @@ export default function FormPage() {
       style={{ opacity: formVisible ? 1 : 0 }}
     >
       {showCheckoutTransition && <CheckoutTransition />}
-      <FormHeader activeStep={1} />
+      <FormHeader />
 
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-5 pb-10 pt-6 sm:px-8 sm:pb-12 lg:max-w-4xl xl:max-w-5xl">
         <div
@@ -574,15 +636,26 @@ export default function FormPage() {
           }`}
         >
           <div className="flex flex-col">
-            <span
-              className={`form-step-item form-step-item-1 mb-3 flex h-7 w-7 shrink-0 items-center justify-center text-sm font-medium ${
-                current.type === "intro"
-                  ? "rounded-full border border-[#CFCFCF] bg-white text-[#6B6B6B]"
-                  : "rounded-md bg-[#FFA126] text-white"
-              }`}
-            >
-              {current.type === "intro" ? "ⓘ" : step}
-            </span>
+            {current.type === "intro" ? (
+              <span className="form-step-item form-step-item-1 mb-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#CFCFCF] bg-white text-sm font-medium text-[#6B6B6B]">
+                ⓘ
+              </span>
+            ) : (
+              <div className="form-step-item form-step-item-1 mb-3 flex items-center gap-1.5">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] text-sm font-medium text-white">
+                  {step}
+                </span>
+                <span
+                  className="text-xl font-medium leading-none text-black sm:text-2xl"
+                  aria-hidden="true"
+                >
+                  /
+                </span>
+                <span className="flex h-7 min-w-7 shrink-0 items-center justify-center rounded-md bg-[#FFA126] px-1.5 text-sm font-medium text-white">
+                  {questions.length - 1}
+                </span>
+              </div>
+            )}
 
             <h1 className="form-step-item form-step-item-2 form-question text-lg leading-snug text-black sm:text-xl lg:text-[1.35rem] lg:whitespace-nowrap xl:text-[1.45rem]">
               {current.text}
@@ -614,8 +687,26 @@ export default function FormPage() {
                 inputMode={
                   "inputMode" in current ? current.inputMode : undefined
                 }
-                value={responses[current.id] || ""}
-                onChange={(e) => setAnswer(e.target.value)}
+                autoComplete={
+                  current.id === "email"
+                    ? "email"
+                    : current.id === "name"
+                      ? "name"
+                      : undefined
+                }
+                value={
+                  typeof responses[current.id] === "string"
+                    ? (responses[current.id] as string)
+                    : ""
+                }
+                onChange={(e) => {
+                  const next = e.target.value;
+                  if (current.id === "age") {
+                    setAnswer(next.replace(/\D/g, "").slice(0, 3));
+                    return;
+                  }
+                  setAnswer(next);
+                }}
                 placeholder="Type your answer here..."
                 className="form-option-text w-full border-0 border-b border-[#FFA126] bg-transparent py-2 text-xl text-black outline-none transition-[border-color] duration-500 placeholder:font-light placeholder:text-[#FFD4A8] focus:border-[#FF8C00] sm:text-2xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 autoFocus

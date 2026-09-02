@@ -17,10 +17,26 @@ export async function POST(request: Request) {
       );
     }
 
+    const email = body.email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 },
+      );
+    }
+
+    const age = Number(body.age);
+    if (!Number.isInteger(age) || age < 13 || age > 100) {
+      return NextResponse.json(
+        { error: "Please enter a valid age between 13 and 100." },
+        { status: 400 },
+      );
+    }
+
     const submission = await createPendingSubmission({
       name: body.name.trim(),
-      email: body.email.trim().toLowerCase(),
-      age: Number(body.age),
+      email,
+      age,
       location: body.location?.trim() || "",
       gender: body.gender || null,
       answers: body.answers || {},
@@ -43,7 +59,7 @@ export async function POST(request: Request) {
 
     const checkoutUrl = await createBlueprintCheckout({
       submissionId: submission.id,
-      email: body.email.trim().toLowerCase(),
+      email,
       name: body.name.trim(),
       redirectUrl,
     });

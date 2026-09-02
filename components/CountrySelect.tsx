@@ -296,6 +296,9 @@ export default function CountrySelect({
   }
 
   function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    // Enter with a value: let the form advance; don't reopen the list
+    if (event.key === "Enter" && value) return;
+
     if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setOpen(true);
@@ -342,7 +345,12 @@ export default function CountrySelect({
   }, [highlight, open]);
 
   return (
-    <div ref={rootRef} className="relative w-full max-w-md">
+    <div
+      ref={rootRef}
+      className="relative w-full max-w-md"
+      data-country-select=""
+      data-open={open ? "true" : "false"}
+    >
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
