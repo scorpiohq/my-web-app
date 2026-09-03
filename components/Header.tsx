@@ -67,12 +67,12 @@ export default function Header() {
       {menuOpen && (
         <div className="grid-bg absolute inset-x-0 top-full z-20 border-t border-black/10 px-5 pb-5 shadow-lg lg:hidden">
           <div className="mx-auto max-w-md pt-4">
-            <div className="space-y-1">
+            <div className="flex flex-col space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="inline-flex items-center px-2 py-3 text-sm font-medium text-black transition hover:bg-black/5"
+                  className="flex w-full items-center px-2 py-3 text-sm font-medium text-black transition hover:bg-black/5"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}

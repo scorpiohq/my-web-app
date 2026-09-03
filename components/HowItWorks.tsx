@@ -311,7 +311,7 @@ export default function HowItWorks() {
           className="mb-12 max-w-3xl text-center text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-14"
           style={{ fontFamily: "var(--font-hero)" }}
         >
-          A SIMPLE 3-STEP PROCESS
+          HOW 'YOUR BLUEPRINT' WORKS..
         </h2>
 
         <div className="flex w-full flex-col gap-16 sm:gap-20 lg:gap-24">
