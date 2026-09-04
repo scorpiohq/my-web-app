@@ -33,6 +33,43 @@ body {
   background-size: 24px 24px;
 }
 
+/* Scroll story only — grid fades from full → ~25% → full to blend with neighbors */
+.grid-bg-scroll {
+  position: relative;
+  background-color: #f8f8f8;
+}
+
+.grid-bg-scroll::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.028) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.25) 14%,
+    rgba(0, 0, 0, 0.25) 78%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.25) 14%,
+    rgba(0, 0, 0, 0.25) 78%,
+    #000 100%
+  );
+}
+
+.grid-bg-scroll > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Report sits on the page grid — outer canvas stays transparent */
 .report-page-shell main {
   background-color: transparent !important;

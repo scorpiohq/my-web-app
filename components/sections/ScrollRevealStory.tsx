@@ -240,7 +240,7 @@ export default function ScrollRevealStory() {
 
   return (
     <section
-      className="grid-bg overflow-x-hidden px-5 pt-16 pb-[120px] sm:px-8 sm:pt-20 sm:pb-36 md:pt-24"
+      className="grid-bg-scroll overflow-x-hidden px-5 pt-10 pb-16 sm:px-8 sm:pt-12 sm:pb-20 md:pt-14 md:pb-24"
       aria-label="Why you need a Blueprint"
     >
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 sm:gap-4 md:gap-5">
@@ -264,8 +264,8 @@ export default function ScrollRevealStory() {
                   }}
                   className={
                     block.allowWrap
-                      ? "w-full max-w-xl text-center font-mono text-[13px] leading-snug sm:text-[15px] sm:leading-relaxed md:text-lg md:leading-relaxed"
-                      : "w-full max-w-full text-center font-mono text-[13px] leading-snug break-words sm:w-max sm:text-[15px] sm:leading-relaxed sm:whitespace-nowrap md:text-lg md:leading-relaxed"
+                      ? "w-full max-w-xl text-center font-mono text-[14px] font-semibold leading-snug sm:text-base sm:leading-relaxed md:text-xl md:leading-relaxed"
+                      : "w-full max-w-full text-center font-mono text-[14px] font-semibold leading-snug break-words sm:w-max sm:text-base sm:leading-relaxed sm:whitespace-nowrap md:text-xl md:leading-relaxed"
                   }
                   style={
                     isStatic
