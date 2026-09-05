@@ -13,7 +13,8 @@ const sections = [
     icon: "✅",
     title: "Refund Policy",
     paragraphs: [
-      "Because your Blueprint is personalized and generated instantly based on your answers, all sales are final and we don't offer refunds once it's been generated. If something goes wrong on our end - a payment issue, a broken link, anything technical - reach out and we'll make it right.",
+      "We offer a 7-day money-back guarantee. If your Blueprint doesn't give you a clear next step, email us within 7 days of purchase for a full refund — no hassle.",
+      "Reach out to hello@yourblueprint.in with the email you used at checkout, and we'll take care of it. If something goes wrong on our end — a payment issue, a broken link, anything technical — we'll make it right either way.",
     ],
   },
   {
@@ -111,7 +112,7 @@ export default function PoliciesPage() {
 
             <span className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm">
               <ClockIcon />
-              Last Updated on August 10, 2026
+              Last Updated on September 5, 2026
             </span>
           </div>
 

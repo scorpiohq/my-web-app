@@ -3,7 +3,7 @@ import { Highlight } from "@/components/testimonial-data";
 import HeroSamplePreviewTrigger from "@/components/HeroSamplePreviewTrigger";
 
 export default function Hero({
-  spotsRemaining: _spotsRemaining = 12,
+  spotsRemaining: _spotsRemaining = 64,
 }: {
   spotsRemaining?: number;
 } = {}) {
