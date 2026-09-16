@@ -12,6 +12,7 @@ export default function ReportPageFooter() {
             width={160}
             height={40}
             className="h-9 w-auto sm:h-10"
+            style={{ width: "auto", height: "auto" }}
           />
         </Link>
 
