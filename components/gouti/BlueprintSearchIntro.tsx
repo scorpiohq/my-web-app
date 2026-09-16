@@ -71,7 +71,7 @@ function markSearchComplete() {
  */
 const INTRO_DURATION_MS = 5600;
 
-declare global {
+declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
       "blueprint-generation": DetailedHTMLProps<

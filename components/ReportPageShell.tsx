@@ -115,6 +115,8 @@ export default function ReportPageShell({
   const reportHref = reportHrefProp ?? getReportHref(submissionId);
   const resolvedGiftHref =
     giftHref !== undefined ? giftHref : promptHref;
+  const headerGiftHref =
+    typeof resolvedGiftHref === "string" ? resolvedGiftHref : promptHref;
   const renderHeader = showHeader || hideHeaderKeepSpace;
   const renderIntro = showIntro || hideIntroKeepSpace;
   const renderReviews =
@@ -180,7 +182,7 @@ export default function ReportPageShell({
           <ReportPageHeader
             userName={userName}
             reportHref={reportHref}
-            giftHref={resolvedGiftHref}
+            giftHref={headerGiftHref}
             showGiftLink={showGiftLink}
           />
         </div>
