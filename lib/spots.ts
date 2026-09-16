@@ -4,18 +4,19 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 export const TOTAL_BLUEPRINT_SPOTS = 100;
 
 /**
- * Displayed claimed spots start at 64 from this paid baseline.
+ * Displayed claimed spots start at 92 from this paid baseline.
  * Each new paid submission after this increases the counter by 1 (capped at 100).
  * Set PAID_BASELINE to the paid count when this baseline was chosen,
- * so the UI shows 64 until the next sale.
+ * so the UI shows 92 until the next sale.
  */
-const SPOTS_CLAIMED_AT_BASELINE = 64;
-const PAID_BASELINE = 2;
+const SPOTS_CLAIMED_AT_BASELINE = 92;
+/** Paid submissions count when the 92 baseline was set (was showing ~66 before). */
+const PAID_BASELINE = 4;
 
 const FALLBACK_SPOTS_CLAIMED = SPOTS_CLAIMED_AT_BASELINE;
 
 /**
- * Claimed / sold spots for the pricing bar (starts at 64, rises with paid sales).
+ * Claimed / sold spots for the pricing bar (starts at 92, rises with paid sales).
  */
 export async function getSpotsRemaining(): Promise<number> {
   try {

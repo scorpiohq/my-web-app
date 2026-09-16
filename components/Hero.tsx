@@ -3,7 +3,7 @@ import { Highlight } from "@/components/testimonial-data";
 import HeroSamplePreviewTrigger from "@/components/HeroSamplePreviewTrigger";
 
 export default function Hero({
-  spotsRemaining: _spotsRemaining = 64,
+  spotsRemaining: _spotsRemaining = 92,
   ctaHref = "/#pricing",
   /** `stacked` = always centered, report preview under the CTA (mobile-style). */
   layout = "default",
