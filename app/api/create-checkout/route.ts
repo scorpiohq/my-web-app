@@ -8,7 +8,9 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as SubmissionPayload;
+    const body = (await request.json()) as SubmissionPayload & {
+      journey?: string;
+    };
 
     if (!body.name?.trim() || !body.email?.trim()) {
       return NextResponse.json(
@@ -33,6 +35,8 @@ export async function POST(request: Request) {
       );
     }
 
+    const isGoutiJourney = body.journey === "gouti";
+
     const submission = await createPendingSubmission({
       name: body.name.trim(),
       email,
@@ -43,7 +47,9 @@ export async function POST(request: Request) {
     });
 
     const appUrl = getAppBaseUrl(request);
-    const redirectUrl = `${appUrl}/form/thank-you?submission_id=${submission.publicId}`;
+    const redirectUrl = isGoutiJourney
+      ? `${appUrl}/progress?submission_id=${submission.publicId}`
+      : `${appUrl}/form/thank-you?submission_id=${submission.publicId}`;
 
     try {
       new URL(redirectUrl);
@@ -62,12 +68,14 @@ export async function POST(request: Request) {
       email,
       name: body.name.trim(),
       redirectUrl,
+      embed: isGoutiJourney,
     });
 
     return NextResponse.json({
       success: true,
       checkoutUrl,
       submissionId: submission.publicId,
+      journey: isGoutiJourney ? "gouti" : "default",
     });
   } catch (error) {
     const message =

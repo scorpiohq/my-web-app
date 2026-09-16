@@ -9,7 +9,11 @@ const navLinks = [
   { href: "/#pricing", label: "Pricing" },
 ];
 
-export default function Header() {
+export default function Header({
+  ctaHref = "/#pricing",
+}: {
+  ctaHref?: string;
+} = {}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -39,7 +43,7 @@ export default function Header() {
             Sign in
           </Link>
           <Link
-            href="/#pricing"
+            href={ctaHref}
             className="btn-brutal btn-brutal-primary inline-block px-5 py-2.5 text-sm font-semibold text-black"
           >
             Get your Blueprint →
@@ -89,7 +93,7 @@ export default function Header() {
                 Sign in
               </Link>
               <Link
-                href="/#pricing"
+                href={ctaHref}
                 className="btn-brutal btn-brutal-primary block px-4 py-3 text-center text-sm font-semibold text-black"
                 onClick={() => setMenuOpen(false)}
               >

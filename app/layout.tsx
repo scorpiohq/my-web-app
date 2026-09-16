@@ -58,6 +58,13 @@ const bethanyElingston = localFont({
   display: "swap",
 });
 
+const azoSansUber = localFont({
+  src: "../public/fonnts.com-Azo_Sans_Uber_Regular.otf",
+  variable: "--font-azo-uber",
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
@@ -110,7 +117,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} ${azoSansUber.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />

@@ -55,6 +55,7 @@ async function createLemonCheckout({
   redirectUrl,
   receiptButtonText,
   receiptThankYouNote,
+  embed = false,
 }: {
   variantId: number;
   variantEnvName: string;
@@ -64,6 +65,7 @@ async function createLemonCheckout({
   redirectUrl?: string;
   receiptButtonText: string;
   receiptThankYouNote: string;
+  embed?: boolean;
 }) {
   configureLemonSqueezy();
 
@@ -83,7 +85,7 @@ async function createLemonCheckout({
   const checkout = await createCheckout(storeId, variantId, {
     testMode,
     checkoutOptions: {
-      embed: false,
+      embed,
       media: true,
       logo: true,
     },
@@ -116,11 +118,13 @@ export async function createBlueprintCheckout({
   email,
   name,
   redirectUrl,
+  embed = false,
 }: {
   submissionId: string;
   email: string;
   name: string;
   redirectUrl: string;
+  embed?: boolean;
 }) {
   return createLemonCheckout({
     variantId: Number(requireEnv("LEMONSQUEEZY_VARIANT_ID")),
@@ -129,6 +133,7 @@ export async function createBlueprintCheckout({
     email,
     name,
     redirectUrl,
+    embed,
     receiptButtonText: "View your progress",
     receiptThankYouNote:
       "Thanks for your purchase. Your Blueprint is on the way.",

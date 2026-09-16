@@ -264,6 +264,83 @@ body {
   box-shadow: 3px 3px 0 0 #c8c8c8;
 }
 
+/* —— Gouti landing (Stanley-inspired motion / softness) —— */
+.gouti-landing {
+  font-family: var(--font-gouti), "Plus Jakarta Sans", system-ui, -apple-system,
+    sans-serif;
+  font-feature-settings: "ss01" on, "cv11" on;
+}
+
+.gouti-fade-up {
+  animation: gouti-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.gouti-fade-up-late {
+  animation: gouti-fade-up 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes gouti-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gouti-float {
+  animation: gouti-float 5.5s ease-in-out infinite;
+}
+
+@keyframes gouti-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.gouti-product-fade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 58%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+}
+
+.gouti-cta-glow {
+  box-shadow:
+    0 10px 40px rgba(255, 201, 64, 0.35),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.gouti-cta-pill:active {
+  transform: scale(0.98);
+}
+
+.gouti-pricing-wrap .grid-bg {
+  background-color: transparent;
+  background-image: none;
+}
+
+.gouti-pricing-wrap section {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gouti-fade-up,
+  .gouti-fade-up-late,
+  .gouti-float {
+    animation: none;
+  }
+}
+
 @keyframes form-slide-up-in {
   from {
     opacity: 0;

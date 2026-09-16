@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { ReportTemplate } from "@/app/261005-report-preview/page";
+import { ReportTemplate } from "@/app/gouti/report-preview/page";
 import ReportPdfSave from "@/components/ReportPdfSave";
 import ReportPreviewFit from "@/components/ReportPreviewFit";
 import {
@@ -14,8 +14,8 @@ export const dynamic = "force-dynamic";
 
 function getGameplanHref(origin: string | undefined, submissionId?: string) {
   const path = submissionId
-    ? `/261005-gameplan?submission_id=${encodeURIComponent(submissionId)}`
-    : "/261005-gameplan";
+    ? `/gouti/gameplan?submission_id=${encodeURIComponent(submissionId)}`
+    : "/gouti/gameplan";
 
   if (!origin) {
     return path;

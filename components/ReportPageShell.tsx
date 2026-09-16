@@ -24,7 +24,7 @@ function getPromptHref(userName: string, submissionId?: string) {
 function getReportHref(submissionId?: string) {
   return submissionId
     ? `/report/${encodeURIComponent(submissionId)}`
-    : "/261005-report-preview";
+    : "/gouti/report-preview";
 }
 
 type ReportPageShellProps = {
@@ -33,9 +33,52 @@ type ReportPageShellProps = {
   showIntro?: boolean;
   showDownloadButton?: boolean;
   showReviews?: boolean;
+  /** When false, header is not rendered (no reserved space). */
+  showHeader?: boolean;
+  /** Hide intro UI but keep its vertical space (report stays put). */
+  hideIntroKeepSpace?: boolean;
+  /** Hide review UI but keep its vertical space. */
+  hideReviewsKeepSpace?: boolean;
+  /** Hide header UI but keep its vertical space. */
+  hideHeaderKeepSpace?: boolean;
   scaleReport?: boolean;
   submissionId?: string;
   giftHref?: string | false;
+  /** Blur only the main report area (footer stays sharp). e.g. "8px" */
+  contentBlur?: string;
+  /** Extra classes on the main content wrapper (padding, etc.). */
+  contentClassName?: string;
+  /** Renders above the report area, outside contentBlur (e.g. search intro). */
+  aboveContent?: ReactNode;
+  /**
+   * Keep aboveContent + report in one shared column so placement stays aligned.
+   * Blur (if set) applies only to the report block, not the intro.
+   */
+  composeColumn?: boolean;
+  /** Classes for the shared compose column (max-width, gap, etc.). */
+  composeColumnClassName?: string;
+  /** Extra classes on the blurred report block inside composeColumn. */
+  composeReportClassName?: string;
+  /** Scale report preview width as a fraction of the area (e.g. 0.54). */
+  reportWidthFactor?: number;
+  /** Horizontal align for reduced-width preview. */
+  reportAlign?: "center" | "start";
+  /** Left offset for start-aligned preview (e.g. under a heading). */
+  reportStartInset?: string;
+  /** Centered lock overlay on the report preview (lock stays unblurred). */
+  reportLocked?: boolean;
+  /** When false, footer is not rendered. */
+  showFooter?: boolean;
+  /** Extra classes on the outer shell (e.g. solid bg instead of grid). */
+  shellClassName?: string;
+  /** Short “Thanks {name}” in Azo (gouti report preview). */
+  shortThanks?: boolean;
+  /** Feedback beside download as popup; hides the inline review block. */
+  feedbackAsPopup?: boolean;
+  /** Override report link in the header (defaults from submission id). */
+  reportHref?: string;
+  /** Profile menu “Your gift” entry (default true). */
+  showGiftLink?: boolean;
 };
 
 export default function ReportPageShell({
@@ -44,56 +87,176 @@ export default function ReportPageShell({
   showIntro = true,
   showDownloadButton = true,
   showReviews = true,
+  showHeader = true,
+  hideIntroKeepSpace = false,
+  hideReviewsKeepSpace = false,
+  hideHeaderKeepSpace = false,
   scaleReport = true,
   submissionId,
   giftHref,
+  contentBlur,
+  contentClassName = "",
+  aboveContent,
+  composeColumn = false,
+  composeColumnClassName = "",
+  composeReportClassName = "",
+  reportWidthFactor = 1,
+  reportAlign = "center",
+  reportStartInset,
+  reportLocked = false,
+  showFooter = true,
+  shellClassName = "",
+  shortThanks = false,
+  feedbackAsPopup = false,
+  reportHref: reportHrefProp,
+  showGiftLink = true,
 }: ReportPageShellProps) {
   const promptHref = getPromptHref(userName, submissionId);
-  const reportHref = getReportHref(submissionId);
+  const reportHref = reportHrefProp ?? getReportHref(submissionId);
   const resolvedGiftHref =
     giftHref !== undefined ? giftHref : promptHref;
-  return (
-    <div className="report-page-shell grid-bg flex min-h-screen flex-col">
-      <ReportPageHeader
-        userName={userName}
-        reportHref={reportHref}
-        giftHref={promptHref}
-      />
-      {showIntro ? (
-        <ReportDownloadThanksBanner
-          userName={userName}
-          submissionId={submissionId}
-          showDownloadButton={showDownloadButton}
-          giftHref={resolvedGiftHref}
+  const renderHeader = showHeader || hideHeaderKeepSpace;
+  const renderIntro = showIntro || hideIntroKeepSpace;
+  const renderReviews =
+    !feedbackAsPopup && (showReviews || hideReviewsKeepSpace);
+
+  const reportBlock = (
+    <>
+      {scaleReport ? (
+        <ReportScaleFrame
+          widthFactor={reportWidthFactor}
+          align={reportAlign}
+          startInset={reportStartInset}
+          locked={reportLocked}
+          contentBlur={reportLocked ? contentBlur : undefined}
+        >
+          {children}
+        </ReportScaleFrame>
+      ) : (
+        children
+      )}
+      {scaleReport ? (
+        <div
+          className={`mx-auto mt-6 h-px w-full max-w-xl sm:mt-7${
+            hideReviewsKeepSpace ? " invisible pointer-events-none" : ""
+          }`}
+          style={{
+            background:
+              "linear-gradient(to right, transparent, rgba(0,0,0,0.85) 50%, transparent)",
+          }}
+          aria-hidden="true"
         />
       ) : null}
-      <div
-        className={`flex-1 px-4 sm:px-6 lg:px-8 ${
-          showReviews ? "pb-[18px]" : "pb-4"
-        } ${showIntro ? "pt-6 sm:pt-7" : "pt-6 sm:pt-8 lg:pt-10"}`}
-      >
-        <div className="mx-auto w-full max-w-[1280px]">
-          {scaleReport ? (
-            <ReportScaleFrame>{children}</ReportScaleFrame>
-          ) : (
-            children
-          )}
-          {scaleReport ? (
-            <div
-              className="mx-auto mt-6 h-px w-full max-w-xl sm:mt-7"
-              style={{
-                background:
-                  "linear-gradient(to right, transparent, rgba(0,0,0,0.85) 50%, transparent)",
-              }}
-              aria-hidden="true"
-            />
-          ) : null}
-          {showReviews ? (
-            <ReportReviewSection submissionId={submissionId} />
-          ) : null}
+      {renderReviews ? (
+        <div
+          className={
+            hideReviewsKeepSpace
+              ? "invisible pointer-events-none select-none"
+              : undefined
+          }
+          aria-hidden={hideReviewsKeepSpace || undefined}
+        >
+          <ReportReviewSection submissionId={submissionId} />
         </div>
-      </div>
-      <ReportPageFooter />
+      ) : null}
+    </>
+  );
+
+  return (
+    <div
+      className={`report-page-shell flex min-h-screen flex-col ${
+        shellClassName || "grid-bg"
+      }`.trim()}
+    >
+      {renderHeader ? (
+        <div
+          className={
+            hideHeaderKeepSpace
+              ? "invisible pointer-events-none select-none"
+              : undefined
+          }
+          aria-hidden={hideHeaderKeepSpace || undefined}
+        >
+          <ReportPageHeader
+            userName={userName}
+            reportHref={reportHref}
+            giftHref={resolvedGiftHref}
+            showGiftLink={showGiftLink}
+          />
+        </div>
+      ) : null}
+      {renderIntro ? (
+        <div
+          className={
+            hideIntroKeepSpace
+              ? "invisible pointer-events-none select-none"
+              : undefined
+          }
+          aria-hidden={hideIntroKeepSpace || undefined}
+        >
+          <ReportDownloadThanksBanner
+            userName={userName}
+            submissionId={submissionId}
+            showDownloadButton={showDownloadButton}
+            giftHref={resolvedGiftHref}
+            shortThanks={shortThanks}
+            feedbackAsPopup={feedbackAsPopup}
+          />
+        </div>
+      ) : null}
+
+      {composeColumn ? (
+        <div
+          className={`flex-1 px-4 sm:px-6 lg:px-8 ${
+            renderReviews ? "pb-[18px]" : "pb-4"
+          } ${
+            renderIntro ? "pt-6 sm:pt-7" : "pt-4 sm:pt-5"
+          } ${contentClassName}`.trim()}
+        >
+          <div
+            className={`mx-auto w-full ${composeColumnClassName}`.trim()}
+          >
+            {aboveContent}
+            <div
+              className={`${
+                contentBlur && !reportLocked ? "select-none" : ""
+              } ${composeReportClassName}`.trim()}
+              style={
+                contentBlur && !reportLocked
+                  ? {
+                      filter: `blur(${contentBlur})`,
+                      userSelect: "none" as const,
+                    }
+                  : undefined
+              }
+            >
+              {reportBlock}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {aboveContent}
+          <div
+            className={`flex-1 px-4 sm:px-6 lg:px-8 ${
+              renderReviews ? "pb-[18px]" : "pb-4"
+            } ${
+              renderIntro ? "pt-6 sm:pt-7" : "pt-4 sm:pt-5"
+            } ${contentBlur ? "select-none" : ""} ${contentClassName}`.trim()}
+            style={
+              contentBlur
+                ? {
+                    filter: `blur(${contentBlur})`,
+                    userSelect: "none" as const,
+                  }
+                : undefined
+            }
+          >
+            <div className="mx-auto w-full max-w-[1280px]">{reportBlock}</div>
+          </div>
+        </>
+      )}
+      {showFooter ? <ReportPageFooter /> : null}
     </div>
   );
 }

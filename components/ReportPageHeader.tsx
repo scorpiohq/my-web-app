@@ -50,12 +50,15 @@ type ReportPageHeaderProps = {
   userName: string;
   reportHref: string;
   giftHref: string;
+  /** Profile menu “Your gift” entry. */
+  showGiftLink?: boolean;
 };
 
 export default function ReportPageHeader({
   userName,
   reportHref,
   giftHref,
+  showGiftLink = true,
 }: ReportPageHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -111,14 +114,16 @@ export default function ReportPageHeader({
                 >
                   {userName}
                 </Link>
-                <Link
-                  href={giftHref}
-                  className="relative mx-3 mb-1 mt-1 block border border-black bg-white px-4 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-black shadow-[2px_2px_0_0_#c8c8c8] transition hover:bg-black/5"
-                  onClick={() => setProfileOpen(false)}
-                >
-                  Your gift
-                  <GiftNotificationBadge />
-                </Link>
+                {showGiftLink ? (
+                  <Link
+                    href={giftHref}
+                    className="relative mx-3 mb-1 mt-1 block border border-black bg-white px-4 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-black shadow-[2px_2px_0_0_#c8c8c8] transition hover:bg-black/5"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    Your gift
+                    <GiftNotificationBadge />
+                  </Link>
+                ) : null}
                 <Link
                   href="/signin"
                   className="block px-4 py-2.5 text-sm font-medium text-black transition hover:bg-black/5"
@@ -170,14 +175,16 @@ export default function ReportPageHeader({
             </Link>
 
             <div className="mt-4 space-y-3">
-              <Link
-                href={giftHref}
-                className="btn-brutal btn-brutal-secondary relative block px-4 py-3 text-center text-sm font-medium uppercase tracking-wide text-black"
-                onClick={() => setMenuOpen(false)}
-              >
-                Your gift
-                <GiftNotificationBadge />
-              </Link>
+              {showGiftLink ? (
+                <Link
+                  href={giftHref}
+                  className="btn-brutal btn-brutal-secondary relative block px-4 py-3 text-center text-sm font-medium uppercase tracking-wide text-black"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Your gift
+                  <GiftNotificationBadge />
+                </Link>
+              ) : null}
               <Link
                 href="/signin"
                 className="btn-brutal btn-brutal-secondary block px-4 py-3 text-center text-sm font-medium text-black"

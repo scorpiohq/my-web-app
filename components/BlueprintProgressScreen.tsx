@@ -1,38 +1,27 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ReportPreviewStack from "@/components/ReportPreviewStack";
+import JourneyEnter from "@/components/gouti/JourneyEnter";
+import { journeyFadeTo } from "@/components/gouti/journeyFade";
 
 const STATUS_MESSAGES = [
-  {
-    title: "Building Your Blueprint...",
-    subtitle: "Usually takes 1–2 minutes.",
-  },
-  {
-    title: "Understanding Your Answers...",
-    subtitle: "Finding what makes you unique.",
-  },
-  {
-    title: "Connecting the Dots...",
-    subtitle: "Matching your strengths, goals, and interests.",
-  },
-  {
-    title: "Almost Ready...",
-    subtitle: "Preparing your blueprint.",
-  },
-  {
-    title: "Your Blueprint is Ready.",
-    subtitle: "",
-  },
+  "Finalizing your Creator Identity…",
+  "Mapping your strengths and blockers…",
+  "Writing your first move…",
+  "Almost ready… Just finishing up.",
 ] as const;
 
 const MIN_WAIT_MS = 18_000;
-const garamond = { fontFamily: "var(--font-garamond)" } as const;
-
-function randomDelayMs() {
-  return 2000 + Math.floor(Math.random() * 3001);
-}
+/** Preview / gouti test path — shorter so the flow can be reviewed quickly. */
+const PREVIEW_WAIT_MS = 7_000;
+/** Match report-animation status (“Reading your answers…”) */
+const statusType = {
+  fontFamily:
+    'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+} as const;
+const stickerType = { fontFamily: "var(--font-garamond)" } as const;
 
 function padSeconds(value: number) {
   return String(value).padStart(2, "0");
@@ -44,7 +33,7 @@ function SecondsToGoSticker({ secondsLeft }: { secondsLeft: number }) {
   return (
     <div
       className="flex h-[86px] w-[86px] rotate-[8deg] flex-col items-center justify-center bg-white shadow-[4px_8px_18px_rgba(0,0,0,0.18)] sm:h-[96px] sm:w-[96px]"
-      style={garamond}
+      style={stickerType}
       aria-live="polite"
       aria-label={`${secondsLeft} seconds to go.`}
     >
@@ -68,11 +57,13 @@ export default function BlueprintProgressScreen({
   submissionId?: string;
   preview?: boolean;
 }) {
+  const router = useRouter();
   const [statusIndex, setStatusIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const [reportStatus, setReportStatus] = useState<ReportStatus>("generating");
   const [pollError, setPollError] = useState<string | null>(null);
-  const [secondsLeft, setSecondsLeft] = useState(18);
+  const waitMs = preview ? PREVIEW_WAIT_MS : MIN_WAIT_MS;
+  const [secondsLeft, setSecondsLeft] = useState(preview ? 7 : 18);
   const [minWaitDone, setMinWaitDone] = useState(false);
 
   const runWait = Boolean(submissionId) || preview;
@@ -81,12 +72,10 @@ export default function BlueprintProgressScreen({
     ? minWaitDone
     : reportStatus === "ready" && minWaitDone;
   const showCountdown = runWait && !isReady && !isFailed && !minWaitDone;
-  const current = isReady
-    ? STATUS_MESSAGES[STATUS_MESSAGES.length - 1]
-    : STATUS_MESSAGES[statusIndex];
+  const current = STATUS_MESSAGES[statusIndex];
   const reportHref = submissionId
     ? `/report/${encodeURIComponent(submissionId)}`
-    : "/261005-report-preview";
+    : "/gouti/report-preview";
 
   useEffect(() => {
     if (!runWait) {
@@ -96,7 +85,7 @@ export default function BlueprintProgressScreen({
     const startedAt = Date.now();
 
     const tick = () => {
-      const remainingMs = MIN_WAIT_MS - (Date.now() - startedAt);
+      const remainingMs = waitMs - (Date.now() - startedAt);
       const left = Math.max(0, Math.ceil(remainingMs / 1000));
       setSecondsLeft(left);
 
@@ -108,13 +97,13 @@ export default function BlueprintProgressScreen({
     tick();
     const interval = setInterval(() => {
       tick();
-      if (Date.now() - startedAt >= MIN_WAIT_MS) {
+      if (Date.now() - startedAt >= waitMs) {
         clearInterval(interval);
       }
     }, 200);
 
     return () => clearInterval(interval);
-  }, [runWait]);
+  }, [runWait, waitMs]);
 
   useEffect(() => {
     if (!submissionId || preview) {
@@ -168,21 +157,27 @@ export default function BlueprintProgressScreen({
       return;
     }
 
-    const delay = randomDelayMs();
-    const fadeOutTimer = setTimeout(() => setVisible(false), delay - 280);
+    // Evenly pace all status lines across the wait so none get skipped.
+    const stepMs = Math.max(900, Math.floor(waitMs / STATUS_MESSAGES.length));
+    const timers: number[] = [];
 
-    const nextTimer = setTimeout(() => {
-      setStatusIndex((index) =>
-        Math.min(index + 1, STATUS_MESSAGES.length - 2),
+    for (let i = 1; i < STATUS_MESSAGES.length; i++) {
+      const at = stepMs * i;
+      timers.push(
+        window.setTimeout(() => setVisible(false), Math.max(0, at - 220)),
       );
-      setVisible(true);
-    }, delay);
+      timers.push(
+        window.setTimeout(() => {
+          setStatusIndex(i);
+          setVisible(true);
+        }, at),
+      );
+    }
 
     return () => {
-      clearTimeout(fadeOutTimer);
-      clearTimeout(nextTimer);
+      timers.forEach((id) => window.clearTimeout(id));
     };
-  }, [statusIndex, isReady, isFailed, runWait]);
+  }, [isReady, isFailed, runWait, waitMs]);
 
   useEffect(() => {
     if (!isReady) {
@@ -193,6 +188,7 @@ export default function BlueprintProgressScreen({
   }, [isReady]);
 
   return (
+    <JourneyEnter className="min-h-screen bg-white">
     <div className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-12 sm:px-6">
       <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center">
         <ReportPreviewStack
@@ -206,56 +202,55 @@ export default function BlueprintProgressScreen({
 
         <div className="mt-10 flex w-full flex-col items-center sm:mt-12">
           <div
-            key={isReady ? "ready" : statusIndex}
-            className={`progress-status-copy min-h-[52px] w-full max-w-[22rem] px-2 text-center sm:min-h-[64px] sm:max-w-none ${
+            key={isReady ? "ready" : isFailed ? "failed" : statusIndex}
+            className={`progress-status-copy flex min-h-[3rem] w-full max-w-[22rem] items-center justify-center px-2 text-center sm:min-h-[3.25rem] sm:max-w-none ${
               visible ? "progress-status-visible" : "progress-status-hidden"
             }`}
           >
-            <p
-              className="text-[22px] font-normal leading-snug text-[#333] sm:text-[26px] lg:whitespace-nowrap lg:text-[28px]"
-              style={garamond}
-            >
-              {isFailed ? "We hit a snag building your Blueprint" : current.title}
-            </p>
             {isFailed ? (
               <p
-                className="mt-2 text-sm italic leading-relaxed text-[#9A9A9A] sm:text-base"
-                style={garamond}
+                className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
+                style={statusType}
               >
-                Please refresh in a minute or contact support if this continues.
+                We hit a snag building your Blueprint
               </p>
-            ) : current.subtitle ? (
+            ) : isReady ? (
+              <button
+                type="button"
+                onClick={() =>
+                  journeyFadeTo(reportHref, router, { durationMs: 480 })
+                }
+                className="btn-brutal btn-brutal-primary inline-block min-w-[220px] px-8 py-3.5 text-sm font-semibold tracking-wide text-black sm:min-w-[240px] sm:text-base"
+              >
+                OPEN MY BLUEPRINT
+              </button>
+            ) : (
               <p
-                className="mt-2 text-sm italic leading-relaxed text-[#9A9A9A] sm:text-base lg:whitespace-nowrap"
-                style={garamond}
+                className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
+                style={statusType}
               >
-                {current.subtitle}
+                {current}
               </p>
-            ) : null}
+            )}
           </div>
+
+          {isFailed ? (
+            <p
+              className="mt-2 text-center text-sm leading-relaxed text-[#6B6B6B]"
+              style={statusType}
+            >
+              Please refresh in a minute or contact support if this continues.
+            </p>
+          ) : null}
 
           {pollError ? (
             <p className="mt-3 text-center text-xs text-[#c0392b] sm:text-sm">
               {pollError}
             </p>
           ) : null}
-
-          <div
-            className={`flex justify-center transition-all duration-500 ${
-              isReady
-                ? "mt-5 translate-y-0 opacity-100"
-                : "pointer-events-none mt-0 h-0 translate-y-1 overflow-hidden opacity-0"
-            }`}
-          >
-            <Link
-              href={reportHref}
-              className="btn-brutal btn-brutal-primary inline-block min-w-[220px] px-8 py-3.5 text-sm font-semibold tracking-wide text-black sm:min-w-[240px] sm:text-base"
-            >
-              Open My Blueprint →
-            </Link>
-          </div>
         </div>
       </div>
     </div>
+    </JourneyEnter>
   );
 }

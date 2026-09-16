@@ -5,7 +5,9 @@ import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import CountrySelect from "@/components/CountrySelect";
 import { readFormDraft, writeFormDraft } from "@/lib/form-draft";
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { journeyFadeTo } from "@/components/gouti/journeyFade";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 function getOptionLetter(index: number): string {
   return String.fromCharCode(65 + index);
@@ -436,6 +438,47 @@ function FormExampleHints({ text }: { text: string }) {
 }
 
 export default function FormPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" aria-hidden="true" />}>
+      <FormPageInner />
+    </Suspense>
+  );
+}
+
+/** Gouti-only test seed — last question ready to Submit. Real form untouched without skip=1. */
+function buildGoutiSkipResponses(): FormResponses {
+  return {
+    name: "Gouti Test",
+    email: `gouti.test+${Date.now()}@yourblueprint.in`,
+    age: "25",
+    location: "United States",
+    photo_or_avatar: "male",
+    gender: "male",
+    current_situation:
+      "I\u2019m ready to start, but don\u2019t know where to begin.",
+    primary_goal: "Create more freedom in my life",
+    worth_it: "Having more freedom in my life",
+    excited_topic: "I\u2019m not sure yet",
+    freetime_topic: "I\u2019m not sure yet",
+    stop_scroll: ["People sharing their personal journey"],
+    talk_forever: "Testing the gouti post-form journey.",
+    real_experience: "Skipping the form to test animations and checkout.",
+    platform: "Not sure yet",
+    time_per_day: "1\u20132 hours",
+    consistency: "2\u20133 days per week",
+    investment: "$0\u2013100",
+    blocker: "Lack of direction",
+    help_type: "All of the above",
+    readiness: "Yes, absolutely",
+  };
+}
+
+function FormPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isGoutiJourney = searchParams.get("journey") === "gouti";
+  const skipToLast =
+    isGoutiJourney && searchParams.get("skip") === "1";
   const [ready, setReady] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [formVisible, setFormVisible] = useState(false);
@@ -448,6 +491,14 @@ export default function FormPage() {
   const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
+    if (skipToLast) {
+      setResponses(buildGoutiSkipResponses());
+      setStep(questions.length - 1);
+      setShowIntro(false);
+      setReady(true);
+      return;
+    }
+
     const draft = readFormDraft();
     if (draft) {
       const safeStep = Math.min(
@@ -459,7 +510,7 @@ export default function FormPage() {
       setShowIntro(false);
     }
     setReady(true);
-  }, []);
+  }, [skipToLast]);
 
   useEffect(() => {
     if (!ready || showIntro) return;
@@ -551,7 +602,18 @@ export default function FormPage() {
 
   async function handleSubmit() {
     setSubmitting(true);
-    setShowCheckoutTransition(true);
+
+    // Gouti skip/test mode: never hit create-checkout / Supabase.
+    // Soft white fade into report-animation.
+    if (skipToLast) {
+      setFormVisible(false);
+      journeyFadeTo("/gouti/report-animation", router, { durationMs: 480 });
+      return;
+    }
+
+    if (!isGoutiJourney) {
+      setShowCheckoutTransition(true);
+    }
 
     const {
       name,
@@ -570,6 +632,7 @@ export default function FormPage() {
       location,
       gender: gender || null,
       answers: restAnswers,
+      ...(isGoutiJourney ? { journey: "gouti" } : {}),
     };
 
     const transitionStart = Date.now();
@@ -584,6 +647,11 @@ export default function FormPage() {
 
       if (!res.ok || !result.checkoutUrl) {
         throw new Error(result.error || "Could not start checkout");
+      }
+
+      if (isGoutiJourney) {
+        window.location.assign(result.checkoutUrl);
+        return;
       }
 
       const elapsed = Date.now() - transitionStart;
@@ -833,7 +901,9 @@ export default function FormPage() {
             >
               {isLast
                 ? submitting
-                  ? "Redirecting..."
+                  ? isGoutiJourney
+                    ? "Preparing..."
+                    : "Redirecting..."
                   : "Submit"
                 : current.id === "instructions"
                   ? "START"

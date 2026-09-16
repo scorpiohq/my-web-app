@@ -44,39 +44,58 @@ function renderPromptText(text: string) {
 
 type PromptPageContentProps = {
   userName: string;
+  /** Short “THANKS {NAME}!” in Azo (gouti gift page). */
+  shortThanks?: boolean;
 };
 
-export default function PromptPageContent({ userName }: PromptPageContentProps) {
+export default function PromptPageContent({
+  userName,
+  shortThanks = false,
+}: PromptPageContentProps) {
   const firstName = userName.trim().split(/\s+/)[0] || "there";
-  const thanksLine = `Thanks ${firstName} for letting us be part of your journey.`;
+  const thanksLine = shortThanks
+    ? `Thanks ${firstName}!`
+    : `Thanks ${firstName} for letting us be part of your journey.`;
 
   return (
     <article className="w-full pb-16 pl-[18px] pr-2 pt-2 text-left sm:pt-4">
       <p className="m-0 text-[13px] leading-5 text-black/40 sm:text-sm">
         A little gift for you
       </p>
-      <h1
-        className="mt-2 max-w-full text-[28px] font-normal italic leading-[1.2] text-black whitespace-nowrap sm:text-[36px] max-[900px]:whitespace-normal"
-        style={{ fontFamily: "var(--font-garamond)" }}
-      >
-        {thanksLine}
-      </h1>
+      {shortThanks ? (
+        <h1
+          className="mt-2 max-w-full text-[clamp(1.5rem,4vw,2.35rem)] font-normal uppercase leading-[1.1] tracking-[-0.02em] text-black"
+          style={{ fontFamily: "var(--font-azo-uber), sans-serif" }}
+        >
+          {thanksLine}
+        </h1>
+      ) : (
+        <h1
+          className="mt-2 max-w-full text-[28px] font-normal italic leading-[1.2] text-black whitespace-nowrap sm:text-[36px] max-[900px]:whitespace-normal"
+          style={{ fontFamily: "var(--font-garamond)" }}
+        >
+          {thanksLine}
+        </h1>
+      )}
       <div
         className="mt-10 space-y-6 text-[16px] leading-8 tracking-[0.01em] text-black/70 sm:mt-12 sm:space-y-7 sm:text-[17px] sm:leading-9"
         style={{ fontFamily: "var(--font-geist-sans)" }}
       >
-        <p className="m-0 max-w-full whitespace-nowrap max-[900px]:whitespace-normal">
-          Your report told you where you&apos;re headed. This is how you take
-          the first step.
+        <p className="m-0 max-w-full">
+          Your Blueprint told you where to start, and this will help you take
+          that step.
         </p>
         <p className="m-0 max-w-full">
-          Works with any AI tool you already use:
+          I made this Prompt myself, so you can start.
         </p>
         <p className="m-0 max-w-full">
           <strong className="font-bold text-black">
-            ChatGPT, Claude, Perplexity, Google AI,
-          </strong>{" "}
-          whichever you want to go with.
+            Works with any AI tool you already use:
+          </strong>
+        </p>
+        <p className="m-0 max-w-full">
+          → ChatGPT, Claude, Perplexity, Google AI, whichever you want to go
+          with.
         </p>
         <p className="m-0 max-w-full">
           I suggest you to go with{" "}
@@ -84,15 +103,21 @@ export default function PromptPageContent({ userName }: PromptPageContentProps) 
           good with this kinda work.
         </p>
         <ol className="m-0 list-decimal space-y-2 pl-6">
-          <li>Copy the Prompt that I shared with you.</li>
-          <li>Attach your Blueprint with the Prompt.</li>
+          <li>Copy the Prompt!</li>
+          <li>Download the Blueprint &amp; Share with the Prompt.</li>
           <li>Hit the Send Button!</li>
         </ol>
-        <p className="m-0">Theirs it is! Voilà!!</p>
+        <p className="m-0">
+          <strong className="font-bold text-black">DONE!</strong>
+        </p>
       </div>
       <div
         className="mt-8 border-2 border-black bg-white p-5 text-left shadow-[6px_6px_0_0_#000] sm:mt-10 sm:p-6 sm:shadow-[8px_8px_0_0_#000]"
-        style={{ fontFamily: "var(--font-bethany)" }}
+        style={{
+          fontFamily: shortThanks
+            ? "var(--font-geist-sans), Arial, Helvetica, sans-serif"
+            : "var(--font-bethany)",
+        }}
       >
         <div className="flex items-center justify-between gap-3">
           <strong className="text-[16px] font-bold leading-none text-black sm:text-[18px]">
@@ -101,8 +126,10 @@ export default function PromptPageContent({ userName }: PromptPageContentProps) 
           <CopyPromptButton text={GIFT_PROMPT} />
         </div>
         <p
-          className="mt-5 m-0 whitespace-pre-wrap text-[16px] leading-[1.85] tracking-[0.03em] text-black/80 sm:text-[17px] sm:leading-[1.95]"
-          style={{ wordSpacing: "0.08em" }}
+          className={`mt-5 m-0 whitespace-pre-wrap text-[16px] leading-[1.85] text-black/80 sm:text-[17px] sm:leading-[1.95] ${
+            shortThanks ? "tracking-normal" : "tracking-[0.03em]"
+          }`}
+          style={shortThanks ? undefined : { wordSpacing: "0.08em" }}
         >
           {renderPromptText(GIFT_PROMPT)}
         </p>
@@ -113,10 +140,7 @@ export default function PromptPageContent({ userName }: PromptPageContentProps) 
       >
         From now on, you have no excuse not to start.
       </p>
-      <div
-        className="mt-2"
-        style={{ fontFamily: "var(--font-garamond)" }}
-      >
+      <div className="mt-2" style={{ fontFamily: "var(--font-garamond)" }}>
         <p className="m-0 max-w-full text-[22px] font-normal italic leading-[1.2] text-black whitespace-nowrap sm:text-[26px] max-[900px]:whitespace-normal">
           One prompt. One real step. That&apos;s all today needs to be.
         </p>

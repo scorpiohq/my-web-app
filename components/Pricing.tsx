@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { TOTAL_BLUEPRINT_SPOTS } from "@/lib/spots";
+import { Reveal } from "@/components/gouti/Reveal";
 
 const defaultFeatures = [
   "Your Personalized Blueprint",
@@ -38,6 +39,9 @@ type PricingProps = {
   checkoutButton?: ReactNode;
   showInstantPdfRow?: boolean;
   showMoneyBack?: boolean;
+  ctaHref?: string;
+  /** Soft = Stanley-style rounded UI (gouti). Brutal = live homepage. */
+  variant?: "brutal" | "soft";
 };
 
 export default function Pricing({
@@ -56,7 +60,10 @@ export default function Pricing({
   checkoutButton,
   showInstantPdfRow = false,
   showMoneyBack = true,
+  ctaHref = "/form",
+  variant = "brutal",
 }: PricingProps) {
+  const soft = variant === "soft";
   const hasSpots =
     typeof spotsRemaining === "number" && Number.isFinite(spotsRemaining);
   const remaining = hasSpots
@@ -68,31 +75,58 @@ export default function Pricing({
       : 0;
 
   return (
-    <section id="pricing" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
+    <section
+      id="pricing"
+      className={
+        soft
+          ? "bg-transparent px-5 py-20 sm:px-8 sm:py-28"
+          : "grid-bg px-6 py-12 sm:px-8 sm:py-16"
+      }
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
         {showIntro ? (
-          <>
-            <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
-              PRICING
-            </span>
+          <Reveal className="flex w-full flex-col items-center">
+            {soft ? (
+              <h2 className="mb-10 max-w-xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] sm:mb-12">
+                Your first step. Right here.
+              </h2>
+            ) : (
+              <>
+                <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
+                  PRICING
+                </span>
 
-            <h2
-              className="mb-10 max-w-none whitespace-nowrap text-[clamp(1.5rem,4.2vw,3.25rem)] font-bold leading-tight tracking-wide text-black sm:mb-12"
-              style={{ fontFamily: "var(--font-hero)" }}
-            >
-              Your first step. Right here.
-            </h2>
-          </>
+                <h2
+                  className="mb-10 max-w-none whitespace-nowrap text-[clamp(1.5rem,4.2vw,3.25rem)] font-bold leading-tight tracking-wide text-black sm:mb-12"
+                  style={{ fontFamily: "var(--font-hero)" }}
+                >
+                  Your first step. Right here.
+                </h2>
+              </>
+            )}
+          </Reveal>
         ) : null}
 
-        <div className="relative w-full max-w-lg sm:max-w-xl lg:max-w-2xl">
+        <Reveal className="relative w-full max-w-lg sm:max-w-xl lg:max-w-2xl" delayMs={80}>
           {offerBadge ? (
-            <span className="absolute -top-3 right-4 z-10 inline-block border border-black bg-[#FFC940] px-3 py-1 text-[10px] font-bold tracking-[0.08em] text-black shadow-[3px_3px_0_0_#000] sm:right-5 sm:text-[11px]">
+            <span
+              className={
+                soft
+                  ? "absolute -top-3 right-5 z-10 inline-block rounded-full bg-[#FFF1C2] px-3.5 py-1.5 text-[11px] font-semibold tracking-wide text-black"
+                  : "absolute -top-3 right-4 z-10 inline-block border border-black bg-[#FFC940] px-3 py-1 text-[10px] font-bold tracking-[0.08em] text-black shadow-[3px_3px_0_0_#000] sm:right-5 sm:text-[11px]"
+              }
+            >
               {offerBadge}
             </span>
           ) : null}
 
-          <div className="border-2 border-black bg-white p-6 text-left shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+          <div
+            className={
+              soft
+                ? "rounded-[28px] border border-black/[0.06] bg-white p-6 text-left shadow-[0_20px_60px_rgba(0,0,0,0.06)] sm:p-8 lg:p-10"
+                : "border-2 border-black bg-white p-6 text-left shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10"
+            }
+          >
             <p className="text-[11px] font-semibold tracking-[0.16em] text-[#6B6B6B] sm:text-xs">
               {planLabel}
             </p>
@@ -100,15 +134,23 @@ export default function Pricing({
             <div className="mt-4 flex flex-wrap items-end gap-x-2.5 gap-y-1 sm:mt-5">
               {originalPrice ? (
                 <span
-                  className="text-[2.75rem] leading-none text-[#999] line-through decoration-2 sm:text-[3.25rem] lg:text-[3.5rem]"
-                  style={{ fontFamily: "var(--font-hero)" }}
+                  className={
+                    soft
+                      ? "pricing-price text-[2.75rem] font-semibold leading-none text-[#CCC] line-through decoration-2 sm:text-[3.25rem]"
+                      : "pricing-price text-[2.75rem] leading-none text-[#999] line-through decoration-2 sm:text-[3.25rem] lg:text-[3.5rem]"
+                  }
+                  style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
                 >
                   {originalPrice}
                 </span>
               ) : null}
               <span
-                className="text-[3rem] leading-none text-black sm:text-[3.5rem] lg:text-[3.75rem]"
-                style={{ fontFamily: "var(--font-hero)" }}
+                className={
+                  soft
+                    ? "pricing-price text-[3rem] font-semibold leading-none tracking-tight text-black sm:text-[3.5rem]"
+                    : "pricing-price text-[3rem] leading-none text-black sm:text-[3.5rem] lg:text-[3.75rem]"
+                }
+                style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
               >
                 {salePrice}
               </span>
@@ -124,9 +166,19 @@ export default function Pricing({
             {remaining != null ? (
               <div className="mt-6 sm:mt-7">
                 <div className="mb-2.5 flex items-center justify-between gap-3">
-                  <span className="inline-flex items-center gap-1.5 border border-black bg-[#FFC940] px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-black shadow-[2px_2px_0_0_#000]">
+                  <span
+                    className={
+                      soft
+                        ? "inline-flex items-center gap-1.5 rounded-full bg-[#FFF1C2] px-3 py-1 text-[10px] font-semibold tracking-[0.08em] text-black"
+                        : "inline-flex items-center gap-1.5 border border-black bg-[#FFC940] px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-black shadow-[2px_2px_0_0_#000]"
+                    }
+                  >
                     <span
-                      className="h-1.5 w-1.5 bg-black"
+                      className={
+                        soft
+                          ? "h-1.5 w-1.5 rounded-full bg-[#E8A317]"
+                          : "h-1.5 w-1.5 bg-black"
+                      }
                       aria-hidden="true"
                     />
                     LIMITED
@@ -139,7 +191,11 @@ export default function Pricing({
                 </div>
 
                 <div
-                  className="h-2.5 overflow-hidden border border-black bg-white"
+                  className={
+                    soft
+                      ? "h-2 overflow-hidden rounded-full bg-[#F0F0F0]"
+                      : "h-2.5 overflow-hidden border border-black bg-white"
+                  }
                   role="progressbar"
                   aria-valuenow={remaining}
                   aria-valuemin={0}
@@ -147,7 +203,11 @@ export default function Pricing({
                   aria-label={`${remaining} of ${totalSpots} spots claimed`}
                 >
                   <div
-                    className="h-full bg-[#FFC940] transition-[width] duration-500"
+                    className={
+                      soft
+                        ? "h-full rounded-full bg-[#FFC940] transition-[width] duration-500"
+                        : "h-full bg-[#FFC940] transition-[width] duration-500"
+                    }
                     style={{ width: `${fillPercent}%` }}
                   />
                 </div>
@@ -163,7 +223,16 @@ export default function Pricing({
             <ul className="mt-7 space-y-3.5 sm:mt-8 sm:space-y-4">
               {features.map((feature) => (
                 <li key={feature} className="flex items-start gap-2.5">
-                  <CheckIcon />
+                  {soft ? (
+                    <span
+                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#FFF1C2] text-[11px] font-bold text-black"
+                      aria-hidden="true"
+                    >
+                      ✓
+                    </span>
+                  ) : (
+                    <CheckIcon />
+                  )}
                   <span className="text-sm leading-snug text-[#333] sm:text-base">
                     {feature}
                   </span>
@@ -187,7 +256,13 @@ export default function Pricing({
             </ul>
 
             {showMoneyBack ? (
-              <div className="mt-7 flex items-start gap-3 border border-black/15 bg-[#F9F9F9] p-3.5 text-left shadow-[2px_2px_0_0_rgba(0,0,0,0.04)] sm:mt-8 sm:p-4">
+              <div
+                className={
+                  soft
+                    ? "mt-7 flex items-start gap-3 rounded-2xl bg-[#FAFAFA] p-3.5 text-left sm:mt-8 sm:p-4"
+                    : "mt-7 flex items-start gap-3 border border-black/15 bg-[#F9F9F9] p-3.5 text-left shadow-[2px_2px_0_0_rgba(0,0,0,0.04)] sm:mt-8 sm:p-4"
+                }
+              >
                 <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center text-[#22C55E]">
                   <svg
                     width="18"
@@ -217,10 +292,14 @@ export default function Pricing({
             <div className="mt-7 sm:mt-8">
               {checkoutButton ?? (
                 <Link
-                  href="/form"
-                  className="btn-brutal btn-brutal-primary inline-flex w-full items-center justify-center px-7 py-4 text-base font-bold tracking-wide text-black text-center sm:py-4.5 sm:text-lg"
+                  href={ctaHref}
+                  className={
+                    soft
+                      ? "st-cta inline-flex w-full items-center justify-center rounded-full px-7 py-4 text-[15px] font-medium text-white"
+                      : "btn-brutal btn-brutal-primary inline-flex w-full items-center justify-center px-7 py-4 text-base font-bold tracking-wide text-black text-center sm:py-4.5 sm:text-lg"
+                  }
                 >
-                  {buttonLabel}
+                  {soft ? "Get your Blueprint →" : buttonLabel}
                 </Link>
               )}
               <p className="mt-3 text-center text-sm text-[#555] sm:text-[15px]">
@@ -228,7 +307,7 @@ export default function Pricing({
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

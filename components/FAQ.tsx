@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Reveal } from "@/components/gouti/Reveal";
 
 const faqs = [
   {
@@ -69,6 +70,8 @@ type FAQProps = {
   excludeQuestions?: string[];
   heading?: string;
   showDescription?: boolean;
+  /** Soft = Stanley-style rounded UI (gouti). Brutal = live homepage. */
+  variant?: "brutal" | "soft";
 };
 
 export default function FAQ({
@@ -76,44 +79,64 @@ export default function FAQ({
   excludeQuestions = [],
   heading,
   showDescription = true,
+  variant = "brutal",
 }: FAQProps) {
   const [openIndex, setOpenIndex] = useState(0);
+  const soft = variant === "soft";
   const visibleFaqs = items.filter(
     (faq) => !excludeQuestions.includes(faq.question),
   );
 
   return (
-    <section className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
+    <section
+      className={
+        soft
+          ? "bg-transparent px-5 py-20 sm:px-8 sm:py-28"
+          : "grid-bg px-6 py-12 sm:px-8 sm:py-16"
+      }
+    >
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-        <h2
-          className={`max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
-            showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
-          }`}
-          style={{ fontFamily: "var(--font-hero)" }}
-        >
-          {heading ?? "Frequently asked."}
-        </h2>
+        <Reveal className="flex w-full flex-col items-center">
+          <h2
+            className={
+              soft
+                ? `max-w-2xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] ${
+                    showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
+                  }`
+                : `max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
+                    showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
+                  }`
+            }
+            style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
+          >
+            {heading ?? (soft ? "Frequently asked" : "Frequently asked.")}
+          </h2>
 
-        {showDescription ? (
-          <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
-            Still have questions? Email{" "}
-            <a
-              href="mailto:hello@yourblueprint.in"
-              className="font-medium text-black underline underline-offset-2 transition-colors hover:text-[#555]"
-            >
-              hello@yourblueprint.in
-            </a>
-          </p>
-        ) : null}
+          {showDescription ? (
+            <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
+              Still have questions? Email{" "}
+              <a
+                href="mailto:hello@yourblueprint.in"
+                className="font-medium text-black underline underline-offset-2 transition-colors hover:text-[#555]"
+              >
+                hello@yourblueprint.in
+              </a>
+            </p>
+          ) : null}
+        </Reveal>
 
-        <div className="flex w-full flex-col gap-4 sm:gap-5">
+        <Reveal className={`flex w-full flex-col ${soft ? "gap-3" : "gap-4 sm:gap-5"}`} delayMs={80}>
           {visibleFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
 
             return (
               <div
                 key={faq.question}
-                className="border-2 border-black bg-white text-left shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000]"
+                className={
+                  soft
+                    ? "rounded-2xl border border-black/[0.06] bg-[#FAFAFA] text-left transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+                    : "border-2 border-black bg-white text-left shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000]"
+                }
               >
                 <button
                   type="button"
@@ -122,18 +145,37 @@ export default function FAQ({
                   aria-expanded={isOpen}
                 >
                   <span
-                    className="pt-0.5 text-base leading-snug tracking-wide text-black sm:text-lg"
-                    style={{ fontFamily: "var(--font-hero)" }}
+                    className={
+                      soft
+                        ? "pt-0.5 text-[15px] font-medium leading-snug tracking-tight text-black sm:text-base"
+                        : "pt-0.5 text-base leading-snug tracking-wide text-black sm:text-lg"
+                    }
+                    style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
                   >
-                    {faq.question}
+                    {soft
+                      ? faq.question.charAt(0) +
+                        faq.question.slice(1).toLowerCase()
+                      : faq.question}
                   </span>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] sm:h-9 sm:w-9">
+                  <span
+                    className={
+                      soft
+                        ? "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--st-soft)] sm:h-9 sm:w-9"
+                        : "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-black bg-[#FFC940] sm:h-9 sm:w-9"
+                    }
+                  >
                     <ChevronIcon open={isOpen} />
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-black/10 px-5 pb-5 pt-1 sm:px-6 sm:pb-6">
+                  <div
+                    className={
+                      soft
+                        ? "border-t border-black/[0.05] px-5 pb-5 pt-1 sm:px-6 sm:pb-6"
+                        : "border-t border-black/10 px-5 pb-5 pt-1 sm:px-6 sm:pb-6"
+                    }
+                  >
                     <p className="whitespace-pre-line text-sm leading-relaxed text-[#6B6B6B] sm:text-base">
                       {faq.answer}
                     </p>
@@ -142,7 +184,7 @@ export default function FAQ({
               </div>
             );
           })}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

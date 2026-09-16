@@ -1,0 +1,178 @@
+/* Flat white background for /gouti/landing — no grid pattern */
+
+.gouti-landing .grid-bg,
+.gouti-landing .grid-bg-scroll {
+  background-color: #ffffff;
+  background-image: none;
+}
+
+.gouti-landing .grid-bg-scroll::before {
+  display: none;
+}
+
+/*
+  Azo Sans Uber reads much larger than Bebas at the same px size.
+  Normalize section headlines so they match the tuned hero scale.
+*/
+.gouti-landing #hero h1,
+.gouti-landing section h2,
+.gouti-landing #how-it-works h3 {
+  font-family: var(--font-azo-uber), sans-serif !important;
+}
+
+.gouti-landing section h2 {
+  font-size: clamp(1.5rem, 4vw, 2.4rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #how-it-works h3 {
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #pricing .pricing-price {
+  font-family: var(--font-azo-uber), sans-serif !important;
+}
+
+/* Scroll reveal (same as Stanley) — used by BlueprintThread */
+.gouti-landing .st-scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(8px);
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gouti-landing .st-scroll-reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gouti-landing .st-scroll-reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ——— BlueprintThread: Stanley-style staggered statement ——— */
+.gouti-landing #blueprint-thread .bp-thread__title {
+  font-family: var(--font-azo-uber), sans-serif !important;
+  /* Slightly above other section h2s, but still in the same family */
+  font-size: clamp(1.55rem, 4.2vw, 2.55rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.03em !important;
+  text-align: left !important;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__line {
+  display: block;
+  overflow: visible;
+  padding-bottom: 0.04em;
+  margin-bottom: -0.04em;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__line > span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__line--1 {
+  margin-left: 2%;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__line--2 {
+  margin-left: 10%;
+  padding-top: 0.04em;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__line--3 {
+  margin-left: 6%;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__mascot {
+  display: inline-block;
+  width: 0.78em;
+  height: auto;
+  vertical-align: -0.06em;
+  margin: 0 0.14em 0 0;
+  transform: rotate(-8deg);
+  border-radius: 0.22em;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__mark {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0.2em;
+  padding: 0 0.2em;
+  margin: 0 -0.04em;
+  white-space: nowrap;
+}
+
+.gouti-landing #blueprint-thread .bp-thread__mark-fill {
+  position: absolute;
+  inset: 0.14em 0 0.02em;
+  border-radius: inherit;
+  z-index: -1;
+  background: #ffe08a;
+}
+
+/* Platform arc — softer offsets at this smaller scale */
+.gouti-landing #blueprint-thread .bp-thread__tile--1 {
+  transform: translateY(10px);
+}
+.gouti-landing #blueprint-thread .bp-thread__tile--2 {
+  transform: translateY(4px);
+}
+.gouti-landing #blueprint-thread .bp-thread__tile--3 {
+  transform: translateY(-4px);
+}
+.gouti-landing #blueprint-thread .bp-thread__tile--4 {
+  transform: translateY(-5px);
+}
+.gouti-landing #blueprint-thread .bp-thread__tile--5 {
+  transform: translateY(2px);
+}
+.gouti-landing #blueprint-thread .bp-thread__tile--6 {
+  transform: translateY(9px);
+}
+
+.gouti-landing #blueprint-thread .bp-thread__tile svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 960px) {
+  .gouti-landing #blueprint-thread .bp-thread__line--1,
+  .gouti-landing #blueprint-thread .bp-thread__line--2,
+  .gouti-landing #blueprint-thread .bp-thread__line--3 {
+    margin-left: 0;
+  }
+
+  .gouti-landing #blueprint-thread .bp-thread__title {
+    font-size: clamp(1.4rem, 6.5vw, 2rem) !important;
+  }
+
+  .gouti-landing #blueprint-thread .bp-thread__mascot {
+    width: 0.72em;
+  }
+}
+
+@media (max-width: 700px) {
+  .gouti-landing #blueprint-thread .bp-thread__tile--1,
+  .gouti-landing #blueprint-thread .bp-thread__tile--2,
+  .gouti-landing #blueprint-thread .bp-thread__tile--3,
+  .gouti-landing #blueprint-thread .bp-thread__tile--4,
+  .gouti-landing #blueprint-thread .bp-thread__tile--5,
+  .gouti-landing #blueprint-thread .bp-thread__tile--6 {
+    transform: none;
+  }
+}

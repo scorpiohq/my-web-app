@@ -92,16 +92,40 @@ function StatusBadge({ status }: { status: Status }) {
   );
 }
 
-export default function GameplanInside() {
+export default function GameplanInside({
+  variant = "default",
+}: {
+  variant?: "default" | "gouti";
+} = {}) {
+  const gouti = variant === "gouti";
+
   return (
     <section className="w-full pt-8 sm:pt-10">
       <h2
-        className="m-0 text-[28px] font-normal italic leading-[1.2] text-black sm:text-[36px]"
-        style={{ fontFamily: "var(--font-garamond)" }}
+        className={
+          gouti
+            ? "m-0 text-[clamp(1.35rem,3.5vw,2.1rem)] font-normal leading-[1.15] tracking-[-0.02em] text-black"
+            : "m-0 text-[28px] font-normal italic leading-[1.2] text-black sm:text-[36px]"
+        }
+        style={{
+          fontFamily: gouti
+            ? "var(--font-azo-uber), sans-serif"
+            : "var(--font-garamond)",
+        }}
       >
         Here&apos;s what you&apos;ll get inside
       </h2>
-      <div className="mt-10 grid grid-cols-1 gap-8 sm:mt-12 md:grid-cols-2 md:gap-x-6 md:gap-y-10 lg:gap-x-8">
+      <div
+        className="mt-10 grid grid-cols-1 gap-8 sm:mt-12 md:grid-cols-2 md:gap-x-6 md:gap-y-10 lg:gap-x-8"
+        style={
+          gouti
+            ? {
+                fontFamily:
+                  "var(--font-geist-sans), Arial, Helvetica, sans-serif",
+              }
+            : undefined
+        }
+      >
         {items.map((item) => (
           <article
             key={item.badge}

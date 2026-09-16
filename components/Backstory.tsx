@@ -1,8 +1,11 @@
 import Image from "next/image";
+import { Reveal } from "@/components/gouti/Reveal";
 
 type BackstoryProps = {
   stacked?: boolean;
   hideHeading?: boolean;
+  /** Hide CREATOR-LED eyebrow and tighten spacing (gouti landing). */
+  hideEyebrow?: boolean;
 };
 
 function InstagramIcon() {
@@ -40,6 +43,7 @@ function EmailIcon() {
 export default function Backstory({
   stacked = false,
   hideHeading = false,
+  hideEyebrow = false,
 }: BackstoryProps) {
   const stackedBody = (
     <div className="space-y-5 text-base leading-relaxed text-[#4A4A4A] sm:text-[17px] sm:leading-[1.75]">
@@ -85,87 +89,99 @@ export default function Backstory({
     <section id="backstory" className="grid-bg px-6 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto grid max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-10 xl:gap-12">
         {/* Founder card — neobrutalist */}
-        <div className="mx-auto w-full max-w-[220px] border-2 border-black bg-white shadow-[8px_8px_0_0_#000] sm:max-w-[236px] lg:mx-0 lg:translate-x-[18px]">
-          <div className="border-b-2 border-black p-2.5 sm:p-3">
-            <Image
-              src="/dp.jpg"
-              alt="Andy, Founder of Your Blueprint"
-              width={680}
-              height={680}
-              className="aspect-square h-auto w-full object-cover"
-              priority={false}
-            />
-          </div>
-          <div className="flex items-center justify-between gap-2 px-3 py-3">
-            <div className="min-w-0 text-left">
-              <p className="truncate text-sm font-bold text-black">
-                @creatorandy
-              </p>
-              <p className="text-[10px] leading-tight text-[#6B6B6B]">
-                Founder &amp; Creator
-              </p>
+        <Reveal delayMs={40}>
+          <div className="mx-auto w-full max-w-[220px] border-2 border-black bg-white shadow-[8px_8px_0_0_#000] sm:max-w-[236px] lg:mx-0 lg:translate-x-[18px]">
+            <div className="border-b-2 border-black p-2.5 sm:p-3">
+              <Image
+                src="/dp.jpg"
+                alt="Andy, Founder of Your Blueprint"
+                width={680}
+                height={680}
+                className="aspect-square h-auto w-full object-cover"
+                priority={false}
+              />
             </div>
-            <div className="flex shrink-0 items-center gap-1.5">
-              <a
-                href="https://www.instagram.com/creatorandy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </a>
-              <a
-                href="https://www.threads.com/creatorandy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
-                aria-label="Threads"
-              >
-                <ThreadsIcon />
-              </a>
-              <a
-                href="mailto:andy@yourblueprint.in"
-                className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
-                aria-label="Email Andy"
-              >
-                <EmailIcon />
-              </a>
+            <div className="flex items-center justify-between gap-2 px-3 py-3">
+              <div className="min-w-0 text-left">
+                <p className="truncate text-sm font-bold text-black">
+                  @creatorandy
+                </p>
+                <p className="text-[10px] leading-tight text-[#6B6B6B]">
+                  Founder &amp; Creator
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1.5">
+                <a
+                  href="https://www.instagram.com/creatorandy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
+                  aria-label="Instagram"
+                >
+                  <InstagramIcon />
+                </a>
+                <a
+                  href="https://www.threads.com/creatorandy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
+                  aria-label="Threads"
+                >
+                  <ThreadsIcon />
+                </a>
+                <a
+                  href="mailto:andy@yourblueprint.in"
+                  className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
+                  aria-label="Email Andy"
+                >
+                  <EmailIcon />
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Copy */}
-        <div className="text-center lg:text-left">
-          <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
-            <span className="hidden h-px w-8 bg-black sm:block" aria-hidden="true" />
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-black sm:text-xs">
-              CREATOR-LED
-            </p>
-          </div>
+        <Reveal delayMs={100}>
+          <div className={`text-center lg:text-left ${hideEyebrow ? "-mt-1 lg:-mt-3" : ""}`}>
+            {hideEyebrow ? null : (
+              <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
+                <span className="hidden h-px w-8 bg-black sm:block" aria-hidden="true" />
+                <p className="text-[11px] font-semibold tracking-[0.16em] text-black sm:text-xs">
+                  CREATOR-LED
+                </p>
+              </div>
+            )}
 
-          <h2
-            className="mb-5 text-[clamp(2rem,5vw,3rem)] leading-[0.95] tracking-wide text-black sm:mb-6"
-            style={{ fontFamily: "var(--font-hero)" }}
-          >
-            Meet the founder.
-          </h2>
+            <h2
+              className={`${
+                hideEyebrow ? "mb-3 sm:mb-4" : "mb-5 sm:mb-6"
+              } text-[clamp(2rem,5vw,3rem)] leading-[0.95] tracking-wide text-black`}
+              style={{ fontFamily: "var(--font-hero)" }}
+            >
+              Meet the founder.
+            </h2>
 
-          <div className="space-y-5 text-base leading-relaxed text-[#4A4A4A] sm:text-[17px] sm:leading-[1.75]">
-            <p>
-              Andy spent years trying to start on social media, stuck between
-              fifty ideas, never actually posting. Once he figured out his own
-              direction, everything moved fast - real growth, real income, and a
-              life he always wanted.
-            </p>
-            <p>
-              He built Your Blueprint because the hardest part was never the
-              content. It was knowing where to start. Blueprint isn&apos;t a
-              cheat code to help you succeed, it&apos;s a compass, so you can
-              start.
-            </p>
+            <div
+              className={`${
+                hideEyebrow ? "space-y-4" : "space-y-5"
+              } text-base leading-relaxed text-[#4A4A4A] sm:text-[17px] sm:leading-[1.75]`}
+            >
+              <p>
+                Andy spent years trying to start on social media, stuck between
+                fifty ideas, never actually posting. Once he figured out his own
+                direction, everything moved fast - real growth, real income, and a
+                life he always wanted.
+              </p>
+              <p>
+                He built Your Blueprint because the hardest part was never the
+                content. It was knowing where to start. Blueprint isn&apos;t a
+                cheat code to help you succeed, it&apos;s a compass, so you can
+                start.
+              </p>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

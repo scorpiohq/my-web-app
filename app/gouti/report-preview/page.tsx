@@ -101,7 +101,7 @@ function ReportCard({
 
 export function ReportTemplate({
   data,
-  gameplanHref = "/261005-gameplan",
+  gameplanHref = "/gouti/gameplan-waitlist#waitlist",
   exportMode = false,
 }: {
   data: ReportData;

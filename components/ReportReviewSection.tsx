@@ -4,6 +4,8 @@ import { useState } from "react";
 
 type ReportReviewSectionProps = {
   submissionId?: string;
+  /** Inline page section vs modal body (no outer margin). */
+  variant?: "section" | "modal";
 };
 
 type ReviewPayload = {
@@ -30,6 +32,7 @@ function StarIcon({ filled }: { filled: boolean }) {
 
 export default function ReportReviewSection({
   submissionId,
+  variant = "section",
 }: ReportReviewSectionProps) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -39,6 +42,7 @@ export default function ReportReviewSection({
   const [error, setError] = useState<string | null>(null);
 
   const displayRating = hoverRating || rating;
+  const isModal = variant === "modal";
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -91,8 +95,14 @@ export default function ReportReviewSection({
   }
 
   return (
-    <section className="mt-[30px]">
-      <div className="relative mx-auto max-w-md border-2 border-black bg-[#F3EEE8] px-4 py-6 shadow-[4px_4px_0_0_#000] sm:max-w-lg sm:px-5 sm:py-7">
+    <section className={isModal ? "" : "mt-[30px]"}>
+      <div
+        className={`relative border-2 border-black bg-[#F3EEE8] px-4 py-6 shadow-[4px_4px_0_0_#000] sm:px-5 sm:py-7 ${
+          isModal
+            ? "mx-auto w-full max-w-md sm:max-w-lg"
+            : "mx-auto max-w-md sm:max-w-lg"
+        }`}
+      >
         <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 border border-black bg-[#e5c4a1] px-2.5 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-black shadow-[2px_2px_0_0_#000] sm:text-[10px]">
           REVIEW
         </span>
