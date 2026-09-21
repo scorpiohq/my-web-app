@@ -300,7 +300,7 @@ export default function ScrollRevealStory() {
                   }
                   aria-hidden={(opacities[blocks.length - 1] ?? DIM) <= 0.7}
                 >
-                  GET YOUR BLUEPRINT →
+                  BUILD MY BLUEPRINT →
                 </Link>
               </div>
             ) : null}

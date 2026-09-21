@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportPreviewStack from "@/components/ReportPreviewStack";
+import BlueprintLoadingBridge from "@/components/gouti/BlueprintLoadingBridge";
 import JourneyEnter from "@/components/gouti/JourneyEnter";
 import { journeyFadeTo } from "@/components/gouti/journeyFade";
 
@@ -16,6 +17,11 @@ const STATUS_MESSAGES = [
 const MIN_WAIT_MS = 18_000;
 /** Preview / gouti test path — shorter so the flow can be reviewed quickly. */
 const PREVIEW_WAIT_MS = 7_000;
+/** Cards-only beat (img3) before the loading bridge. */
+const CARDS_HOLD_MS = 1_600;
+/** Blobatar loading bridge (img4) before the report. */
+const LOADING_HOLD_MS = 1_800;
+
 /** Match report-animation status (“Reading your answers…”) */
 const statusType = {
   fontFamily:
@@ -28,6 +34,7 @@ function padSeconds(value: number) {
 }
 
 type ReportStatus = "pending" | "generating" | "ready" | "failed";
+type Phase = "waiting" | "cards" | "loading";
 
 function SecondsToGoSticker({ secondsLeft }: { secondsLeft: number }) {
   return (
@@ -65,12 +72,16 @@ export default function BlueprintProgressScreen({
   const waitMs = preview ? PREVIEW_WAIT_MS : MIN_WAIT_MS;
   const [secondsLeft, setSecondsLeft] = useState(preview ? 7 : 18);
   const [minWaitDone, setMinWaitDone] = useState(false);
+  const [phase, setPhase] = useState<Phase>("waiting");
 
   const runWait = Boolean(submissionId) || preview;
   const isFailed = reportStatus === "failed";
   const isReady = preview
     ? minWaitDone
     : reportStatus === "ready" && minWaitDone;
+  const inHandoff = isReady && !isFailed;
+  const showLoading = inHandoff && phase === "loading";
+  const showCardsOnly = inHandoff && !showLoading;
   const showCountdown = runWait && !isReady && !isFailed && !minWaitDone;
   const current = STATUS_MESSAGES[statusIndex];
   const reportHref = submissionId
@@ -179,78 +190,98 @@ export default function BlueprintProgressScreen({
     };
   }, [isReady, isFailed, runWait, waitMs]);
 
+  // Timer done → cards only (no text / button) → loading → report
   useEffect(() => {
-    if (!isReady) {
-      return;
-    }
+    if (!isReady || isFailed) return;
 
-    setVisible(true);
-  }, [isReady]);
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const cardsHold = prefersReduced ? 400 : CARDS_HOLD_MS;
+    const loadingHold = prefersReduced ? 400 : LOADING_HOLD_MS;
+
+    setPhase("cards");
+
+    const toLoading = window.setTimeout(() => {
+      setPhase("loading");
+    }, cardsHold);
+
+    const toReport = window.setTimeout(() => {
+      journeyFadeTo(reportHref, router, { durationMs: 480 });
+    }, cardsHold + loadingHold);
+
+    return () => {
+      window.clearTimeout(toLoading);
+      window.clearTimeout(toReport);
+    };
+  }, [isReady, isFailed, reportHref, router]);
+
+  if (showLoading) {
+    return (
+      <JourneyEnter className="min-h-screen bg-white">
+        <BlueprintLoadingBridge holdMs={LOADING_HOLD_MS} />
+      </JourneyEnter>
+    );
+  }
 
   return (
     <JourneyEnter className="min-h-screen bg-white">
-    <div className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-12 sm:px-6">
-      <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center">
-        <ReportPreviewStack
-          ready={isReady}
-          stamp={
-            showCountdown ? (
-              <SecondsToGoSticker secondsLeft={secondsLeft} />
-            ) : undefined
-          }
-        />
+      <div className="flex min-h-screen w-full items-center justify-center bg-white px-4 py-12 sm:px-6">
+        <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center">
+          <ReportPreviewStack
+            ready={showCardsOnly}
+            stamp={
+              showCountdown ? (
+                <SecondsToGoSticker secondsLeft={secondsLeft} />
+              ) : undefined
+            }
+          />
 
-        <div className="mt-10 flex w-full flex-col items-center sm:mt-12">
-          <div
-            key={isReady ? "ready" : isFailed ? "failed" : statusIndex}
-            className={`progress-status-copy flex min-h-[3rem] w-full max-w-[22rem] items-center justify-center px-2 text-center sm:min-h-[3.25rem] sm:max-w-none ${
-              visible ? "progress-status-visible" : "progress-status-hidden"
-            }`}
-          >
-            {isFailed ? (
-              <p
-                className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
-                style={statusType}
+          {/* Waiting: status copy. Cards phase: nothing (img3 only). */}
+          {!showCardsOnly ? (
+            <div className="mt-10 flex w-full flex-col items-center sm:mt-12">
+              <div
+                key={isFailed ? "failed" : statusIndex}
+                className={`progress-status-copy flex min-h-[3rem] w-full max-w-[22rem] items-center justify-center px-2 text-center sm:min-h-[3.25rem] sm:max-w-none ${
+                  visible ? "progress-status-visible" : "progress-status-hidden"
+                }`}
               >
-                We hit a snag building your Blueprint
-              </p>
-            ) : isReady ? (
-              <button
-                type="button"
-                onClick={() =>
-                  journeyFadeTo(reportHref, router, { durationMs: 480 })
-                }
-                className="btn-brutal btn-brutal-primary inline-block min-w-[220px] px-8 py-3.5 text-sm font-semibold tracking-wide text-black sm:min-w-[240px] sm:text-base"
-              >
-                OPEN MY BLUEPRINT
-              </button>
-            ) : (
-              <p
-                className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
-                style={statusType}
-              >
-                {current}
-              </p>
-            )}
-          </div>
+                {isFailed ? (
+                  <p
+                    className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
+                    style={statusType}
+                  >
+                    We hit a snag building your Blueprint
+                  </p>
+                ) : (
+                  <p
+                    className="text-[clamp(1rem,2vw,1.12rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#171717]"
+                    style={statusType}
+                  >
+                    {current}
+                  </p>
+                )}
+              </div>
 
-          {isFailed ? (
-            <p
-              className="mt-2 text-center text-sm leading-relaxed text-[#6B6B6B]"
-              style={statusType}
-            >
-              Please refresh in a minute or contact support if this continues.
-            </p>
-          ) : null}
+              {isFailed ? (
+                <p
+                  className="mt-2 text-center text-sm leading-relaxed text-[#6B6B6B]"
+                  style={statusType}
+                >
+                  Please refresh in a minute or contact support if this
+                  continues.
+                </p>
+              ) : null}
 
-          {pollError ? (
-            <p className="mt-3 text-center text-xs text-[#c0392b] sm:text-sm">
-              {pollError}
-            </p>
+              {pollError ? (
+                <p className="mt-3 text-center text-xs text-[#c0392b] sm:text-sm">
+                  {pollError}
+                </p>
+              ) : null}
+            </div>
           ) : null}
         </div>
       </div>
-    </div>
     </JourneyEnter>
   );
 }

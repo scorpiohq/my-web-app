@@ -1,8 +1,76 @@
-/* Flat white background for /gouti/landing — no grid pattern */
+/* Soft page surface for /gouti/landing — milky off-white canvas */
+
+.gouti-landing {
+  --gouti-page: #fefefe;
+  position: relative;
+  background-color: var(--gouti-page);
+  overflow-x: clip;
+}
+
+/* Page-wide grain (same texture above and below every hairline) */
+.gouti-landing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: multiply;
+}
+
+.gouti-landing > * {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+  Short centered hairlines between major sections
+  (same style as the inline-review dividers — not full-bleed).
+*/
+.gouti-landing > section:not(#hero) {
+  position: relative;
+}
+
+.gouti-landing > section:not(#hero):not(#why-now)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: min(720px, calc(100% - 2.5rem));
+  transform: translateX(-50%);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+}
+
+.gouti-landing > footer {
+  position: relative;
+  border-top: none !important;
+}
+
+.gouti-landing > footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: min(720px, calc(100% - 2.5rem));
+  transform: translateX(-50%);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+}
+
+.gouti-landing > footer .footer-nav-link,
+.gouti-landing > footer .footer-copy {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
 
 .gouti-landing .grid-bg,
 .gouti-landing .grid-bg-scroll {
-  background-color: #ffffff;
+  background-color: transparent;
   background-image: none;
 }
 
@@ -10,33 +78,592 @@
   display: none;
 }
 
+/* Story sections stay on the shared cream — never white bands across a hairline */
+.gouti-landing #blueprint-thread.bp-thread {
+  max-width: none;
+  width: 100%;
+  background: transparent !important;
+  padding-top: 2.25rem;
+  padding-bottom: 3.5rem;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing #blueprint-thread.bp-thread {
+    padding-top: 2.75rem;
+    padding-bottom: 4.5rem;
+  }
+}
+
+.gouti-landing #blueprint-thread .bp-thread__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+.gouti-landing #blueprint-loop {
+  background: transparent !important;
+}
+
+.gouti-landing #reviews {
+  background: transparent !important;
+}
+
+.gouti-landing #reviews .reviews-eyebrow,
+.gouti-landing #reviews .reviews-sub,
+.gouti-landing #reviews .reviews-quote,
+.gouti-landing #reviews .reviews-author,
+.gouti-landing #reviews .reviews-cta-sub {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #reviews .reviews-title,
+.gouti-landing #reviews .reviews-cta-title {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #reviews .reviews-title {
+  font-size: clamp(1.65rem, 4.2vw, 2.55rem) !important;
+  line-height: 1.12 !important;
+}
+
+.gouti-landing #reviews .reviews-sub {
+  max-width: min(42rem, 100%) !important;
+}
+
+.gouti-landing #final-offer {
+  background: transparent !important;
+}
+
+.gouti-landing #final-offer .final-offer-title {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #final-offer .final-offer-sub,
+.gouti-landing #final-offer .final-offer-pills {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #final-offer .final-offer-sub {
+  max-width: 34rem !important;
+  color: #6b6b6b !important;
+  font-weight: 400 !important;
+  text-wrap: balance;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing #final-offer .final-offer-sub {
+    line-height: 1.7 !important;
+  }
+}
+
+.gouti-landing #faq .faq-title,
+.gouti-landing #faq .faq-question {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #faq .faq-title {
+  font-size: clamp(1.65rem, 4.2vw, 2.55rem) !important;
+  line-height: 1.12 !important;
+  text-transform: none !important;
+}
+
+.gouti-landing #faq .faq-sub,
+.gouti-landing #faq .faq-answer {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #faq .faq-sub {
+  font-size: clamp(0.95rem, 2vw, 1.0625rem) !important;
+  font-weight: 400 !important;
+}
+
+.gouti-landing #blueprint-compare {
+  background: transparent !important;
+}
+
+/* —— Youform-style hero —— */
+.gouti-landing .yf-hero {
+  background-color: transparent;
+  padding-bottom: 1.75rem;
+}
+
+.gouti-landing .yf-hero__title {
+  display: table;
+  box-sizing: border-box;
+  margin-inline: auto;
+  width: auto;
+  max-width: 100%;
+  color: rgb(37, 39, 32);
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  /* Scale to keep “You want to Start on Social Media,” on one line on phones */
+  font-size: clamp(1.15rem, calc((100vw - 2.75rem) / 18.75), 64px) !important;
+  font-weight: 700 !important;
+  font-stretch: 100%;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-size-adjust: none;
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.gouti-landing .yf-hero__title-line {
+  max-width: 100%;
+}
+
+.gouti-landing .yf-hero__how-to {
+  font-family: var(--font-garamond), Georgia, "Times New Roman", serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em;
+  padding: 0 0.06em 0.08em;
+}
+
+.gouti-landing .yf-hero__how-to-mark {
+  position: absolute;
+  left: -0.08em;
+  right: -0.08em;
+  bottom: 0.06em;
+  z-index: -1;
+  height: 0.38em;
+  border-radius: 0.12em;
+  background: #f2c94c;
+  transform: rotate(-1.2deg);
+}
+
+.gouti-landing .yf-hero__sub {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+  font-weight: 400;
+}
+
+/* Youform-like text selection (marker highlight, not default blue) */
+.gouti-landing ::selection {
+  background: #ffc940;
+  color: #1a1a1a;
+}
+
+.gouti-landing ::-moz-selection {
+  background: #ffc940;
+  color: #1a1a1a;
+}
+
+.gouti-landing #hero.yf-hero ::selection {
+  background: #ffe08a;
+  color: #1a1a1a;
+}
+
+.gouti-landing #hero.yf-hero ::-moz-selection {
+  background: #ffe08a;
+  color: #1a1a1a;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing .yf-hero {
+    padding-bottom: 2.25rem;
+  }
+}
+
+/* Grain lives on .gouti-landing — hide per-section copies so texture doesn’t stack */
+.gouti-landing .yf-hero__grain {
+  display: none;
+}
+
+/* CTAs match hero headline */
+.gouti-landing .btn-brutal {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Header nav links + header buttons — lighter than page CTAs */
+.gouti-landing > header a:not(.btn-brutal),
+.gouti-landing > header .btn-brutal {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.gouti-landing .yf-btn {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    filter 0.18s ease;
+}
+
+.gouti-landing .yf-btn:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 3px;
+}
+
+/* Youform-like: soft lift, subtle border, gentle shadow */
+.gouti-landing .yf-btn-primary {
+  box-shadow: 0 3px 0 #d4a82e, 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.gouti-landing .yf-btn-primary:hover {
+  filter: brightness(0.98);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #d4a82e, 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.gouti-landing .yf-btn-primary:active {
+  filter: brightness(0.96);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #d4a82e, 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.gouti-landing .yf-btn-secondary {
+  box-shadow: 0 3px 0 #c8c8c8, 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.gouti-landing .yf-btn-secondary:hover {
+  background-color: #f5f5f5;
+  border-color: #d6d6d6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #c8c8c8, 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.gouti-landing .yf-btn-secondary:active {
+  background-color: #efefef;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #c8c8c8;
+}
+
+/* Site nav — white bar (page stays #FEFEFE) */
+.gouti-landing > header {
+  z-index: 40;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile dropdown stays solid white */
+.gouti-landing > header .grid-bg {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+.gouti-landing > header button[aria-label] {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
 /*
-  Azo Sans Uber reads much larger than Bebas at the same px size.
-  Normalize section headlines so they match the tuned hero scale.
+  Landing section headlines (Azo) — ONLY top-level page sections.
+  `section:not(#hero)` was wrong: it still matched <section>s *inside* #hero
+  (the embedded report), which overwrote Inter on "Your Creator Identity".
 */
-.gouti-landing #hero h1,
-.gouti-landing section h2,
-.gouti-landing #how-it-works h3 {
+.gouti-landing > section:not(#hero):not(#pricing):not(#blueprint-thread):not(#blueprint-loop):not(#how-it-works):not(#why-now):not(#reviews):not(#final-offer):not(#faq) h2 {
   font-family: var(--font-azo-uber), sans-serif !important;
 }
 
-.gouti-landing section h2 {
+.gouti-landing > section:not(#hero):not(#pricing):not(#blueprint-thread):not(#blueprint-loop):not(#how-it-works):not(#why-now):not(#reviews):not(#final-offer):not(#faq) h2 {
   font-size: clamp(1.5rem, 4vw, 2.4rem) !important;
   line-height: 1.12 !important;
   letter-spacing: -0.02em !important;
 }
 
-.gouti-landing #how-it-works h3 {
-  font-size: clamp(1.35rem, 3.2vw, 1.85rem) !important;
+.gouti-landing #how-it-works h2 {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-size: clamp(1.55rem, 4.2vw, 2.55rem) !important;
+  font-weight: 700 !important;
   line-height: 1.15 !important;
   letter-spacing: -0.02em !important;
+  color: rgb(37, 39, 32);
+}
+
+.gouti-landing #why-now .why-now__eyebrow {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #why-now .why-now__title {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  /* Keep both title lines intact on phones (incl. “where to start. Now they…”) */
+  font-size: clamp(1.05rem, calc((100vw - 2.75rem) / 22.5), 2.55rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.02em !important;
+  color: rgb(37, 39, 32);
+}
+
+.gouti-landing #why-now .why-now__line {
+  display: block;
+  white-space: nowrap;
+}
+
+.gouti-landing #why-now .why-now__highlight {
+  display: inline;
+  color: #121212 !important;
+  font-weight: 700 !important;
+  background: #f2c94c;
+  padding: 0.08em 0.22em 0.1em;
+  border-radius: 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  box-shadow: 0.05em 0 0 #f2c94c, -0.05em 0 0 #f2c94c;
+  white-space: nowrap;
+}
+
+.gouti-landing #why-now .why-now__body,
+.gouti-landing #why-now .why-now__badge {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+  font-size: clamp(1.05rem, 2.2vw, 1.125rem) !important;
+  line-height: 1.7 !important;
+}
+
+.gouti-landing #why-now .why-now__point-title {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-size: 1.05em !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+.gouti-landing #why-now .why-now__star {
+  color: #e48217;
+  font-weight: 400;
+  font-size: 1.05em;
+}
+
+.gouti-landing #how-it-works h3 {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+  color: rgb(37, 39, 32);
+}
+
+/* Step body copy — same as hero sub (DM Sans) */
+.gouti-landing #how-it-works h3 + p {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+  font-weight: 400;
 }
 
 .gouti-landing #pricing .pricing-price {
   font-family: var(--font-azo-uber), sans-serif !important;
 }
 
-/* Scroll reveal (same as Stanley) — used by BlueprintThread */
+.gouti-landing #pricing .pricing-plan-label,
+.gouti-landing #pricing .pricing-moneyback-lead {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+.gouti-landing #pricing .pricing-purchase-pill,
+.gouti-landing #pricing .pricing-feature,
+.gouti-landing #pricing .pricing-moneyback {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #pricing .pricing-cta-note {
+  font-family: var(--font-garamond), Georgia, serif !important;
+}
+
+.gouti-landing section#pricing h2 {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  text-transform: none !important;
+  white-space: normal !important;
+}
+
+/* ——— Meet the founder (DataFast-style float layout) ——— */
+.gouti-landing .meet-founder__inner {
+  overflow: hidden; /* clear floats */
+}
+
+.gouti-landing .meet-founder__badge {
+  float: left;
+  width: 11.5rem;
+  margin: 0 1.75rem 1rem 0;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing .meet-founder__badge {
+    width: 13rem;
+    margin-right: 2rem;
+  }
+}
+
+.gouti-landing .meet-founder__badge-card {
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: 1.15rem;
+  background: #f5f0e8;
+}
+
+.gouti-landing .meet-founder__avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gouti-landing .meet-founder__caption {
+  margin: 0.65rem 0 0;
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: center;
+  color: #5a5a5a;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing .meet-founder__caption {
+    font-size: 0.9375rem;
+  }
+}
+
+.gouti-landing .meet-founder__copy {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #333;
+}
+
+@media (min-width: 640px) {
+  .gouti-landing .meet-founder__copy {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+}
+
+.gouti-landing .meet-founder__copy > p {
+  margin: 0 0 1.15rem;
+}
+
+.gouti-landing .meet-founder__copy > p:last-child {
+  margin-bottom: 0;
+}
+
+.gouti-landing .meet-founder__copy strong {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.gouti-landing .meet-founder__copy em {
+  font-style: italic;
+}
+
+.gouti-landing .meet-founder__greet {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.gouti-landing .meet-founder__place {
+  position: relative;
+  display: inline-block;
+  padding: 0.05em 0.28em;
+  border-radius: 0.3em;
+  background: #ececec;
+  text-decoration: underline;
+  text-decoration-color: #e25555;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-style: wavy;
+}
+
+.gouti-landing .meet-founder__place-arrow {
+  position: absolute;
+  top: -1.05em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7em;
+  line-height: 1;
+  color: #b0b0b0;
+  pointer-events: none;
+}
+
+.gouti-landing .meet-founder__link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  color: inherit;
+}
+
+.gouti-landing .meet-founder__cta {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.gouti-landing .meet-founder__cta:hover {
+  color: #000;
+}
+
+.gouti-landing .meet-founder__reasons {
+  margin: 0 0 1.15rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: founder-reason;
+}
+
+.gouti-landing .meet-founder__reasons > li {
+  position: relative;
+  padding-left: 1.6em;
+  margin: 0 0 0.35rem;
+  counter-increment: founder-reason;
+}
+
+.gouti-landing .meet-founder__reasons > li::before {
+  content: counter(founder-reason) ".";
+  position: absolute;
+  left: 0;
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+@media (max-width: 639px) {
+  .gouti-landing .meet-founder__badge {
+    float: none;
+    width: 11.5rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .gouti-landing .meet-founder__copy {
+    text-align: left;
+  }
+}
+
+/*
+  Seal the embedded report: same Inter as /gouti/report-preview.
+  Landing/hero fonts (Azo, Bethany, gouti) must not leak in.
+*/
+.gouti-landing .yf-hero__preview .report-page-main {
+  font-family: var(--font-report-inter, Inter), ui-sans-serif, system-ui,
+    sans-serif !important;
+  font-feature-settings: normal !important;
+}
+
+.gouti-landing .yf-hero__preview .report-page-main * {
+  font-family: inherit !important;
+  font-feature-settings: inherit !important;
+}
+
+/* Scroll reveal — used by BlueprintThread */
 .gouti-landing .st-scroll-reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -63,13 +690,50 @@
 
 /* ——— BlueprintThread: Stanley-style staggered statement ——— */
 .gouti-landing #blueprint-thread .bp-thread__title {
-  font-family: var(--font-azo-uber), sans-serif !important;
-  /* Slightly above other section h2s, but still in the same family */
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
   font-size: clamp(1.55rem, 4.2vw, 2.55rem) !important;
-  font-weight: 800 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.03em !important;
-  text-align: left !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+  text-align: center !important;
+  color: rgb(37, 39, 32);
+}
+
+.gouti-landing #blueprint-thread .bp-thread__sub {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  color: #6b6b6b !important;
+}
+
+.gouti-landing #blueprint-thread .bp-paper__title {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+}
+
+.gouti-landing #blueprint-thread .bp-paper__sub {
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+.gouti-landing #blueprint-thread .bp-paper__tape {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
+  font-weight: 600;
+}
+
+/* ——— BlueprintLoop: same Azo + Bethany pairing ——— */
+.gouti-landing #blueprint-loop .bp-loop__title {
+  font-family: var(--font-author), system-ui, sans-serif !important;
+  font-size: clamp(1.55rem, 4.2vw, 2.55rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.gouti-landing #blueprint-loop .bp-loop__sub {
+  font-family: var(--font-bethany), Georgia, serif !important;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem) !important;
+  line-height: 1.65 !important;
+  color: #6b6b6b !important;
 }
 
 .gouti-landing #blueprint-thread .bp-thread__line {
@@ -124,7 +788,6 @@
   background: #ffe08a;
 }
 
-/* Platform arc — softer offsets at this smaller scale */
 .gouti-landing #blueprint-thread .bp-thread__tile--1 {
   transform: translateY(10px);
 }
@@ -157,8 +820,13 @@
     margin-left: 0;
   }
 
+  .gouti-landing #blueprint-thread .bp-thread__line > span {
+    white-space: normal;
+  }
+
   .gouti-landing #blueprint-thread .bp-thread__title {
     font-size: clamp(1.4rem, 6.5vw, 2rem) !important;
+    text-align: center !important;
   }
 
   .gouti-landing #blueprint-thread .bp-thread__mascot {
@@ -176,3 +844,4 @@
     transform: none;
   }
 }
+

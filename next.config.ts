@@ -58,6 +58,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/gouti/report-animation3",
+        destination: "/gouti/report-animation",
+        permanent: true,
+      },
+      {
         source: "/gouti/checkout-preview2",
         destination: "/gouti/checkout-preview",
         permanent: true,

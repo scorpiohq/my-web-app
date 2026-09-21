@@ -6,7 +6,14 @@
  */
 class BlueprintGeneration extends HTMLElement {
   static get observedAttributes() {
-    return ["user-name", "user-message", "first-line", "second-line", "autoplay"];
+    return [
+      "user-name",
+      "user-message",
+      "first-line",
+      "second-line",
+      "autoplay",
+      "layout",
+    ];
   }
 
   constructor() {
@@ -31,6 +38,7 @@ class BlueprintGeneration extends HTMLElement {
     const userMessage = escapeHtml(this.getAttribute("user-message") || "Build my Blueprint!");
     const firstLine = escapeHtml(this.getAttribute("first-line") || "Reading your answers…");
     const secondLine = escapeHtml(this.getAttribute("second-line") || "Your Blueprint is taking shape…");
+    const centered = this.getAttribute("layout") === "centered";
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -141,6 +149,39 @@ class BlueprintGeneration extends HTMLElement {
         .first { font-size: clamp(1rem, 2vw, 1.12rem); color: var(--yb-ink); }
         .second { font-size: clamp(1rem, 2vw, 1.12rem); color: var(--yb-ink); font-weight: 650; }
 
+        /* Centered stack — optional layout mode */
+        .generation.is-centered .user-row {
+          justify-content: center;
+          margin-bottom: clamp(1.1rem, 3vw, 1.6rem);
+        }
+        .generation.is-centered .user-bubble {
+          max-width: min(92%, 20rem);
+          text-align: left;
+        }
+        .generation.is-centered .assistant-row {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: .55rem;
+        }
+        .generation.is-centered .engine {
+          margin-top: 0;
+          flex: 0 0 20px;
+        }
+        .generation.is-centered .copy {
+          position: relative;
+          min-width: 0;
+          min-height: 1.55rem;
+          width: min(100%, 22rem);
+        }
+        .generation.is-centered .line {
+          left: 0;
+          right: 0;
+          width: 100%;
+          text-align: center;
+          white-space: normal;
+        }
+
         .is-playing .user-bubble { animation: yb-copy-in .38s cubic-bezier(.2,.8,.2,1) forwards; }
         .is-playing .engine { animation: yb-enter .22s ease-out .45s forwards, yb-engine-exit .25s ease-in 2.2s forwards; }
         .is-playing .halo { animation: yb-breathe 1.02s cubic-bezier(.45,0,.55,1) .5s 2 both; }
@@ -165,7 +206,7 @@ class BlueprintGeneration extends HTMLElement {
           .first { display: none; }
         }
       </style>
-      <section class="generation">
+      <section class="generation${centered ? " is-centered" : ""}">
         <div class="user-row">
           <div class="user-bubble">
             <span class="file-name" aria-label="Personal blueprint file">📄 ${userName}.json</span>

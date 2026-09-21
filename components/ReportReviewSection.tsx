@@ -110,24 +110,40 @@ export default function ReportReviewSection({
         {isSubmitted ? (
           <div className="text-center">
             <h2
-              className="mb-1.5 text-base font-bold leading-snug tracking-wide text-black sm:text-lg"
-              style={{ fontFamily: "var(--font-hero)" }}
+              className="mb-1.5 text-base font-bold leading-snug tracking-[-0.02em] text-black sm:text-lg"
+              style={{
+                fontFamily:
+                  'var(--font-bricolage), "Bricolage Grotesque", sans-serif',
+              }}
             >
               THANK YOU FOR YOUR FEEDBACK
             </h2>
-            <p className="m-0 text-xs text-black/80 sm:text-sm">
+            <p
+              className="m-0 text-xs text-black/80 sm:text-sm"
+              style={{
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              }}
+            >
               We read every review — it helps us make Your Blueprint better.
             </p>
           </div>
         ) : (
           <>
             <h2
-              className="mb-2 text-center text-base font-bold leading-snug tracking-wide text-black sm:text-lg"
-              style={{ fontFamily: "var(--font-hero)" }}
+              className="mb-2 text-center text-base font-bold leading-snug tracking-[-0.02em] text-black sm:text-lg"
+              style={{
+                fontFamily:
+                  'var(--font-bricolage), "Bricolage Grotesque", sans-serif',
+              }}
             >
               YOUR FEEDBACK MEANS A LOT!!
             </h2>
-            <p className="mx-auto mb-3 max-w-sm text-center text-xs leading-relaxed text-black/80 sm:mb-4 sm:text-sm">
+            <p
+              className="mx-auto mb-3 max-w-sm text-center text-xs leading-relaxed text-black/80 sm:mb-4 sm:text-sm"
+              style={{
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              }}
+            >
               Tell us what you liked, what could be better, or how this Blueprint
               helped you.
             </p>

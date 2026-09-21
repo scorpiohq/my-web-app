@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import ReportReviewSection from "@/components/ReportReviewSection";
+import { downloadReportPdf } from "@/lib/client-download-report";
 
 function ProfileIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -52,6 +55,11 @@ type ReportPageHeaderProps = {
   giftHref: string;
   /** Profile menu “Your gift” entry. */
   showGiftLink?: boolean;
+  submissionId?: string;
+  /** Show Download in the profile menu. */
+  showDownloadAction?: boolean;
+  /** Show Review in the profile menu (opens feedback popup). */
+  showReviewAction?: boolean;
 };
 
 export default function ReportPageHeader({
@@ -59,10 +67,95 @@ export default function ReportPageHeader({
   reportHref,
   giftHref,
   showGiftLink = true,
+  submissionId,
+  showDownloadAction = false,
+  showReviewAction = false,
 }: ReportPageHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
+  const [downloadPhase, setDownloadPhase] = useState<
+    "idle" | "loading" | "error"
+  >("idle");
   const firstName = userName.trim().split(/\s+/)[0] || "Profile";
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!feedbackOpen) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFeedbackOpen(false);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [feedbackOpen]);
+
+  async function handleDownload() {
+    if (downloadPhase === "loading") return;
+    setDownloadPhase("loading");
+    try {
+      await downloadReportPdf({ userName, submissionId });
+      setDownloadPhase("idle");
+      setProfileOpen(false);
+      setMenuOpen(false);
+    } catch {
+      setDownloadPhase("error");
+    }
+  }
+
+  function openReview() {
+    setMenuOpen(false);
+    setProfileOpen(false);
+    if (showReviewAction) {
+      setFeedbackOpen(true);
+    }
+  }
+
+  const menuItemClass =
+    "block w-full px-4 py-2.5 text-left text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-wait";
+
+  const feedbackModal =
+    showReviewAction && feedbackOpen && portalReady
+      ? createPortal(
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Feedback"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/40"
+              aria-label="Close feedback"
+              onClick={() => setFeedbackOpen(false)}
+            />
+            <div className="relative z-10 w-full max-w-lg">
+              <button
+                type="button"
+                onClick={() => setFeedbackOpen(false)}
+                className="absolute -right-1 -top-3 z-20 flex h-8 w-8 items-center justify-center border-2 border-black bg-white text-lg leading-none shadow-[2px_2px_0_0_#000] sm:-right-2 sm:-top-4"
+                aria-label="Close"
+              >
+                ×
+              </button>
+              <ReportReviewSection
+                submissionId={submissionId}
+                variant="modal"
+              />
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
     <header className="relative z-30 border-b border-black/10">
@@ -104,7 +197,10 @@ export default function ReportPageHeader({
                 aria-label="Close profile menu"
                 onClick={() => setProfileOpen(false)}
               />
-              <div className="absolute right-0 top-[calc(100%+8px)] z-20 min-w-[220px] border border-black bg-white py-2 shadow-[4px_4px_0_0_#000]">
+              <div
+                className="absolute right-0 top-[calc(100%+8px)] z-20 min-w-[220px] border border-black bg-white py-2 shadow-[4px_4px_0_0_#000]"
+                role="menu"
+              >
                 <p className="px-4 py-2 text-xs font-medium uppercase tracking-wide text-black/50">
                   Signed in as
                 </p>
@@ -112,14 +208,41 @@ export default function ReportPageHeader({
                   href={reportHref}
                   className="block px-4 pb-3 text-sm font-semibold text-black transition hover:bg-black/5"
                   onClick={() => setProfileOpen(false)}
+                  role="menuitem"
                 >
                   {userName}
                 </Link>
+                {showDownloadAction ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => void handleDownload()}
+                    disabled={downloadPhase === "loading"}
+                    className={menuItemClass}
+                  >
+                    {downloadPhase === "loading"
+                      ? "Downloading…"
+                      : downloadPhase === "error"
+                        ? "Try download again"
+                        : "Download"}
+                  </button>
+                ) : null}
+                {showReviewAction ? (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={openReview}
+                    className={menuItemClass}
+                  >
+                    Review
+                  </button>
+                ) : null}
                 {showGiftLink ? (
                   <Link
                     href={giftHref}
                     className="relative mx-3 mb-1 mt-1 block border border-black bg-white px-4 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-black shadow-[2px_2px_0_0_#c8c8c8] transition hover:bg-black/5"
                     onClick={() => setProfileOpen(false)}
+                    role="menuitem"
                   >
                     Your gift
                     <GiftNotificationBadge />
@@ -129,6 +252,7 @@ export default function ReportPageHeader({
                   href="/signin"
                   className="block px-4 py-2.5 text-sm font-medium text-black transition hover:bg-black/5"
                   onClick={() => setProfileOpen(false)}
+                  role="menuitem"
                 >
                   Sign out
                 </Link>
@@ -176,6 +300,29 @@ export default function ReportPageHeader({
             </Link>
 
             <div className="mt-4 space-y-3">
+              {showDownloadAction ? (
+                <button
+                  type="button"
+                  onClick={() => void handleDownload()}
+                  disabled={downloadPhase === "loading"}
+                  className="btn-brutal btn-brutal-secondary block w-full px-4 py-3 text-center text-sm font-medium text-black disabled:cursor-wait"
+                >
+                  {downloadPhase === "loading"
+                    ? "Downloading…"
+                    : downloadPhase === "error"
+                      ? "Try download again"
+                      : "Download"}
+                </button>
+              ) : null}
+              {showReviewAction ? (
+                <button
+                  type="button"
+                  onClick={openReview}
+                  className="btn-brutal btn-brutal-secondary block w-full px-4 py-3 text-center text-sm font-medium text-black"
+                >
+                  Review
+                </button>
+              ) : null}
               {showGiftLink ? (
                 <Link
                   href={giftHref}
@@ -197,6 +344,7 @@ export default function ReportPageHeader({
           </div>
         </div>
       )}
+      {feedbackModal}
     </header>
   );
 }

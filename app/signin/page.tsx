@@ -126,7 +126,7 @@ export default function SignInPage() {
                 href="/#hero"
                 className="font-semibold text-black underline underline-offset-2"
               >
-                Get yours
+                Build my Blueprint
               </Link>
             </p>
           </div>

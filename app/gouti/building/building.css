@@ -1,0 +1,24 @@
+.bp-building-fill {
+  width: 100%;
+  transform: scaleX(0.04);
+  transform-origin: left center;
+  animation-name: bp-building-fill;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes bp-building-fill {
+  from {
+    transform: scaleX(0.04);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-building-fill {
+    animation: none;
+    transform: scaleX(1);
+  }
+}

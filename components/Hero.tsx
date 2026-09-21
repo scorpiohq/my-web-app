@@ -69,7 +69,7 @@ export default function Hero({
             href={ctaHref}
             className="btn-brutal btn-brutal-primary inline-block min-w-[180px] px-8 py-3.5 text-sm font-bold tracking-wide text-black"
           >
-            GET YOUR BLUEPRINT →
+            BUILD MY BLUEPRINT →
           </Link>
 
           {stacked ? (

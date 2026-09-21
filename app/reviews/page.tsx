@@ -26,36 +26,53 @@ function ClockIcon() {
   );
 }
 
+const bricolage = {
+  fontFamily: 'var(--font-bricolage), "Bricolage Grotesque", sans-serif',
+} as const;
+
+const dmSans = {
+  fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+} as const;
+
 export default function ReviewsPage() {
   return (
-    <>
-      <Header />
-      <main className="grid-bg flex-1 px-6 py-12 sm:px-8 sm:py-16">
+    <div className="flex min-h-full flex-col bg-[#fefefe]">
+      <Header surface="soft" />
+      <main className="flex-1 px-6 py-12 sm:px-8 sm:py-16">
         <div className="mx-auto w-full max-w-3xl">
           <div className="mb-10 flex flex-col items-center text-center sm:mb-12">
-            <span className="mb-5 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs">
+            <span
+              className="mb-5 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs"
+              style={bricolage}
+            >
               REVIEWS
             </span>
 
             <h1
-              className="mb-4 text-[clamp(2.25rem,6vw,3.5rem)] leading-none tracking-wide text-black"
-              style={{ fontFamily: "var(--font-hero)" }}
+              className="mb-4 text-[clamp(2rem,5.5vw,3.15rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212]"
+              style={bricolage}
             >
-              WHAT PEOPLE ARE SAYING
+              What People Are Saying
             </h1>
 
-            <p className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base">
+            <p
+              className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base"
+              style={dmSans}
+            >
               See what people had to say after receiving their personalized
-              blueprint.
+              Blueprint.
             </p>
 
-            <span className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm">
+            <span
+              className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm"
+              style={dmSans}
+            >
               <ClockIcon />
               Last Updated on August 10, 2026
             </span>
           </div>
 
-          <div className="flex flex-col gap-5 sm:gap-6">
+          <div className="flex flex-col gap-5 sm:gap-6" style={dmSans}>
             {allTestimonials.map((item) => (
               <section
                 key={`${item.author}-${item.company}`}
@@ -67,8 +84,8 @@ export default function ReviewsPage() {
           </div>
         </div>
       </main>
-      <FinalOffer />
-      <Footer />
-    </>
+      <FinalOffer layout="centered" ctaHref="/#pricing" />
+      <Footer surface="soft" />
+    </div>
   );
 }

@@ -21,7 +21,7 @@ export default function ClosingOffer({ ctaHref = "/form" }: { ctaHref?: string }
             href={ctaHref}
             className="btn-brutal btn-brutal-primary mt-7 inline-flex items-center justify-center px-7 py-3.5 text-sm font-bold tracking-wide text-black sm:mt-8 sm:px-9 sm:py-4 sm:text-base"
           >
-            GET YOUR BLUEPRINT →
+            BUILD MY BLUEPRINT →
           </Link>
         </div>
       </Reveal>

@@ -24,11 +24,11 @@ function ReviewCard({
     <article className={cardShell}>
       <div>
         <Stars />
-        <blockquote className="text-[15px] leading-relaxed text-[#333] sm:text-base sm:leading-relaxed">
+        <blockquote className="reviews-quote text-[15px] leading-relaxed text-[#333] sm:text-base sm:leading-relaxed">
           {quote}
         </blockquote>
       </div>
-      <p className="pt-6 text-sm font-normal text-[#555] sm:text-base">
+      <p className="reviews-author pt-6 text-sm font-normal text-[#555] sm:text-base">
         —{author}, {company}
       </p>
     </article>
@@ -39,11 +39,8 @@ function CtaCard({ ctaHref }: { ctaHref: string }) {
   return (
     <article className={cardShell}>
       <div className="flex flex-1 flex-col items-center justify-center">
-        <p
-          className="text-center text-[clamp(1.5rem,4vw,2.1rem)] leading-[1.15] tracking-[-0.02em] text-[#121212]"
-          style={{ fontFamily: "var(--font-azo-uber), sans-serif" }}
-        >
-          Now it&apos;s your TURN!!
+        <p className="reviews-cta-title text-center text-[clamp(1.5rem,4vw,2.1rem)] leading-[1.15] tracking-[-0.02em] text-[#121212]">
+          Your Turn to Start!
         </p>
 
         <Link
@@ -52,6 +49,10 @@ function CtaCard({ ctaHref }: { ctaHref: string }) {
         >
           Let&apos;s Start →
         </Link>
+
+        <p className="reviews-cta-sub mt-5 max-w-[18rem] text-center text-[14px] leading-snug text-[#8A8A8A] sm:text-[15px]">
+          Yours could be the next review here.
+        </p>
       </div>
     </article>
   );
@@ -116,12 +117,17 @@ export default function MessageTestimonials({
     <section className="bg-white px-6 py-12 sm:px-8 sm:py-16" id="reviews">
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
         <Reveal className="flex w-full flex-col items-center">
-          <p className="mb-3 text-[13px] font-medium text-[#888] sm:mb-4">
-            Testimonials
+          <p className="reviews-eyebrow mb-3 text-[13px] font-medium text-[#888] sm:mb-4">
+            Reviews
           </p>
-          <h2 className="mb-10 max-w-3xl text-[clamp(1.5rem,4vw,2.4rem)] leading-[1.12] tracking-[-0.02em] text-black sm:mb-12">
-            Here&apos;s what people are saying.
+          <h2 className="reviews-title m-0 max-w-3xl text-[clamp(1.65rem,4.2vw,2.55rem)] font-bold leading-[1.12] tracking-[-0.02em] text-black">
+            Their Words, Not Mine
           </h2>
+          <p className="reviews-sub mx-auto mt-4 mb-10 max-w-[42rem] text-[15px] leading-relaxed text-[#6B6B6B] sm:mt-5 sm:mb-12 sm:text-[17px]">
+            Every day, people are joining, sharing wins, &amp; leaving
+            heartfelt reviews. It&apos;s growing fast, and this is just the
+            beginning.
+          </p>
         </Reveal>
 
         <Reveal className="relative w-full max-w-[560px] px-12 sm:px-16 md:px-20" delayMs={80}>

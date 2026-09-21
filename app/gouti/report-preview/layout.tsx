@@ -14,6 +14,9 @@ export default function ReportPreviewLayout({
         userName="Lewis Hamilton"
         shortThanks
         feedbackAsPopup
+        showPeekCaption
+        actionsBelowReport
+        footerSurface="soft"
         shellClassName="bg-[#F7F7F7]"
         giftHref="/gouti/prompt?name=Lewis%20Hamilton"
         reportHref="/gouti/report-preview"

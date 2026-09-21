@@ -89,6 +89,7 @@ export default function FAQ({
 
   return (
     <section
+      id="faq"
       className={
         soft
           ? "bg-transparent px-5 py-20 sm:px-8 sm:py-28"
@@ -100,10 +101,10 @@ export default function FAQ({
           <h2
             className={
               soft
-                ? `max-w-2xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] ${
+                ? `faq-title max-w-2xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] ${
                     showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
                   }`
-                : `max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
+                : `faq-title max-w-2xl text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black ${
                     showDescription ? "mb-3 sm:mb-4" : "mb-10 sm:mb-12"
                   }`
             }
@@ -113,7 +114,7 @@ export default function FAQ({
           </h2>
 
           {showDescription ? (
-            <p className="mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
+            <p className="faq-sub mb-10 max-w-xl text-base leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-lg">
               Still have questions? Email{" "}
               <a
                 href="mailto:hello@yourblueprint.in"
@@ -147,8 +148,8 @@ export default function FAQ({
                   <span
                     className={
                       soft
-                        ? "pt-0.5 text-[15px] font-medium leading-snug tracking-tight text-black sm:text-base"
-                        : "pt-0.5 text-base leading-snug tracking-wide text-black sm:text-lg"
+                        ? "faq-question pt-0.5 text-[15px] font-medium leading-snug tracking-tight text-black sm:text-base"
+                        : "faq-question pt-0.5 text-base leading-snug tracking-wide text-black sm:text-lg"
                     }
                     style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
                   >
@@ -176,7 +177,7 @@ export default function FAQ({
                         : "border-t border-black/10 px-5 pb-5 pt-1 sm:px-6 sm:pb-6"
                     }
                   >
-                    <p className="whitespace-pre-line text-sm leading-relaxed text-[#6B6B6B] sm:text-base">
+                    <p className="faq-answer whitespace-pre-line text-sm leading-relaxed text-[#6B6B6B] sm:text-base">
                       {faq.answer}
                     </p>
                   </div>

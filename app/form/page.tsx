@@ -604,10 +604,15 @@ function FormPageInner() {
     setSubmitting(true);
 
     // Gouti skip/test mode: never hit create-checkout / Supabase.
-    // Soft white fade into report-animation.
+    // Soft white fade → Blobatar bridge → report-animation.
     if (skipToLast) {
       setFormVisible(false);
-      journeyFadeTo("/gouti/report-animation", router, { durationMs: 480 });
+      const name = String(responses.name ?? "").trim() || "friend";
+      journeyFadeTo(
+        `/gouti/building?n=${encodeURIComponent(name)}`,
+        router,
+        { durationMs: 480 },
+      );
       return;
     }
 

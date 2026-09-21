@@ -23,11 +23,11 @@ export default function FinalOffer({
   const centered = layout === "centered";
 
   return (
-    <section className="grid-bg px-4 py-14 sm:px-8 sm:py-20">
+    <section id="final-offer" className="grid-bg px-4 py-14 sm:px-8 sm:py-20">
       <div
         className={
           centered
-            ? "mx-auto flex w-full max-w-3xl flex-col items-center text-center"
+            ? "mx-auto flex w-full max-w-[1100px] flex-col items-center text-center"
             : "mx-auto grid w-full max-w-6xl items-center gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] md:gap-10 lg:gap-12"
         }
       >
@@ -51,46 +51,65 @@ export default function FinalOffer({
           <div
             className={
               centered
-                ? "mx-auto w-full max-w-2xl text-center"
+                ? "mx-auto flex w-full max-w-[980px] flex-col items-center text-center"
                 : "mx-auto w-full text-center md:mx-0 md:w-max md:max-w-full md:translate-y-2 md:-translate-x-2 md:text-left lg:-translate-x-3"
             }
           >
             <h2
               className={
                 centered
-                  ? "text-[clamp(1.85rem,3.8vw,3.1rem)] font-bold leading-[1.15] tracking-tight text-black"
-                  : "text-[clamp(1.85rem,3.8vw,3.1rem)] font-bold leading-[1.15] tracking-tight text-black md:whitespace-nowrap"
+                  ? "final-offer-title m-0 text-[clamp(1.65rem,4.2vw,2.55rem)] font-bold leading-[1.12] tracking-[-0.02em] text-black"
+                  : "final-offer-title text-[clamp(1.85rem,3.8vw,3.1rem)] font-bold leading-[1.15] tracking-tight text-black md:whitespace-nowrap"
               }
             >
               Start with clarity, not confusion.
             </h2>
 
-            <div className={`mt-4 sm:mt-5 ${centered ? "" : "md:w-0 md:min-w-full"}`}>
-              <p className="text-[17px] leading-relaxed text-[#555] sm:text-lg md:text-[19px] lg:text-xl">
-                Answer 18 questions and get your personalized Blueprint — built
-                around your goals, interests, strengths, and starting point, so
-                you know exactly where to start.
-              </p>
+            {centered ? (
+              <>
+                <p className="final-offer-sub mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-[#6B6B6B] text-balance sm:mt-6 sm:text-[17px] sm:leading-[1.7]">
+                  Answer 18 simple questions about you, and get a personalized
+                  Blueprint that tells you exactly where to start.
+                </p>
 
-              <div
-                className={`mt-6 flex flex-col items-center gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 ${
-                  centered ? "" : "md:justify-start"
-                }`}
-              >
-                <FeaturePill>One-time payment</FeaturePill>
-                <FeaturePill>Lifetime Access</FeaturePill>
-                <FeaturePill>Money-back guarantee</FeaturePill>
-              </div>
+                <div className="final-offer-pills mt-7 flex w-full flex-col items-center gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6">
+                  <FeaturePill>One-time payment</FeaturePill>
+                  <FeaturePill>Lifetime Access</FeaturePill>
+                  <FeaturePill>Money-back guarantee</FeaturePill>
+                </div>
 
-              <div className="mt-7 sm:mt-9">
-                <Link
-                  href={ctaHref}
-                  className="btn-brutal btn-brutal-primary inline-flex min-w-[240px] items-center justify-center gap-2 px-10 py-4.5 text-lg font-bold tracking-wide text-black sm:min-w-[280px] sm:px-12 sm:py-5 sm:text-xl"
-                >
-                  Get your Blueprint →
-                </Link>
+                <div className="mt-7 sm:mt-9">
+                  <Link
+                    href={ctaHref}
+                    className="btn-brutal btn-brutal-primary inline-flex min-w-[240px] items-center justify-center gap-2 px-10 py-4.5 text-lg font-bold tracking-wide text-black sm:min-w-[280px] sm:px-12 sm:py-5 sm:text-xl"
+                  >
+                    Build my Blueprint →
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="mt-4 sm:mt-5 md:w-0 md:min-w-full">
+                <p className="final-offer-sub mt-4 text-[17px] leading-relaxed text-[#555] sm:mt-5 sm:text-lg md:text-[19px] lg:text-xl">
+                  Answer 18 simple questions about you, and get a personalized
+                  Blueprint that tells you exactly where to start.
+                </p>
+
+                <div className="final-offer-pills mt-6 flex flex-col items-center gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 md:justify-start">
+                  <FeaturePill>One-time payment</FeaturePill>
+                  <FeaturePill>Lifetime Access</FeaturePill>
+                  <FeaturePill>Money-back guarantee</FeaturePill>
+                </div>
+
+                <div className="mt-7 sm:mt-9">
+                  <Link
+                    href={ctaHref}
+                    className="btn-brutal btn-brutal-primary inline-flex min-w-[240px] items-center justify-center gap-2 px-10 py-4.5 text-lg font-bold tracking-wide text-black sm:min-w-[280px] sm:px-12 sm:py-5 sm:text-xl"
+                  >
+                    Build my Blueprint →
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Reveal>
       </div>

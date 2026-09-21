@@ -1,0 +1,287 @@
+/**
+ * Landing report — EDITABLE copy of the locked report template.
+ * Source of truth: app/gouti/report-preview/page.tsx (LOCKED — do not edit).
+ * Do not alter this report unless asked. Used by /gouti/landing hero.
+ */
+import { Inter } from "next/font/google";
+import Image from "next/image";
+import type { ReactNode } from "react";
+import {
+  previewReportData,
+  type ReportData,
+} from "@/lib/report-preview-data";
+
+export type { ReportData };
+
+/** Landing-only sample person — does not change locked report-preview data. */
+export const landingReportData: ReportData = {
+  ...previewReportData,
+  name: "Marcus Webb",
+  age: 26,
+  location: "Manchester, United Kingdom",
+  goal: "I want to build an income online, but I don't know what to sell or where to start.",
+  profileImage: "/avatars/marcus-webb.png",
+  creatorIdentity: "The Everyday Money Guy",
+  identityDescription:
+    "You're not selling a course or a secret system — you're sharing exactly how you saved $3,000 in 6 months on a normal income, using simple habits anyone can copy. That's easy for people to understand, and easy for them to trust.",
+  whyItFits: [
+    "You've actually done this yourself",
+    "You explain money in simple terms",
+    "You already talk about it with friends",
+    "You're ready to commit real time",
+    "Most people make money sound complicated, you don't, that's exactly what makes you listen.",
+  ],
+  whyItFitsDescription:
+    "People don't want a finance expert. They want someone who's done it recently, in plain language, without jargon. You already talk this way — you just haven't said it in front of an audience yet.",
+  strengths: [
+    "Real experience saving on a normal income",
+    "Explains things simply, no jargon",
+    "Comfortable talking about money honestly",
+  ],
+  strengthsDescription:
+    "A lot of people give money advice without ever proving it works. You've already lived it — $3,000 saved is real, simple proof, and that's worth more than sounding \"expert.\"",
+  blockers: [
+    "Too many ideas, no clear starting point",
+    "Waiting until it feels \"ready enough\"",
+    "Hasn't picked a platform yet",
+  ],
+  blockersDescription:
+    "You're not stuck because you lack something to say — you're stuck picking where to start. Once you choose one simple story to share first, the rest gets easier fast.",
+  nextMoves: [
+    "Create your Instagram account today",
+    "Share how you saved your first $3,000",
+    "Explain it in three simple steps",
+    "Ask your followers one honest question",
+    "Post consistently for one week",
+    "See which post people responded to most",
+  ],
+  gameplanCopyLine1:
+    "What's still missing isn't a better idea — it's simply saying this out loud, in public, for the first time.",
+  gameplanCopyLine2: "",
+  gameplanCopyLine3: "",
+};
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-report-inter",
+});
+
+function ReportHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="m-0 text-[52px] font-bold leading-[63px] tracking-[-0.04em] text-[#e48217]">
+      ✰ {children}
+    </h2>
+  );
+}
+
+function ReportCard({
+  title,
+  items,
+  description,
+}: {
+  title: string;
+  items: string[];
+  description: string;
+}) {
+  return (
+    <section className="h-[669px] w-[966px] border border-black bg-white px-[39px] py-[47px]">
+      <ReportHeading>{title}</ReportHeading>
+      <ol className="mb-[28px] mt-[29px] list-decimal space-y-[22px] pl-[48px] text-[40px] leading-[49px] tracking-[-0.01em]">
+        {items.slice(0, 3).map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ol>
+      <p className="m-0 max-h-[250px] overflow-hidden text-[40px] leading-[50px] tracking-[-0.01em]">
+        {description}
+      </p>
+    </section>
+  );
+}
+
+export function ReportTemplate({
+  data,
+  exportMode = false,
+}: {
+  data: ReportData;
+  exportMode?: boolean;
+}) {
+  return (
+    <main
+      className={`report-page-main ${inter.variable} ${inter.className} ${exportMode ? "bg-white" : "min-h-screen overflow-x-hidden bg-[#f4f0ef] pb-3 sm:pb-6 lg:pb-10"}`}
+    >
+      <div
+        className={
+          exportMode
+            ? "report-viewport h-[3365px] w-[2214px]"
+            : "report-viewport mx-auto -mt-[11px] h-[494px] w-full md:-mt-[21px] md:h-[943px] xl:-mt-[34px] xl:h-[1496px]"
+        }
+      >
+        <article
+          className={
+            exportMode
+              ? "relative h-[3365px] w-[2214px] bg-white text-black"
+              : "relative h-[3525px] w-[2356px] origin-top-left scale-[0.1400679] bg-[#f4f0ef] text-black md:scale-[0.2674024] xl:scale-[0.4244482]"
+          }
+        >
+          <div
+            id="report-pdf-source"
+            className={
+              exportMode
+                ? "relative h-[3365px] w-[2214px] bg-white"
+                : "absolute left-[71px] top-[80px] h-[3365px] w-[2214px] rounded-[25px] border-[0.3px] border-black bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+            }
+          >
+            {exportMode ? (
+              <img
+                src="/logo-dp.svg"
+                alt="Your Blueprint"
+                width={168}
+                height={168}
+                className="absolute right-[120px] top-[96px] h-[168px] w-[168px]"
+              />
+            ) : (
+              <Image
+                src="/logo-dp.svg"
+                alt="Your Blueprint"
+                width={168}
+                height={168}
+                className="absolute right-[120px] top-[96px] h-[168px] w-[168px]"
+              />
+            )}
+            <header className="absolute left-[121px] right-[109px] top-[96px] h-[254px] border-b border-black">
+              <p className="m-0 text-[72px] font-bold leading-[87px] tracking-[-0.04em]">
+                Personalized Creator Blueprint
+              </p>
+              <h1 className="m-[6px_0_0] whitespace-nowrap text-[100px] font-bold leading-[121px] tracking-[-0.04em] text-[#e48217]">
+                {data.name.toUpperCase()}
+              </h1>
+            </header>
+
+            <section className="absolute left-[102px] top-[420px] h-[901px] w-[2001px] border-b border-black">
+              <div className="absolute left-0 top-0 h-[556px] w-[516px] rotate-[-2deg] rounded-[30px] bg-[#d9d9d9]" />
+              {exportMode ? (
+                <img
+                  src={data.profileImage}
+                  alt={data.name}
+                  width={518}
+                  height={510}
+                  className="absolute left-[33px] top-[14px] h-[510px] w-[518px] rounded-[30px] border-[0.2px] border-black object-cover shadow-[0_6px_14px_rgba(0,0,0,0.18)]"
+                />
+              ) : (
+                <Image
+                  src={data.profileImage}
+                  alt={data.name}
+                  width={518}
+                  height={510}
+                  unoptimized
+                  className="absolute left-[33px] top-[14px] h-[510px] w-[518px] rounded-[30px] border-[0.2px] border-black object-cover shadow-[0_6px_14px_rgba(0,0,0,0.18)]"
+                />
+              )}
+              <div className="absolute left-[683px] top-[37px] w-[1305px]">
+                <div className="grid grid-cols-[1fr_1.35fr] gap-y-[27px] text-[48px] leading-[58px]">
+                  <p className="col-span-2 m-0 whitespace-nowrap">
+                    <b>NAME:</b> {data.name}
+                  </p>
+                  <p className="m-0">
+                    <b>AGE:</b> {data.age}
+                  </p>
+                  <p className="m-0 whitespace-nowrap">
+                    <b>BASED:</b> {data.location}
+                  </p>
+                  <p className="col-span-2 m-0">
+                    <b>GOAL:</b>{" "}
+                    {data.goal.includes("help me") ? (
+                      <>
+                        {data.goal.split("help me")[0]}help me
+                        <br />
+                        {data.goal.split("help me")[1]?.trim()}
+                      </>
+                    ) : (
+                      data.goal
+                    )}
+                  </p>
+                </div>
+                <h2 className="mb-0 mt-[57px] text-[72px] font-bold leading-[87px] tracking-[-0.04em]">
+                  Your Creator Identity:
+                </h2>
+                <p className="m-0 text-[64px] font-bold leading-[77px] tracking-[-0.04em] text-[#e48217]">
+                  {data.creatorIdentity}
+                </p>
+              </div>
+              <p className="absolute left-0 top-[657px] m-0 w-full text-[48px] leading-[62px] tracking-[-0.01em]">
+                {data.identityDescription}
+              </p>
+            </section>
+
+            <section className="absolute left-[104px] top-[1387px] w-[2001px] pb-[43px]">
+              <ReportHeading>Why This Direction Fits You</ReportHeading>
+              <ul className="m-[29px_0_28px] grid list-none grid-cols-2 gap-y-[23px] p-0 text-[44px] leading-[53px] tracking-[-0.01em]">
+                {data.whyItFits.slice(0, 4).map((item) => (
+                  <li key={item}>
+                    <span className="mr-[17px] text-[#ffb553]">✓</span>
+                    {item}
+                  </li>
+                ))}
+                {data.whyItFits[4] && (
+                  <li className="col-span-2" key={data.whyItFits[4]}>
+                    <span className="mr-[17px] text-[#ffb553]">✓</span>
+                    {data.whyItFits[4]}
+                  </li>
+                )}
+              </ul>
+              <p className="m-0 mt-[24px] text-[48px] leading-[62px] tracking-[-0.01em]">
+                {data.whyItFitsDescription}
+              </p>
+            </section>
+
+            <div className="absolute left-[104px] top-[1967px] flex gap-[73px]">
+              <ReportCard
+                title="Strengths You Already Have"
+                items={data.strengths}
+                description={data.strengthsDescription}
+              />
+              <ReportCard
+                title="Things Holding You Back"
+                items={data.blockers}
+                description={data.blockersDescription}
+              />
+            </div>
+
+            <section className="absolute left-[104px] top-[2747px] grid w-[2001px] grid-cols-2 gap-[73px]">
+              <div>
+                <ReportHeading>Your Next Move?</ReportHeading>
+                <ul className="m-[30px_0_0] list-none space-y-[23px] p-0 text-[44px] leading-[53px] tracking-[-0.01em]">
+                  {data.nextMoves.slice(0, 6).map((move, index) => (
+                    <li key={`${move}-${index}`}>- {move}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex min-h-[420px] flex-col">
+                <ReportHeading>What&apos;s still missing?</ReportHeading>
+                <p className="m-[29px_0_0] line-clamp-3 whitespace-normal text-[44px] leading-[53px] tracking-[-0.01em]">
+                  {[
+                    data.gameplanCopyLine1,
+                    data.gameplanCopyLine2,
+                    data.gameplanCopyLine3,
+                  ]
+                    .join(" ")
+                    .replace(/\s+/g, " ")
+                    .trim()}
+                </p>
+                <p className="m-[53px_0_0] text-[44px] leading-[53px] tracking-[-0.01em]">
+                  So Marcus, let&apos;s not wait for the perfect post.
+                  <br />
+                  Let&apos;s build the one that gets you started.
+                </p>
+              </div>
+            </section>
+          </div>
+        </article>
+      </div>
+    </main>
+  );
+}
+
+export default function LandingReportPage() {
+  return <ReportTemplate data={landingReportData} exportMode />;
+}

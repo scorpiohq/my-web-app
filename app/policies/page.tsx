@@ -86,31 +86,48 @@ function ClockIcon() {
   );
 }
 
+const bricolage = {
+  fontFamily: 'var(--font-bricolage), "Bricolage Grotesque", sans-serif',
+} as const;
+
+const dmSans = {
+  fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+} as const;
+
 export default function PoliciesPage() {
   return (
-    <>
-      <Header />
-      <main className="grid-bg flex-1 px-6 py-12 sm:px-8 sm:py-16">
+    <div className="flex min-h-full flex-col bg-[#fefefe]">
+      <Header surface="soft" />
+      <main className="flex-1 px-6 py-12 sm:px-8 sm:py-16">
         <div className="mx-auto w-full max-w-3xl">
           <div className="mb-10 flex flex-col items-center text-center sm:mb-12">
-            <span className="mb-5 inline-flex items-center gap-2 border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs">
+            <span
+              className="mb-5 inline-flex items-center gap-2 border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs"
+              style={bricolage}
+            >
               <LockIcon />
               OUR POLICIES
             </span>
 
             <h1
-              className="mb-4 text-[clamp(2.25rem,6vw,3.5rem)] leading-none tracking-wide text-black"
-              style={{ fontFamily: "var(--font-hero)" }}
+              className="mb-4 text-[clamp(2rem,5.5vw,3.15rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212]"
+              style={bricolage}
             >
-              OUR POLICIES
+              Our Policies
             </h1>
 
-            <p className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base">
+            <p
+              className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base"
+              style={dmSans}
+            >
               Here&apos;s how we deliver your Blueprint, handle your data,
               manage refunds, and support you — all in plain language.
             </p>
 
-            <span className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm">
+            <span
+              className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm"
+              style={dmSans}
+            >
               <ClockIcon />
               Last Updated on September 5, 2026
             </span>
@@ -123,17 +140,18 @@ export default function PoliciesPage() {
                 className="border-2 border-black bg-white px-5 py-7 shadow-[4px_4px_0_0_#000] sm:px-7 sm:py-8"
               >
                 <h2
-                  className="mb-4 flex items-center gap-2.5 text-xl tracking-wide text-black sm:text-2xl"
-                  style={{ fontFamily: "var(--font-hero)" }}
+                  className="mb-4 flex items-center gap-2.5 text-xl font-bold tracking-[-0.02em] text-[#121212] sm:text-2xl"
+                  style={bricolage}
                 >
                   <span aria-hidden="true">{section.icon}</span>
-                  {section.title.toUpperCase()}
+                  {section.title}
                 </h2>
                 <div className="space-y-3">
                   {section.paragraphs.map((paragraph) => (
                     <p
                       key={paragraph}
                       className="text-sm leading-relaxed text-[#333] sm:text-base"
+                      style={dmSans}
                     >
                       {paragraph}
                     </p>
@@ -144,7 +162,7 @@ export default function PoliciesPage() {
           </div>
         </div>
       </main>
-      <Footer />
-    </>
+      <Footer surface="soft" />
+    </div>
   );
 }

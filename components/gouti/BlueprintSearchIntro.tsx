@@ -82,6 +82,7 @@ declare module "react" {
         "user-message"?: string;
         "first-line"?: string;
         "second-line"?: string;
+        layout?: string;
         autoplay?: string;
       };
     }
@@ -124,11 +125,14 @@ export default function BlueprintSearchIntro({
   userMessage = "Build my Blueprint!",
   firstLine = "Reading your answers…",
   secondLine = "Your Blueprint is taking shape…",
+  /** `centered` = stacked/centered layout. Default keeps chat layout. */
+  layout = "default",
 }: {
   userName?: string;
   userMessage?: string;
   firstLine?: string;
   secondLine?: string;
+  layout?: "default" | "centered";
 }) {
   const [ready, setReady] = useState(false);
   const startedRef = useRef(false);
@@ -178,6 +182,7 @@ export default function BlueprintSearchIntro({
           user-message={userMessage}
           first-line={firstLine}
           second-line={secondLine}
+          {...(layout === "centered" ? { layout: "centered" } : {})}
         />
       ) : (
         <div className="min-h-[7.5rem] w-full sm:min-h-[8.5rem]" aria-hidden />

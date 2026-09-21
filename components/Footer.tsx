@@ -1,12 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const navLinks = [
-  { href: "/#how-it-works", label: "How it work" },
-  { href: "/#pricing", label: "Pricing" },
-  { href: "/reviews", label: "Reviews" },
-  { href: "/policies", label: "Our Policies" },
-];
+function sectionNav(sectionPath: string) {
+  const prefix =
+    sectionPath === "/" ? "/#" : `${sectionPath.replace(/\/$/, "")}#`;
+  return [
+    { href: `${prefix}how-it-works`, label: "How it works" },
+    { href: `${prefix}pricing`, label: "Pricing" },
+    { href: `${prefix}backstory`, label: "About" },
+    { href: "/policies", label: "Our Policies" },
+  ];
+}
 
 function InstagramIcon() {
   return (
@@ -33,9 +37,28 @@ function EmailIcon() {
   );
 }
 
-export default function Footer() {
+export default function Footer({
+  surface = "grid",
+  /** Page path for section anchors. Use `/gouti/landing` on that page. */
+  sectionPath = "/",
+}: {
+  surface?: "grid" | "soft";
+  sectionPath?: string;
+} = {}) {
+  const soft = surface === "soft";
+  const navLinks = sectionNav(sectionPath);
+  const dmSans = soft
+    ? { fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }
+    : undefined;
+
   return (
-    <footer className="grid-bg border-t border-black/20">
+    <footer
+      className={`site-footer ${
+        soft
+          ? "border-t border-black/[0.08] bg-[#fefefe]"
+          : "grid-bg border-t border-black/20"
+      }`}
+    >
       <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-12 sm:px-8 sm:py-14">
         <Link href="/" className="mb-8 sm:mb-10">
           <Image
@@ -53,7 +76,8 @@ export default function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[15px] font-medium text-black transition hover:text-black/70"
+              className="footer-nav-link text-[15px] font-medium text-black transition hover:text-black/70"
+              style={dmSans}
             >
               {link.label}
             </Link>
@@ -88,7 +112,9 @@ export default function Footer() {
           </a>
         </div>
 
-        <p className="text-sm text-black/70">©Your Blueprint, 2026. All rights reserved.</p>
+        <p className="footer-copy text-sm text-black/70" style={dmSans}>
+          ©Your Blueprint, 2026. All rights reserved.
+        </p>
       </div>
     </footer>
   );

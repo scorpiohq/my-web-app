@@ -10,5 +10,5 @@ export default function GoutiLandingLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="gouti-landing bg-white">{children}</div>;
+  return <div className="gouti-landing bg-[#fefefe]">{children}</div>;
 }

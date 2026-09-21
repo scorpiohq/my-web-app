@@ -34,17 +34,17 @@ export default function BlueprintLoop() {
       className="mx-auto max-w-[1100px] bg-white px-5 py-14 sm:px-8 sm:py-20"
     >
       <Reveal className="mx-auto max-w-[640px] text-center">
-        <h2 className="m-0 text-[#121212]">
+        <h2 className="bp-loop__title m-0 text-[#121212]">
           That&apos;s why{" "}
           <span className="bp-loop__mark relative inline-block whitespace-nowrap rounded-[0.2em] px-[0.2em]">
             <span
-              className="bp-loop__mark-fill absolute inset-[0.14em_0_0.02em] -z-10 rounded-[inherit] bg-[#e8dffc]"
+              className="bp-loop__mark-fill absolute inset-[0.14em_0_0.02em] -z-10 rounded-[inherit] bg-[#ffe08a]"
               aria-hidden="true"
             />
             Your Blueprint
           </span>
         </h2>
-        <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-[#666] sm:text-[16px]">
+        <p className="bp-loop__sub mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-[#6B6B6B] sm:text-[16px]">
           Questions in. Clarity out. Your identity, strengths, blockers, and
           first move — all in one Blueprint.
         </p>

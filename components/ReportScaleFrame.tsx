@@ -25,6 +25,10 @@ export default function ReportScaleFrame({
   contentBlur,
   /** Lock overlay (reveals after identity section via event). */
   locked = false,
+  /** Design canvas width before scale (defaults to locked report article). */
+  designWidth = REPORT_ARTICLE_WIDTH,
+  /** Design canvas height before scale (defaults to locked report article). */
+  designHeight = REPORT_ARTICLE_HEIGHT,
 }: {
   children: ReactNode;
   widthFactor?: number;
@@ -32,11 +36,11 @@ export default function ReportScaleFrame({
   startInset?: string;
   contentBlur?: string;
   locked?: boolean;
+  designWidth?: number;
+  designHeight?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(
-    (330 * widthFactor) / REPORT_ARTICLE_WIDTH,
-  );
+  const [scale, setScale] = useState((330 * widthFactor) / designWidth);
 
   useEffect(() => {
     const el = ref.current;
@@ -45,7 +49,7 @@ export default function ReportScaleFrame({
     const update = () => {
       const width = el.clientWidth;
       if (width > 0) {
-        setScale(width / REPORT_ARTICLE_WIDTH);
+        setScale(width / designWidth);
       }
     };
 
@@ -53,7 +57,7 @@ export default function ReportScaleFrame({
     const observer = new ResizeObserver(update);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [widthFactor]);
+  }, [widthFactor, designWidth]);
 
   const preview = (
     <div
@@ -74,7 +78,7 @@ export default function ReportScaleFrame({
         style={
           {
             "--report-scale": scale,
-            height: REPORT_ARTICLE_HEIGHT * scale,
+            height: designHeight * scale,
             ...(contentBlur
               ? {
                   filter: `blur(${contentBlur})`,

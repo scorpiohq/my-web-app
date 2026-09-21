@@ -135,8 +135,15 @@ function skeletonThenType(
  * 1) Waits for generation intro (`blueprint-search-complete`)
  * 2) Report card soft-fades in under the status
  * 3) Header → logo → photo → skeleton→type details → rest
+ *
+ * `gentleScroll` (report-animation): tiny page nudges from the first
+ * typed line onward so the viewport drifts with the build — not a big scroll.
  */
-export default function ReportBuildIn() {
+export default function ReportBuildIn({
+  gentleScroll = false,
+}: {
+  gentleScroll?: boolean;
+} = {}) {
   useLayoutEffect(() => {
     const frame = document.querySelector<HTMLElement>("[data-report-frame]");
     const content = document.querySelector<HTMLElement>("[data-report-content]");
@@ -145,6 +152,11 @@ export default function ReportBuildIn() {
     const root = document.getElementById("report-pdf-source");
     if (!frame || !content || !article || !camera || !root) return;
     if (prefersReducedMotion()) return;
+
+    const nudgePage = (px: number) => {
+      if (!gentleScroll || px === 0) return;
+      window.scrollBy({ top: px, left: 0, behavior: "smooth" });
+    };
 
     const groups = Array.from({ length: BUILD_COUNT }, (_, i) =>
       root.querySelectorAll(`[data-report-build="${i + 1}"]`),
@@ -300,20 +312,31 @@ export default function ReportBuildIn() {
           fadeUp([photoGroup], "+=0.14");
         }
 
+        // Typing starts here — begin the gentle page drift
         lineOriginals.forEach(({ el, text, html }, i) => {
+          if (i === 0) {
+            tl.add(() => nudgePage(22), "+=0.02");
+          } else if (i % 2 === 1) {
+            tl.add(() => nudgePage(10), "+=0");
+          }
           skeletonThenType(tl, el, text, html, i === 0 ? "+=0.08" : "+=0.12");
         });
 
+        tl.add(() => nudgePage(16), "+=0.05");
         fadeUp(groups[5], "+=0.22");
 
         // Lock reveals after identity description lands (before “Why This Direction…”)
         tl.add(() => {
+          nudgePage(14);
           window.dispatchEvent(new Event(REPORT_LOCK_REVEAL));
         }, "+=0.2");
 
+        tl.add(() => nudgePage(12), "+=0.08");
         fadeUp(groups[6], "+=0.35");
         fadeUp(groups[7], "-=0.12");
+        tl.add(() => nudgePage(10), "-=0.05");
         fadeUp(groups[8], "-=0.12");
+        tl.add(() => nudgePage(12), "+=0.1");
         fadeUp(groups[9], "+=0.36");
       }, article);
     };
@@ -335,7 +358,7 @@ export default function ReportBuildIn() {
       window.clearTimeout(fallback);
       cleanupVisuals();
     };
-  }, []);
+  }, [gentleScroll]);
 
   return null;
 }

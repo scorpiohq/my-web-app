@@ -16,30 +16,6 @@ function InstagramIcon() {
   );
 }
 
-function ThreadsIcon() {
-  return (
-    <span className="text-sm font-semibold leading-none" aria-hidden="true">
-      @
-    </span>
-  );
-}
-
-function EmailIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-4 w-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="M2 7l10 7 10-7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 export default function Backstory({
   stacked = false,
   hideHeading = false,
@@ -110,7 +86,7 @@ export default function Backstory({
                   Founder &amp; Creator
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-1.5">
+              <div className="flex shrink-0 items-center">
                 <a
                   href="https://www.instagram.com/creatorandy"
                   target="_blank"
@@ -119,22 +95,6 @@ export default function Backstory({
                   aria-label="Instagram"
                 >
                   <InstagramIcon />
-                </a>
-                <a
-                  href="https://www.threads.com/creatorandy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
-                  aria-label="Threads"
-                >
-                  <ThreadsIcon />
-                </a>
-                <a
-                  href="mailto:andy@yourblueprint.in"
-                  className="flex h-7 w-7 items-center justify-center border border-black bg-[#FFC940] text-black transition hover:bg-[#ffd966]"
-                  aria-label="Email Andy"
-                >
-                  <EmailIcon />
                 </a>
               </div>
             </div>

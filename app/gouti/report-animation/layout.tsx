@@ -2,15 +2,21 @@
 
 import BlueprintSearchIntro from "@/components/gouti/BlueprintSearchIntro";
 import JourneyEnter from "@/components/gouti/JourneyEnter";
+import ReportReadyScroll from "@/components/gouti/ReportReadyScroll";
 import ReportPageShell from "@/components/ReportPageShell";
 
-export default function ReportAnimation2Layout({
+/**
+ * Report animation — chat reply beat (bubble → status → report),
+ * framed evenly + auto-scroll to UNLOCK when ready.
+ */
+export default function ReportAnimationLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <JourneyEnter bg="#F7F7F7" className="min-h-screen">
+      <ReportReadyScroll />
       <ReportPageShell
         userName="Lewis Hamilton"
         showHeader={false}
@@ -19,12 +25,12 @@ export default function ReportAnimation2Layout({
         showFooter={false}
         contentBlur="4px"
         composeColumn
-        // Shared column: generation + report stacked, same width on every breakpoint
-        composeColumnClassName="max-w-[40rem] sm:max-w-[44rem] lg:max-w-[48rem]"
+        // Chat column sits in the middle of the viewport (not a skinny centered stack)
+        composeColumnClassName="mt-[100px] max-w-[36rem] sm:max-w-[40rem] lg:max-w-[44rem]"
         composeReportClassName="mt-[6px]"
-        contentClassName="!pt-20 sm:!pt-28 lg:!pt-32"
-        // Same size; left-aligned under “Your Blueprint is taking shape…”
-        reportWidthFactor={0.54}
+        contentClassName="!pt-16 sm:!pt-20 md:!pt-24 lg:!pt-28"
+        // Report under the status line — same reply alignment as original
+        reportWidthFactor={0.62}
         reportAlign="start"
         reportStartInset="calc(20px + 0.82rem)"
         reportLocked

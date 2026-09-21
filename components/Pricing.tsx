@@ -35,6 +35,10 @@ type PricingProps = {
   spotsRemaining?: number;
   totalSpots?: number;
   showIntro?: boolean;
+  /** Brutal tan “PRICING” badge above the title. */
+  showPricingBadge?: boolean;
+  /** Section headline above the pricing card. */
+  heading?: string;
   features?: string[];
   checkoutButton?: ReactNode;
   showInstantPdfRow?: boolean;
@@ -52,10 +56,12 @@ export default function Pricing({
   priceNote = "USD",
   purchasePill = "One Time Payment",
   scarcityNote = "Special launch price, going up once these spots are gone.",
-  buttonLabel = "GET YOUR BLUEPRINT →",
+  buttonLabel = "BUILD MY BLUEPRINT →",
   spotsRemaining,
   totalSpots = TOTAL_BLUEPRINT_SPOTS,
   showIntro = true,
+  showPricingBadge = true,
+  heading = "Your first step. Right here.",
   features = defaultFeatures,
   checkoutButton,
   showInstantPdfRow = false,
@@ -88,19 +94,21 @@ export default function Pricing({
           <Reveal className="flex w-full flex-col items-center">
             {soft ? (
               <h2 className="mb-10 max-w-xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] sm:mb-12">
-                Your first step. Right here.
+                {heading}
               </h2>
             ) : (
               <>
-                <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
-                  PRICING
-                </span>
+                {showPricingBadge ? (
+                  <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
+                    PRICING
+                  </span>
+                ) : null}
 
                 <h2
                   className="mb-10 max-w-none whitespace-nowrap text-[clamp(1.5rem,4.2vw,3.25rem)] font-bold leading-tight tracking-wide text-black sm:mb-12"
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
-                  Your first step. Right here.
+                  {heading}
                 </h2>
               </>
             )}
@@ -127,7 +135,7 @@ export default function Pricing({
                 : "border-2 border-black bg-white p-6 text-left shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10"
             }
           >
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-[#6B6B6B] sm:text-xs">
+            <p className="pricing-plan-label text-[13px] font-semibold tracking-[0.14em] text-[#6B6B6B] sm:text-[14px]">
               {planLabel}
             </p>
 
@@ -159,7 +167,7 @@ export default function Pricing({
               </span>
             </div>
 
-            <p className="mt-2 text-sm text-[#6B6B6B] sm:text-[15px]">
+            <p className="pricing-purchase-pill mt-2 text-sm text-[#6B6B6B] sm:text-[15px]">
               {purchasePill}
             </p>
 
@@ -181,7 +189,7 @@ export default function Pricing({
                       }
                       aria-hidden="true"
                     />
-                    LIMITED
+                    SPOTS
                   </span>
                   <p className="text-sm text-[#6B6B6B]">
                     <span className="font-bold text-black">{remaining}</span>
@@ -233,7 +241,7 @@ export default function Pricing({
                   ) : (
                     <CheckIcon />
                   )}
-                  <span className="text-sm leading-snug text-[#333] sm:text-base">
+                  <span className="pricing-feature text-sm leading-snug text-[#333] sm:text-base">
                     {feature}
                   </span>
                 </li>
@@ -279,8 +287,8 @@ export default function Pricing({
                     <path d="m9 12 2 2 4-4" />
                   </svg>
                 </span>
-                <p className="text-xs leading-relaxed text-[#555] sm:text-sm">
-                  <strong className="font-semibold text-black">
+                <p className="pricing-moneyback text-xs leading-relaxed text-[#555] sm:text-sm">
+                  <strong className="pricing-moneyback-lead font-semibold text-black">
                     Money-back guarantee.
                   </strong>{" "}
                   If your Blueprint doesn&apos;t give you a clear next step,
@@ -299,11 +307,14 @@ export default function Pricing({
                       : "btn-brutal btn-brutal-primary inline-flex w-full items-center justify-center px-7 py-4 text-base font-bold tracking-wide text-black text-center sm:py-4.5 sm:text-lg"
                   }
                 >
-                  {soft ? "Get your Blueprint →" : buttonLabel}
+                  {soft ? "Build my Blueprint →" : buttonLabel}
                 </Link>
               )}
-              <p className="mt-3 text-center text-sm text-[#555] sm:text-[15px]">
-                Access forever (no subscription)
+              <p
+                className="pricing-cta-note mt-3 text-center text-[14px] text-[#5A5A5A] sm:text-[15px]"
+                style={{ fontFamily: "var(--font-garamond), Georgia, serif" }}
+              >
+                Takes 2 minutes, This won&apos;t stay {salePrice} forever.
               </p>
             </div>
           </div>

@@ -102,7 +102,10 @@ export default function ReportLockOverlay({
       aria-hidden="true"
     >
       {/* ~after identity description / before “Why This Direction…” */}
-      <div className="absolute left-1/2 top-[38%] flex -translate-x-1/2 flex-col items-center gap-3 sm:gap-3.5">
+      <div
+        className="absolute left-1/2 top-[38%] flex w-max -translate-x-[calc(50%+10px)] flex-col items-center gap-3 sm:gap-3.5"
+        data-report-ready-anchor
+      >
         <div
           ref={iconRef}
           className="opacity-0"
@@ -122,12 +125,15 @@ export default function ReportLockOverlay({
           ref={buttonRef}
           type="button"
           onClick={() => journeyFadeTo(unlockHref, router, { durationMs: 520 })}
-          className="pointer-events-auto inline-flex items-center justify-center border-2 border-black bg-[#FFA126] px-5 py-2 text-[15px] font-bold tracking-[-0.02em] text-black opacity-0 shadow-[4px_4px_0_0_#000] transition hover:bg-[#ffb044] sm:px-6 sm:py-2.5 sm:text-[16px]"
-          style={{ visibility: "hidden" }}
+          className="btn-brutal btn-brutal-primary pointer-events-auto inline-flex min-h-[40px] min-w-[180px] items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-wide text-black opacity-0 sm:min-h-[44px] sm:min-w-[200px] sm:px-6 sm:text-sm"
+          style={{
+            visibility: "hidden",
+            fontFamily: "var(--font-bricolage), \"Bricolage Grotesque\", sans-serif",
+          }}
           tabIndex={-1}
           aria-hidden="true"
         >
-          UNLOCK!
+          UNLOCK MY BLUEPRINT
         </button>
       </div>
     </div>

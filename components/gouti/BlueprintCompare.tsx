@@ -1,14 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import { Reveal } from "@/components/gouti/Reveal";
 
 /**
- * With vs Without compare — adapted from StanleyCompare for Blueprint.
+ * Stanley-style With vs Without — Blueprint content (what the report actually gives).
  * Used on /gouti/landing after reviews.
  */
 export default function BlueprintCompare() {
   return (
     <section
-      className="bg-white px-5 py-12 sm:px-8 sm:py-16"
+      id="blueprint-compare"
+      className="bp-compare px-5 py-12 sm:px-8 sm:py-16"
       aria-label="Starting without Your Blueprint versus with one"
     >
       <div className="mx-auto grid max-w-[1000px] gap-5 md:grid-cols-2">
@@ -18,8 +21,12 @@ export default function BlueprintCompare() {
               Without Your Blueprint
             </p>
             <div className="mt-5 rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-[14px] font-medium text-[#121212]">Untitled draft</p>
-              <p className="mt-1 text-[12px] text-[#999]">Opened 14 times · never posted</p>
+              <p className="text-[14px] font-medium text-[#121212]">
+                Untitled draft
+              </p>
+              <p className="mt-1 text-[12px] text-[#999]">
+                Opened 14 times · never posted
+              </p>
               <div className="mt-4 rounded-xl bg-[#F5F5F5] px-3 py-3">
                 <p className="text-[13px] text-[#333]">
                   Figure out what to post (again)
@@ -29,10 +36,13 @@ export default function BlueprintCompare() {
                 </p>
               </div>
               <p className="mt-4 text-[12px] text-[#999]">
-                Ideas · 47 notes · still stuck
+                Notes · Instagram or YouTube? · still stuck
               </p>
             </div>
-            <p className="mt-5 text-[15px] text-[#666]">
+            <p
+              className="bp-compare__foot mt-5 text-[15px] text-[#666]"
+              style={{ fontFamily: "var(--font-bethany), Georgia, serif" }}
+            >
               Endless tabs and a feed you never start.
             </p>
           </div>
@@ -47,15 +57,15 @@ export default function BlueprintCompare() {
               {[
                 {
                   time: "Day 1",
-                  text: "Your identity named in one clear line.",
+                  text: "Your Creator Identity — named in one clear line.",
                 },
                 {
                   time: "Day 1",
-                  text: "Strengths, blockers, and first move mapped.",
+                  text: "Platform picked. Strengths & blockers mapped.",
                 },
                 {
                   time: "This week",
-                  text: "You know exactly where to start — and why.",
+                  text: "Your first move — exactly what to post, and why.",
                 },
               ].map((m) => (
                 <div
@@ -81,7 +91,10 @@ export default function BlueprintCompare() {
                 </div>
               ))}
             </div>
-            <p className="mt-5 text-[15px] font-medium text-[#121212]">
+            <p
+              className="bp-compare__foot mt-5 text-[15px] font-medium text-[#121212]"
+              style={{ fontFamily: "var(--font-bethany), Georgia, serif" }}
+            >
               Clarity first. Then you move.
             </p>
           </div>

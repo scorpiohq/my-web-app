@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Bebas_Neue, Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Bebas_Neue, DM_Sans, Geist, Geist_Mono, Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import HashScroll from "@/components/HashScroll";
 import UtmCapture from "@/components/UtmCapture";
@@ -28,8 +28,14 @@ const roboto = Roboto({
   weight: ["100", "300", "500"],
 });
 
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const fuzzyBubbles = localFont({
-  src: "../public/FuzzyBubbles-Regular.ttf",
+  src: "../public/Fonts/FuzzyBubbles-Regular.ttf",
   variable: "--font-fuzzy",
   weight: "400",
   display: "swap",
@@ -38,12 +44,12 @@ const fuzzyBubbles = localFont({
 const appleGaramond = localFont({
   src: [
     {
-      path: "../public/AppleGaramond.ttf",
+      path: "../public/Fonts/AppleGaramond.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/AppleGaramond-Italic.ttf",
+      path: "../public/Fonts/AppleGaramond-Italic.ttf",
       weight: "400",
       style: "italic",
     },
@@ -53,15 +59,61 @@ const appleGaramond = localFont({
 });
 
 const bethanyElingston = localFont({
-  src: "../public/Bethany Elingston.otf",
+  src: "../public/Fonts/Bethany Elingston.otf",
   variable: "--font-bethany",
   display: "swap",
 });
 
 const azoSansUber = localFont({
-  src: "../public/fonnts.com-Azo_Sans_Uber_Regular.otf",
+  src: "../public/Fonts/fonnts.com-Azo_Sans_Uber_Regular.otf",
   variable: "--font-azo-uber",
   weight: "400",
+  display: "swap",
+});
+
+const cocogooseProBold = localFont({
+  src: "../public/Fonts/cocogoose/Cocogoose-Pro-Bold-trial.ttf",
+  variable: "--font-cocogoose",
+  weight: "700",
+  display: "swap",
+});
+
+const authorBold = localFont({
+  src: "../public/Fonts/Author_Fonts/OTF/Author-Bold.otf",
+  variable: "--font-author",
+  weight: "700",
+  display: "swap",
+});
+
+const bricolageGrotesque = localFont({
+  src: [
+    {
+      path: "../public/Fonts/Bricolage_Grotesque/BricolageGrotesque-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/Fonts/Bricolage_Grotesque/BricolageGrotesque-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/Fonts/Bricolage_Grotesque/BricolageGrotesque-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/Fonts/Bricolage_Grotesque/BricolageGrotesque_72pt-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/Fonts/Bricolage_Grotesque/BricolageGrotesque_72pt-ExtraBold.ttf",
+      weight: "800",
+      style: "normal",
+    },
+  ],
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -117,7 +169,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} ${azoSansUber.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${dmSans.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} ${azoSansUber.variable} ${cocogooseProBold.variable} ${authorBold.variable} ${bricolageGrotesque.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <GoogleAnalytics />

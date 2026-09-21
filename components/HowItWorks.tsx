@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import ReportPreviewStack from "@/components/ReportPreviewStack";
 import { Reveal } from "@/components/gouti/Reveal";
 
@@ -413,11 +413,44 @@ function GiantStepNumber({
   );
 }
 
+/** Standalone step 1 (answer mock) — used on gouti landing after the inline review. */
+export function HowItWorksStep1({
+  soft = false,
+  preview = "platform",
+  className = "",
+}: {
+  soft?: boolean;
+  preview?: Step1Preview;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      <Reveal delayMs={60}>
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="relative pl-[5.5rem] sm:pl-28 lg:pl-32">
+            <GiantStepNumber value="01" soft={soft} />
+            <StepCopy
+              soft={soft}
+              eyebrow="ANSWER"
+              title="Answer 18 Simple questions."
+              description="Questions about you, your goals, interests, and your situation, so it build the blueprint about you."
+            />
+          </div>
+          <Step1FormMock soft={soft} preview={preview} />
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
 export default function HowItWorks({
   variant = "default",
   step1Preview = "situation",
   step2Eyebrow = "02 · THE ENGINE",
   heading = "HOW 'YOUR BLUEPRINT' WORKS..",
+  caption,
+  showBadge = true,
+  showStep1 = true,
 }: {
   variant?: HowItWorksVariant;
   /** Question shown in the step 1 form mock. Default keeps production as-is. */
@@ -425,7 +458,13 @@ export default function HowItWorks({
   /** Eyebrow label for step 2. Default keeps production as-is. */
   step2Eyebrow?: string;
   /** Main section heading (default variant). Soft variant keeps its own copy. */
-  heading?: string;
+  heading?: ReactNode;
+  /** Small line under the heading (e.g. gouti landing peek-style caption). */
+  caption?: ReactNode;
+  /** Brutal / soft “HOW IT WORKS” badge above the title. */
+  showBadge?: boolean;
+  /** When false, skip step 1 (e.g. already shown earlier on the page). */
+  showStep1?: boolean;
 }) {
   const soft = variant === "soft";
 
@@ -440,21 +479,25 @@ export default function HowItWorks({
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center">
         <Reveal className="flex w-full flex-col items-center">
-          {soft ? (
-            <p className="mb-4 text-[12px] font-semibold tracking-[0.16em] text-[#FFA126] sm:mb-5 sm:text-[13px]">
-              — HOW IT WORKS
-            </p>
-          ) : (
-            <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
-              HOW IT WORKS
-            </span>
-          )}
+          {showBadge ? (
+            soft ? (
+              <p className="mb-4 text-[12px] font-semibold tracking-[0.16em] text-[#FFA126] sm:mb-5 sm:text-[13px]">
+                — HOW IT WORKS
+              </p>
+            ) : (
+              <span className="mb-6 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-7 sm:text-xs">
+                HOW IT WORKS
+              </span>
+            )
+          ) : null}
 
           <h2
             className={
               soft
                 ? "mb-3 max-w-3xl text-center text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.08] tracking-[-0.035em] text-black"
-                : "mb-12 max-w-3xl text-center text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-14"
+                : caption
+                  ? "mb-3 max-w-3xl text-center text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-4"
+                  : "mb-12 max-w-3xl text-center text-[clamp(2rem,5vw,3.25rem)] leading-tight tracking-wide text-black sm:mb-14"
             }
             style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
           >
@@ -466,6 +509,13 @@ export default function HowItWorks({
               Answer a few questions. The AI does the thinking. You get a clear
               creator path — not a generic template.
             </p>
+          ) : caption ? (
+            <p
+              className="mb-12 max-w-xl text-center text-[14px] leading-snug text-[#5A5A5A] sm:mb-14 sm:text-[15px]"
+              style={{ fontFamily: "var(--font-garamond), Georgia, serif" }}
+            >
+              {caption}
+            </p>
           ) : null}
         </Reveal>
 
@@ -475,20 +525,9 @@ export default function HowItWorks({
           }`}
         >
           {/* Step 01 */}
-          <Reveal delayMs={60}>
-            <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-              <div className="relative pl-[5.5rem] sm:pl-28 lg:pl-32">
-                <GiantStepNumber value="01" soft={soft} />
-                <StepCopy
-                  soft={soft}
-                  eyebrow="ANSWER"
-                  title="Answer 18 Simple questions."
-                  description="Questions about you, your goals, interests, and your situation, so it build the blueprint about you."
-                />
-              </div>
-              <Step1FormMock soft={soft} preview={step1Preview} />
-            </div>
-          </Reveal>
+          {showStep1 ? (
+            <HowItWorksStep1 soft={soft} preview={step1Preview} />
+          ) : null}
 
           {/* Step 02 — full-width engine card (UGC Tank pattern) */}
           <Reveal delayMs={80}>
@@ -509,8 +548,8 @@ export default function HowItWorks({
                 <StepCopy
                   soft={soft}
                   eyebrow={step2Eyebrow}
-                  title="The AI does the thinking."
-                  description="The moment you submit, two rounds of reasoning starts -  first understanding who you are, what you're already good at, and what's been holding you back. Then it builds your personalized Blueprint. No templates. No generic output."
+                  title="We Map What's Already Working For You."
+                  description="Your answers get compared against what actually works for creators like you — what you're already good at, and what's been quietly holding you back. Then your Blueprint gets built. No templates. No generic output."
                 />
               </div>
               <div
@@ -532,9 +571,9 @@ export default function HowItWorks({
                 <GiantStepNumber value="03" soft={soft} />
                 <StepCopy
                   soft={soft}
-                  eyebrow="DOWNLOAD"
-                  title="Get your Blueprint."
-                  description="Your creator identity. Your strengths. What's been holding you back. And your first move from exactly where you are — all built for you."
+                  eyebrow="03 — DOWNLOAD"
+                  title="Your Blueprint, Ready."
+                  description="Your creator identity. Your strengths. What's been holding you back. And your first move, from exactly where you are. All built for you."
                 />
               </div>
               <Step3DownloadMock soft={soft} />

@@ -1,9 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function ReportPageFooter() {
+export default function ReportPageFooter({
+  surface = "grid",
+}: {
+  surface?: "grid" | "soft";
+} = {}) {
+  const soft = surface === "soft";
+
   return (
-    <footer className="grid-bg border-t border-black/20">
+    <footer
+      className={
+        soft
+          ? "border-t border-black/[0.08] bg-[#F7F7F7]"
+          : "grid-bg border-t border-black/20"
+      }
+    >
       <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-10 sm:px-8 sm:py-12">
         <Link href="/" className="mb-6 sm:mb-8">
           <Image
@@ -16,7 +28,16 @@ export default function ReportPageFooter() {
           />
         </Link>
 
-        <p className="text-sm text-black/70">©Your Blueprint, 2026. All rights reserved.</p>
+        <p
+          className="text-sm text-black/70"
+          style={
+            soft
+              ? { fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }
+              : undefined
+          }
+        >
+          ©Your Blueprint, 2026. All rights reserved.
+        </p>
       </div>
     </footer>
   );

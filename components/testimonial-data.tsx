@@ -40,6 +40,7 @@ export function TestimonialCard({
   );
 }
 
+/** First 5 appear on the gouti landing carousel. */
 export const testimonials: {
   quote: ReactNode;
   author: string;
@@ -63,15 +64,42 @@ export const testimonials: {
   {
     quote: (
       <>
-        &ldquo;
+        &ldquo;Easy to read, well structured, and filled with useful insights.{" "}
         <Highlight>
-          GOAT! Honestly one of the most straightforward and helpful resources
-        </Highlight>{" "}
-        I&apos;ve come across.&rdquo;
+          It helped simplify a lot of things that previously felt confusing.
+        </Highlight>
+        &rdquo;
       </>
     ),
-    author: "Selimhan Ergören",
-    company: "Turkiye",
+    author: "Sverre Slotfeldt",
+    company: "United States",
+  },
+  {
+    quote: (
+      <>
+        &ldquo;
+        <Highlight>
+          Providing value through a personalized blueprint is such a great idea.
+        </Highlight>{" "}
+        It gave me practical insights that I can actually use from here.&rdquo;
+      </>
+    ),
+    author: "itemelite",
+    company: "United States",
+  },
+  {
+    quote: (
+      <>
+        &ldquo;The{" "}
+        <Highlight>
+          best part is how easy everything is to understand
+        </Highlight>
+        . Every concept is explained clearly, which makes it much easier to take
+        action.&rdquo;
+      </>
+    ),
+    author: "Ilsa Syeda",
+    company: "Dubai",
   },
   {
     quote: (
@@ -88,18 +116,26 @@ export const testimonials: {
     author: "Kolawole Sylvester",
     company: "Germany",
   },
+];
+
+/** Extra reviews shown only on /reviews */
+export const additionalTestimonials: {
+  quote: ReactNode;
+  author: string;
+  company: string;
+}[] = [
   {
     quote: (
       <>
-        &ldquo;Easy to read, well structured, and filled with useful insights.{" "}
+        &ldquo;
         <Highlight>
-          It helped simplify a lot of things that previously felt confusing.
-        </Highlight>
-        &rdquo;
+          GOAT! Honestly one of the most straightforward and helpful resources
+        </Highlight>{" "}
+        I&apos;ve come across.&rdquo;
       </>
     ),
-    author: "Sverre Slotfeldt",
-    company: "United States",
+    author: "Selimhan Ergören",
+    company: "Turkiye",
   },
   {
     quote: (
@@ -129,20 +165,6 @@ export const testimonials: {
   {
     quote: (
       <>
-        &ldquo;The{" "}
-        <Highlight>
-          best part is how easy everything is to understand
-        </Highlight>
-        . Every concept is explained clearly, which makes it much easier to take
-        action.&rdquo;
-      </>
-    ),
-    author: "Ilsa Syeda",
-    company: "Dubai",
-  },
-  {
-    quote: (
-      <>
         &ldquo;
         <Highlight>It&apos;s amazing and genuinely helpful.</Highlight> Thank
         you for putting together something that&apos;s both practical and easy
@@ -152,27 +174,6 @@ export const testimonials: {
     author: "Yuvika Kundra",
     company: "India",
   },
-  {
-    quote: (
-      <>
-        &ldquo;
-        <Highlight>
-          Providing value through a personalized blueprint is such a great idea.
-        </Highlight>{" "}
-        It gave me practical insights that I can actually use from here.&rdquo;
-      </>
-    ),
-    author: "itemelite",
-    company: "United States",
-  },
-];
-
-/** Extra reviews shown only on /reviews */
-export const additionalTestimonials: {
-  quote: ReactNode;
-  author: string;
-  company: string;
-}[] = [
   {
     quote: (
       <>

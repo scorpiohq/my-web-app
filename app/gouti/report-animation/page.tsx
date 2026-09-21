@@ -1,5 +1,5 @@
 /**
- * Report animation sandbox for the gouti journey.
+ * Report animation for the gouti journey.
  * Edit freely here. Locked template: app/gouti/report-preview/page.tsx
  */
 import { Inter } from "next/font/google";
@@ -118,7 +118,7 @@ export function ReportTemplate({
     <main
       className={`report-page-main ${inter.className} ${exportMode ? "bg-white" : "min-h-screen overflow-x-hidden bg-transparent pb-3 sm:pb-6 lg:pb-10"}`}
     >
-      {!exportMode ? <ReportBuildIn /> : null}
+      {!exportMode ? <ReportBuildIn gentleScroll /> : null}
       <div
         data-report-camera
         className={
