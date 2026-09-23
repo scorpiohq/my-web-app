@@ -87,6 +87,8 @@ type ReportPageShellProps = {
   reportStartInset?: string;
   /** Centered lock overlay on the report preview (lock stays unblurred). */
   reportLocked?: boolean;
+  /** When set, UNLOCK starts Stripe/Lemon for this pending submission. */
+  checkoutSubmissionId?: string;
   /** When false, footer is not rendered. */
   showFooter?: boolean;
   /** Extra classes on the outer shell (e.g. solid bg instead of grid). */
@@ -130,6 +132,7 @@ export default function ReportPageShell({
   reportAlign = "center",
   reportStartInset,
   reportLocked = false,
+  checkoutSubmissionId,
   showFooter = true,
   shellClassName = "",
   shortThanks = false,
@@ -162,6 +165,7 @@ export default function ReportPageShell({
           align={reportAlign}
           startInset={reportStartInset}
           locked={reportLocked}
+          checkoutSubmissionId={checkoutSubmissionId}
           contentBlur={reportLocked ? contentBlur : undefined}
         >
           {children}

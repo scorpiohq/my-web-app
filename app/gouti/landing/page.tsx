@@ -15,15 +15,12 @@ import { getVisitorGeo } from "@/lib/visitor-geo";
  * Gouti landing — Youform-inspired soft hero + Blueprint sections.
  * Does not affect live `/`.
  *
- * Flow: Build my Blueprint CTAs → #pricing → form.
- * CTA temporarily skips to last form question (`skip=1`) so post-form
- * flow can be tested: Submit → /gouti/building (Blobatar) →
- * /gouti/report-animation → UNLOCK! → /gouti/checkout-preview.
- * Switch back to `/gouti/form` (without skip) when done.
+ * Flow: CTAs → #pricing → form → building → report-animation →
+ * UNLOCK MY BLUEPRINT → Stripe (Preview) / Lemon (Production) → progress.
  */
 const SECTION_PATH = "/gouti/landing";
 const PRICING_CTA = `${SECTION_PATH}#pricing`;
-const FORM_CTA = "/form?journey=gouti&skip=1";
+const FORM_CTA = "/form?journey=gouti";
 const SALE_PRICE = "$15";
 const ORIGINAL_PRICE = "$29";
 

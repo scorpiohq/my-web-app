@@ -25,6 +25,7 @@ export default function ReportScaleFrame({
   contentBlur,
   /** Lock overlay (reveals after identity section via event). */
   locked = false,
+  checkoutSubmissionId,
   /** Design canvas width before scale (defaults to locked report article). */
   designWidth = REPORT_ARTICLE_WIDTH,
   /** Design canvas height before scale (defaults to locked report article). */
@@ -36,6 +37,7 @@ export default function ReportScaleFrame({
   startInset?: string;
   contentBlur?: string;
   locked?: boolean;
+  checkoutSubmissionId?: string;
   designWidth?: number;
   designHeight?: number;
 }) {
@@ -91,7 +93,9 @@ export default function ReportScaleFrame({
         {children}
       </div>
 
-      {locked ? <ReportLockOverlay /> : null}
+      {locked ? (
+        <ReportLockOverlay checkoutSubmissionId={checkoutSubmissionId} />
+      ) : null}
     </div>
   );
 

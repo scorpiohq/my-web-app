@@ -15,18 +15,25 @@ function useFormUserName() {
   return raw && raw.length > 0 ? raw : FALLBACK_NAME;
 }
 
+function useCheckoutSubmissionId() {
+  const searchParams = useSearchParams();
+  return searchParams.get("sid")?.trim() || undefined;
+}
+
 function ReportAnimationLayoutInner({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const userName = useFormUserName();
+  const checkoutSubmissionId = useCheckoutSubmissionId();
 
   return (
     <JourneyEnter bg="#F7F7F7" className="min-h-screen">
       <ReportReadyScroll />
       <ReportPageShell
         userName={userName}
+        checkoutSubmissionId={checkoutSubmissionId}
         showHeader={false}
         showIntro={false}
         showReviews={false}

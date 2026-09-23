@@ -603,8 +603,7 @@ function FormPageInner() {
   async function handleSubmit() {
     setSubmitting(true);
 
-    // Gouti skip/test mode: never hit create-checkout / Supabase.
-    // Soft white fade → Blobatar bridge → report-animation.
+    // Animation-only skip: no Supabase / checkout.
     if (skipToLast) {
       setFormVisible(false);
       const name = String(responses.name ?? "").trim() || "friend";
@@ -646,17 +645,33 @@ function FormPageInner() {
       const res = await fetch("/api/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          ...(isGoutiJourney ? { deferCheckout: true } : {}),
+        }),
       });
       const result = await res.json();
 
-      if (!res.ok || !result.checkoutUrl) {
+      if (!res.ok) {
         throw new Error(result.error || "Could not start checkout");
       }
 
       if (isGoutiJourney) {
-        window.location.assign(result.checkoutUrl);
+        if (!result.submissionId) {
+          throw new Error("Could not save your answers");
+        }
+        const name = String(responses.name ?? "").trim() || "friend";
+        setFormVisible(false);
+        journeyFadeTo(
+          `/gouti/building?n=${encodeURIComponent(name)}&sid=${encodeURIComponent(result.submissionId)}`,
+          router,
+          { durationMs: 480 },
+        );
         return;
+      }
+
+      if (!result.checkoutUrl) {
+        throw new Error(result.error || "Could not start checkout");
       }
 
       const elapsed = Date.now() - transitionStart;

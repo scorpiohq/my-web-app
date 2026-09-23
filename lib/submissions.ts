@@ -90,6 +90,30 @@ export async function markGameplanPurchased(submissionId: string) {
   }
 }
 
+export async function getPendingSubmissionForCheckout(publicId: string) {
+  if (!isPublicAccessId(publicId)) {
+    return null;
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from("submissions")
+    .select("id, public_id, name, email, payment_status")
+    .eq("public_id", publicId)
+    .maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    id: String(data.id),
+    publicId: String(data.public_id),
+    name: String(data.name || ""),
+    email: String(data.email || ""),
+    paymentStatus: String(data.payment_status || ""),
+  };
+}
+
 export async function getPaidSubmissionInternalId(publicId: string) {
   if (!isPublicAccessId(publicId)) {
     return null;

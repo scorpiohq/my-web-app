@@ -19,12 +19,15 @@ export const REPORT_BUILD_COMPLETE = "report-build-complete";
  */
 export default function ReportLockOverlay({
   unlockHref = "/gouti/checkout-preview",
+  checkoutSubmissionId,
 }: {
   unlockHref?: string;
+  checkoutSubmissionId?: string;
 } = {}) {
   const router = useRouter();
   const iconRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const startingCheckout = useRef(false);
 
   useLayoutEffect(() => {
     const icon = iconRef.current;
@@ -124,7 +127,40 @@ export default function ReportLockOverlay({
         <button
           ref={buttonRef}
           type="button"
-          onClick={() => journeyFadeTo(unlockHref, router, { durationMs: 520 })}
+          onClick={async () => {
+            if (!checkoutSubmissionId) {
+              journeyFadeTo(unlockHref, router, { durationMs: 520 });
+              return;
+            }
+            if (startingCheckout.current) return;
+            startingCheckout.current = true;
+            try {
+              const res = await fetch("/api/start-checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  submissionId: checkoutSubmissionId,
+                  journey: "gouti",
+                }),
+              });
+              const result = await res.json();
+              if (result.alreadyPaid && result.progressUrl) {
+                journeyFadeTo(result.progressUrl, router, { durationMs: 520 });
+                return;
+              }
+              if (!res.ok || !result.checkoutUrl) {
+                throw new Error(result.error || "Could not start checkout");
+              }
+              window.location.assign(result.checkoutUrl);
+            } catch (error) {
+              startingCheckout.current = false;
+              alert(
+                error instanceof Error
+                  ? error.message
+                  : "Something went wrong starting checkout.",
+              );
+            }
+          }}
           className="btn-brutal btn-brutal-primary pointer-events-auto inline-flex min-h-[40px] min-w-[180px] items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-wide text-black opacity-0 sm:min-h-[44px] sm:min-w-[200px] sm:px-6 sm:text-sm"
           style={{
             visibility: "hidden",

@@ -44,16 +44,25 @@ function BuildingInner() {
     ).matches;
     const hold = prefersReduced ? 400 : HOLD_MS;
 
+    const sid = searchParams.get("sid")?.trim();
+
     const timer = window.setTimeout(() => {
-      const next =
-        seed && seed !== "Your Blueprint"
-          ? `/gouti/report-animation?n=${encodeURIComponent(seed)}`
-          : "/gouti/report-animation";
+      const params = new URLSearchParams();
+      if (seed && seed !== "Your Blueprint") {
+        params.set("n", seed);
+      }
+      if (sid) {
+        params.set("sid", sid);
+      }
+      const query = params.toString();
+      const next = query
+        ? `/gouti/report-animation?${query}`
+        : "/gouti/report-animation";
       journeyFadeTo(next, router, { durationMs: 420 });
     }, hold);
 
     return () => window.clearTimeout(timer);
-  }, [router, seed]);
+  }, [router, seed, searchParams]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
