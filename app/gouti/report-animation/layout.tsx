@@ -1,24 +1,32 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import BlueprintSearchIntro from "@/components/gouti/BlueprintSearchIntro";
 import JourneyEnter from "@/components/gouti/JourneyEnter";
 import ReportReadyScroll from "@/components/gouti/ReportReadyScroll";
 import ReportPageShell from "@/components/ReportPageShell";
 
-/**
- * Report animation — chat reply beat (bubble → status → report),
- * framed evenly + auto-scroll to UNLOCK when ready.
- */
-export default function ReportAnimationLayout({
+const FALLBACK_NAME = "Lewis Hamilton";
+
+function useFormUserName() {
+  const searchParams = useSearchParams();
+  const raw = searchParams.get("n")?.trim();
+  return raw && raw.length > 0 ? raw : FALLBACK_NAME;
+}
+
+function ReportAnimationLayoutInner({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const userName = useFormUserName();
+
   return (
     <JourneyEnter bg="#F7F7F7" className="min-h-screen">
       <ReportReadyScroll />
       <ReportPageShell
-        userName="Lewis Hamilton"
+        userName={userName}
         showHeader={false}
         showIntro={false}
         showReviews={false}
@@ -35,10 +43,27 @@ export default function ReportAnimationLayout({
         reportStartInset="calc(20px + 0.82rem)"
         reportLocked
         shellClassName="bg-[#F7F7F7]"
-        aboveContent={<BlueprintSearchIntro />}
+        aboveContent={<BlueprintSearchIntro userName={userName} />}
       >
         {children}
       </ReportPageShell>
     </JourneyEnter>
+  );
+}
+
+/**
+ * Report animation — chat reply beat (bubble → status → report),
+ * framed evenly + auto-scroll to UNLOCK when ready.
+ * Name comes from the form via `?n=` (passed through /gouti/building).
+ */
+export default function ReportAnimationLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F7F7F7]" />}>
+      <ReportAnimationLayoutInner>{children}</ReportAnimationLayoutInner>
+    </Suspense>
   );
 }

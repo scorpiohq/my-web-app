@@ -97,18 +97,22 @@ export default function ReportReviewSection({
   return (
     <section className={isModal ? "" : "mt-[30px]"}>
       <div
-        className={`relative border-2 border-black bg-[#F3EEE8] px-4 py-6 shadow-[4px_4px_0_0_#000] sm:px-5 sm:py-7 ${
+        className={`border-2 border-black bg-[#F3EEE8] px-4 py-6 shadow-[4px_4px_0_0_#000] sm:px-5 sm:py-7 ${
           isModal
             ? "mx-auto w-full max-w-md sm:max-w-lg"
             : "mx-auto max-w-md sm:max-w-lg"
         }`}
       >
-        <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 border border-black bg-[#e5c4a1] px-2.5 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-black shadow-[2px_2px_0_0_#000] sm:text-[10px]">
-          REVIEW
-        </span>
-
         {isSubmitted ? (
           <div className="text-center">
+            <p
+              className="mb-2 text-[10px] font-semibold tracking-[0.12em] text-black/55 sm:text-[11px]"
+              style={{
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              }}
+            >
+              REVIEW
+            </p>
             <h2
               className="mb-1.5 text-base font-bold leading-snug tracking-[-0.02em] text-black sm:text-lg"
               style={{
@@ -129,6 +133,14 @@ export default function ReportReviewSection({
           </div>
         ) : (
           <>
+            <p
+              className="mb-2 text-center text-[10px] font-semibold tracking-[0.12em] text-black/55 sm:mb-2.5 sm:text-[11px]"
+              style={{
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              }}
+            >
+              REVIEW
+            </p>
             <h2
               className="mb-2 text-center text-base font-bold leading-snug tracking-[-0.02em] text-black sm:text-lg"
               style={{

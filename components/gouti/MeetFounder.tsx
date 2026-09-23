@@ -95,7 +95,7 @@ export default function MeetFounder({
               <strong>Courses and mentorships become money-machine,</strong>{" "}
               then actually valuable for people..{" "}
               <strong>Real Help Shouldn&apos;t cost $499,</strong> This get you
-              a real starting point for {salePrice}.
+              a real starting point for just {salePrice}.
             </li>
             <li>
               <strong>The hardest part was just starting.</strong>{" "}

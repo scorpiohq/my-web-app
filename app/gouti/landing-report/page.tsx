@@ -1,6 +1,6 @@
 /**
  * Landing report — EDITABLE copy of the locked report template.
- * Source of truth: app/gouti/report-preview/page.tsx (LOCKED — do not edit).
+ * Source of truth: app/gouti/report-preview/page.tsx (live template — do not edit).
  * Do not alter this report unless asked. Used by /gouti/landing hero.
  */
 import { Inter } from "next/font/google";

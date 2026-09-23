@@ -1,11 +1,9 @@
 /**
- * FINAL REPORT TEMPLATE — LOCKED
- * Layout, spacing, and styling are approved. Do not edit unless the user
- * explicitly requests changes to this template.
+ * LIVE report template — used by /gouti/report-preview, /report/[id], PDF export.
+ * Promoted from report-preview2. Do not edit unless the user asks.
  */
 import { Inter } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   previewReportData,
@@ -21,57 +19,6 @@ function ReportHeading({ children }: { children: ReactNode }) {
     <h2 className="m-0 text-[52px] font-bold leading-[63px] tracking-[-0.04em] text-[#e48217]">
       ✰ {children}
     </h2>
-  );
-}
-
-function ReportBrutalButton({
-  children,
-  className = "",
-  twoLine,
-  href,
-}: {
-  children?: ReactNode;
-  className?: string;
-  twoLine?: { primary: string; secondary: string };
-  href?: string;
-}) {
-  const sharedClassName = `inline-flex items-center justify-center border-2 border-black bg-[#ffc940] font-semibold text-black shadow-[4px_4px_0_0_#000] transition hover:bg-[#ffd966] ${className}`;
-
-  const content = twoLine ? (
-    <>
-      <span className="block text-[32px] font-bold leading-[35px]">
-        {twoLine.primary}
-      </span>
-      <span className="block text-[20px] leading-[20px] font-semibold">
-        {twoLine.secondary}
-      </span>
-    </>
-  ) : (
-    children
-  );
-
-  if (href) {
-    const isAbsolute = /^https?:\/\//i.test(href);
-
-    if (isAbsolute) {
-      return (
-        <a href={href} className={sharedClassName}>
-          {content}
-        </a>
-      );
-    }
-
-    return (
-      <Link href={href} className={sharedClassName}>
-        {content}
-      </Link>
-    );
-  }
-
-  return (
-    <button type="button" className={sharedClassName}>
-      {content}
-    </button>
   );
 }
 
@@ -101,11 +48,9 @@ function ReportCard({
 
 export function ReportTemplate({
   data,
-  gameplanHref = "/gouti/gameplan-waitlist#waitlist",
   exportMode = false,
 }: {
   data: ReportData;
-  gameplanHref?: string;
   exportMode?: boolean;
 }) {
   return (
@@ -271,15 +216,15 @@ export function ReportTemplate({
                     .replace(/\s+/g, " ")
                     .trim()}
                 </p>
-                <p className="m-[53px_0_0] whitespace-nowrap text-[44px] leading-[53px] tracking-[-0.01em]">
-                  let&apos;s build the plan to get you there.
-                </p>
-                <ReportBrutalButton
-                  href={gameplanHref}
-                  className="mt-[24px] h-[98px] w-full text-[48px] font-bold leading-[58px]"
-                >
-                  Checkout your Gameplan →
-                </ReportBrutalButton>
+                <div className="m-[53px_0_0] whitespace-normal text-[44px] leading-[53px] tracking-[-0.01em]">
+                  <p className="m-0">
+                    Take action from here, or keep wasting time, even with the
+                    Blueprint in your hands.
+                  </p>
+                  <p className="m-0 mt-[40px]">
+                    Either way, you already started.
+                  </p>
+                </div>
               </div>
             </section>
           </div>

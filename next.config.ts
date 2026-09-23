@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/261005-gameplan",
-        destination: "/gouti/gameplan",
+        destination: "/gouti/landing",
         permanent: true,
       },
       {
@@ -48,8 +48,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/gouti/report-preview2",
-        destination: "/gouti/report-preview",
+        source: "/gouti/gameplan",
+        destination: "/gouti/landing",
+        permanent: true,
+      },
+      {
+        source: "/gouti/gameplan-waitlist",
+        destination: "/gouti/landing",
         permanent: true,
       },
       {

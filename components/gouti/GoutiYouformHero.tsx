@@ -74,33 +74,6 @@ function FlowerIcon({ className = "" }: { className?: string }) {
   );
 }
 
-/** People / social-proof icon for the recent Blueprints line */
-function PeopleIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden
-    >
-      <circle cx="6" cy="5" r="2.1" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M1.8 13c.4-2.1 2-3.3 4.2-3.3s3.8 1.2 4.2 3.3"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      <circle cx="11.2" cy="5.4" r="1.7" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M10.2 9.8c1.5.2 2.7 1.1 3.1 2.6"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 /**
  * Youform / Stanley-inspired hero for /gouti/landing only.
  */
@@ -118,14 +91,14 @@ export default function GoutiYouformHero({
     <section id="hero" className="yf-hero relative">
       <div className="yf-hero__grain pointer-events-none absolute inset-0" aria-hidden />
 
-      <BubbleIcon className="pointer-events-none absolute left-[3%] top-[96px] hidden h-8 w-8 text-[#C4B8A8] sm:block md:left-[5%] md:top-[110px] md:h-9 md:w-9 lg:left-[9%] lg:top-[120px]" />
-      <SparkleIcon className="pointer-events-none absolute right-[4%] top-[88px] hidden h-8 w-8 text-[#C4B8A8] sm:block md:right-[6%] md:top-[100px] md:h-9 md:w-9 lg:right-[10%] lg:top-[108px]" />
-      <MotionLinesIcon className="pointer-events-none absolute right-[6%] top-[200px] hidden h-8 w-8 rotate-[-8deg] text-[#B5A48E] sm:block md:right-[8%] md:top-[220px] md:h-9 md:w-9 lg:right-[14%] lg:top-[240px]" />
-      <FlowerIcon className="pointer-events-none absolute right-[5%] top-[340px] hidden h-8 w-8 text-[#C4B8A8] sm:block md:right-[7%] md:top-[360px] md:h-9 md:w-9 lg:right-[11%] lg:top-[380px]" />
+      <BubbleIcon className="pointer-events-none absolute left-[2%] top-[72px] h-6 w-6 text-[#C4B8A8] sm:left-[3%] sm:top-[96px] sm:h-8 sm:w-8 md:left-[5%] md:top-[110px] md:h-9 md:w-9 lg:left-[9%] lg:top-[120px]" />
+      <SparkleIcon className="pointer-events-none absolute right-[2%] top-[68px] h-6 w-6 text-[#C4B8A8] sm:right-[4%] sm:top-[88px] sm:h-8 sm:w-8 md:right-[6%] md:top-[100px] md:h-9 md:w-9 lg:right-[10%] lg:top-[108px]" />
+      <MotionLinesIcon className="pointer-events-none absolute right-[3%] top-[168px] h-6 w-6 rotate-[-8deg] text-[#B5A48E] sm:right-[6%] sm:top-[200px] sm:h-8 sm:w-8 md:right-[8%] md:top-[220px] md:h-9 md:w-9 lg:right-[14%] lg:top-[240px]" />
+      <FlowerIcon className="pointer-events-none absolute left-[3%] top-[210px] h-6 w-6 text-[#C4B8A8] sm:left-auto sm:right-[5%] sm:top-[340px] sm:h-8 sm:w-8 md:right-[7%] md:top-[360px] md:h-9 md:w-9 lg:right-[11%] lg:top-[380px]" />
 
-      <div className="relative mx-auto w-full max-w-[1100px] px-5 pt-12 sm:px-8 sm:pt-14 md:pt-16">
+      <div className="relative mx-auto w-full max-w-[1100px] px-3.5 pt-12 sm:px-8 sm:pt-14 md:pt-16">
         <div className="mx-auto flex w-full max-w-[980px] flex-col items-center text-center">
-          <p className="mb-4 text-[11px] font-semibold tracking-[0.16em] text-[#3D5A45] sm:mb-5 sm:text-[12px]">
+          <p className="mb-3.5 text-[10px] font-semibold tracking-[0.14em] text-[#3D5A45] sm:mb-5 sm:text-[12px] sm:tracking-[0.16em]">
             • YOUR PERSONALIZED BLUEPRINT
           </p>
 
@@ -156,10 +129,12 @@ export default function GoutiYouformHero({
             </Link>
           </div>
 
-          <p className="mt-5 inline-flex items-center gap-1.5 text-[13px] text-[#8A8A8A] sm:text-[14px]">
-            <PeopleIcon className="h-3.5 w-3.5 shrink-0 text-[#5A7A62]" />
-            {peopleCount.toLocaleString("en-US")} people have already built
-            their Blueprint
+          <p
+            className="mt-5 text-[14px] text-[#5A5A5A] sm:mt-5 sm:text-[15px]"
+            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+          >
+            {peopleCount.toLocaleString("en-US")} people already built their
+            Blueprint.
           </p>
         </div>
 
@@ -215,23 +190,13 @@ export default function GoutiYouformHero({
             </Link>
           </div>
 
-          <div
-            className="mx-auto mt-10 w-full max-w-[720px] border-t border-black/[0.08] sm:mt-12"
-            aria-hidden
-          />
-
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/inline-review.svg"
             alt="Review from @creatorandy"
-            width={593}
+            width={453}
             height={146}
-            className="mx-auto mt-10 h-auto w-full max-w-[900px] sm:mt-12"
-          />
-
-          <div
-            className="mx-auto mt-10 w-full max-w-[720px] border-t border-black/[0.08] sm:mt-12"
-            aria-hidden
+            className="mx-auto mt-10 h-auto w-full max-w-[720px] sm:mt-12"
           />
         </div>
       </div>

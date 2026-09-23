@@ -1,10 +1,23 @@
 import { NextResponse } from "next/server";
 import { createBlueprintCheckout } from "@/lib/lemonsqueezy";
+import { createBlueprintStripeCheckout } from "@/lib/stripe";
 import {
   createPendingSubmission,
   getAppBaseUrl,
   type SubmissionPayload,
 } from "@/lib/submissions";
+
+function paymentProvider() {
+  const raw = process.env.PAYMENT_PROVIDER?.trim().toLowerCase();
+  if (raw === "stripe" || raw === "lemon" || raw === "lemonsqueezy") {
+    return raw === "lemonsqueezy" ? "lemon" : raw;
+  }
+  // Prefer Stripe when its secret is configured.
+  if (process.env.STRIPE_SECRET_KEY?.trim()) {
+    return "stripe";
+  }
+  return "lemon";
+}
 
 export async function POST(request: Request) {
   try {
@@ -63,19 +76,38 @@ export async function POST(request: Request) {
       );
     }
 
-    const checkoutUrl = await createBlueprintCheckout({
-      submissionId: submission.id,
-      email,
-      name: body.name.trim(),
-      redirectUrl,
-      embed: isGoutiJourney,
-    });
+    const provider = paymentProvider();
+    let checkoutUrl: string;
+
+    if (provider === "stripe") {
+      const cancelUrl = isGoutiJourney
+        ? `${appUrl}/gouti/landing#pricing`
+        : `${appUrl}/form`;
+      checkoutUrl = await createBlueprintStripeCheckout({
+        submissionId: submission.id,
+        email,
+        name: body.name.trim(),
+        successUrl: redirectUrl.includes("?")
+          ? `${redirectUrl}&session_id={CHECKOUT_SESSION_ID}`
+          : `${redirectUrl}?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl,
+      });
+    } else {
+      checkoutUrl = await createBlueprintCheckout({
+        submissionId: submission.id,
+        email,
+        name: body.name.trim(),
+        redirectUrl,
+        embed: isGoutiJourney,
+      });
+    }
 
     return NextResponse.json({
       success: true,
       checkoutUrl,
       submissionId: submission.publicId,
       journey: isGoutiJourney ? "gouti" : "default",
+      provider,
     });
   } catch (error) {
     const message =

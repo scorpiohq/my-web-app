@@ -6,6 +6,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Report template (locked)
 
-The final report template lives in `app/gouti/report-preview/page.tsx` (`ReportTemplate` + `ReportData`).
+The live report template lives in `app/gouti/report-preview/page.tsx` (`ReportTemplate` + `ReportData`).
 
-**Do not edit** layout, spacing, styling, or copy unless the user explicitly asks for report template changes.
+`app/gouti/report-preview2/page.tsx` is the previous template (archive / experiments).
+
+**Do not edit** the live preview layout, spacing, styling, or copy unless the user explicitly asks for report template changes.

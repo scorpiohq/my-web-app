@@ -35,7 +35,7 @@ export default async function ReportPage({
     >
       <ReportTemplate
         data={reportData}
-        gameplanHref={`/gouti/gameplan?submission_id=${encodeURIComponent(submission.public_id)}`}
+        gameplanHref="/gouti/landing"
       />
     </ReportPageShell>
   );

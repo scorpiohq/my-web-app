@@ -12,10 +12,8 @@ import { getSubmissionForReportPage } from "@/lib/submissions";
 
 export const dynamic = "force-dynamic";
 
-function getGameplanHref(origin: string | undefined, submissionId?: string) {
-  const path = submissionId
-    ? `/gouti/gameplan?submission_id=${encodeURIComponent(submissionId)}`
-    : "/gouti/gameplan";
+function getGameplanHref(origin: string | undefined, _submissionId?: string) {
+  const path = "/gouti/landing";
 
   if (!origin) {
     return path;

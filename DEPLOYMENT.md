@@ -37,13 +37,42 @@ Copy from [`.env.example`](.env.example):
 | `LEMONSQUEEZY_VARIANT_ID` | Your $24 product variant ID |
 | `LEMONSQUEEZY_WEBHOOK_SECRET` | From webhook setup (step 4) |
 | `LEMONSQUEEZY_TEST_MODE` | `true` while testing |
+| `PAYMENT_PROVIDER` | `stripe` or `lemon` (if unset: Stripe when `STRIPE_SECRET_KEY` exists, else Lemon) |
+| `STRIPE_SECRET_KEY` | Stripe → Developers → API keys (`sk_test_…` / `sk_live_…`) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_…`) |
+| `STRIPE_PRICE_ID` | Optional. Stripe Price ID for Blueprint. If unset, uses amount below |
+| `STRIPE_UNIT_AMOUNT_CENTS` | Optional. Default `1500` ($15) when no `STRIPE_PRICE_ID` |
+| `STRIPE_CURRENCY` | Optional. Default `usd` |
 | `OPENAI_API_KEY` | OpenAI API key for report generation |
 | `OPENAI_MODEL` | `gpt-4o-mini` (or `gpt-4o`) |
 | `INTERNAL_API_SECRET` | Random long string (protects `/api/generate-report`) |
 
 Redeploy after saving env vars.
 
-## 4. Lemon Squeezy setup
+## 4. Stripe setup (recommended)
+
+1. Create a Stripe account → **Developers → API keys** → copy **Secret key** → `STRIPE_SECRET_KEY`.
+2. Optional: Products → create “Creator Blueprint” → copy **Price ID** → `STRIPE_PRICE_ID`.  
+   If you skip this, checkout uses `STRIPE_UNIT_AMOUNT_CENTS` (default **1500** = $15).
+3. Set `PAYMENT_PROVIDER=stripe` (or just set `STRIPE_SECRET_KEY` and leave provider unset).
+4. **Webhooks** → Add endpoint:
+   - **URL:** `https://your-blueprint.vercel.app/api/webhooks/stripe`
+   - **Events:** `checkout.session.completed`
+   - Copy **Signing secret** → `STRIPE_WEBHOOK_SECRET`
+5. Local webhook testing:
+   ```bash
+   stripe listen --forward-to localhost:3000/api/webhooks/stripe
+   ```
+   Use the `whsec_…` from that command in `.env.local` as `STRIPE_WEBHOOK_SECRET`.
+
+### Test payment flow (Stripe)
+
+1. Open your form → complete → you should land on Stripe Checkout.
+2. Pay with test card `4242 4242 4242 4242`.
+3. In Supabase `submissions`: `payment_status=paid`, report generation starts.
+4. User lands on progress / thank-you via `success_url`.
+
+## 5. Lemon Squeezy setup (legacy / fallback)
 
 1. Create store + one-time product ($24).
 2. Copy **Store ID** and **Variant ID**.
@@ -53,8 +82,9 @@ Redeploy after saving env vars.
    - **Event:** `order_created`
    - Copy **Signing secret** → `LEMONSQUEEZY_WEBHOOK_SECRET`
 5. Enable **Test mode** in Lemon Squeezy while developing.
+6. Set `PAYMENT_PROVIDER=lemon` to force Lemon instead of Stripe.
 
-### Test payment flow
+### Test payment flow (Lemon)
 
 1. Open `https://your-blueprint.vercel.app/form`
 2. Complete form → pay with Lemon Squeezy test card
@@ -65,10 +95,10 @@ Redeploy after saving env vars.
 
 If webhook fails, check Vercel function logs and that the webhook URL matches exactly.
 
-## 5. Local development notes
+## 6. Local development notes
 
 - UI work: `npm run dev` on localhost is fine.
-- **Webhooks cannot reach localhost** — test payments on the Vercel URL.
+- Local Stripe webhooks: `stripe listen --forward-to localhost:3000/api/webhooks/stripe` (or test on Vercel).
 - PDF export locally needs Google Chrome or `PUPPETEER_EXECUTABLE_PATH`.
 - Add to `.env.local` (never commit):
 
@@ -76,39 +106,43 @@ If webhook fails, check Vercel function logs and that the webhook URL matches ex
 INTERNAL_API_SECRET=your-local-secret
 OPENAI_API_KEY=sk-...
 NEXT_PUBLIC_APP_URL=http://127.0.0.1:3000
+PAYMENT_PROVIDER=stripe
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...   # from `stripe listen` locally
+# STRIPE_PRICE_ID=price_...       # optional; else $15 via STRIPE_UNIT_AMOUNT_CENTS
 ```
 
-## 6. End-to-end flow (production)
+## 7. End-to-end flow (production)
 
 ```text
 Form → create-checkout → Supabase (pending)
-     → Lemon Squeezy checkout → user pays
-     → webhook marks paid + triggers /api/generate-report
+     → Stripe Checkout → user pays
+     → /api/webhooks/stripe marks paid + triggers /api/generate-report
      → OpenAI Stage 1 + Stage 2 → report_json saved (ready)
      → Progress page polls /api/report-status
      → /report/[id] shows real template + review + PDF
 ```
 
-## 7. Switch to your custom domain (when ready to go public)
+## 8. Switch to your custom domain (when ready to go public)
 
 1. Vercel → Project → **Domains** → add your domain.
 2. Update DNS at your registrar (Vercel shows the records).
 3. Change `NEXT_PUBLIC_APP_URL` to `https://yourdomain.com`.
-4. Lemon Squeezy → update webhook URL and checkout redirect URLs.
+4. Stripe → update webhook endpoint URL to the new domain.
 5. Redeploy.
-6. Run one full test in LS test mode, then set `LEMONSQUEEZY_TEST_MODE=false` for live payments.
+6. Run one full test with Stripe test mode, then switch to live keys (`sk_live_…` + live webhook secret).
 
 This is a config change only — no code changes required.
 
-## 8. Go-live checklist
+## 9. Go-live checklist
 
 - [ ] Supabase columns: `review`, `report_json`, `report_status`
-- [ ] All Vercel env vars set
-- [ ] Lemon Squeezy webhook returns 200 on test order
+- [ ] All Vercel env vars set (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, …)
+- [ ] Stripe webhook returns 200 on `checkout.session.completed`
 - [ ] Report generation completes (`report_status = ready`)
 - [ ] Progress page unlocks when ready
 - [ ] `/report/[id]` shows personalized report
 - [ ] Sign-in by email works
 - [ ] PDF download works on Vercel
 - [ ] Custom domain attached (optional until public launch)
-- [ ] `LEMONSQUEEZY_TEST_MODE=false` for real sales
+- [ ] Live Stripe keys + live webhook for real sales

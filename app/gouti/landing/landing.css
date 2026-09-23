@@ -202,8 +202,8 @@
   max-width: 100%;
   color: rgb(37, 39, 32);
   font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif !important;
-  /* Scale to keep “You want to Start on Social Media,” on one line on phones */
-  font-size: clamp(1.15rem, calc((100vw - 2.75rem) / 18.75), 64px) !important;
+  /* Bigger on phones, still fits “You want to Start on Social Media,” on one line */
+  font-size: clamp(1.25rem, calc((100vw - 1.75rem) / 16.2), 64px) !important;
   font-weight: 700 !important;
   font-stretch: 100%;
   font-feature-settings: normal;
@@ -211,7 +211,7 @@
   font-optical-sizing: auto;
   font-size-adjust: none;
   line-height: 1.05 !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   text-align: center;
 }
 

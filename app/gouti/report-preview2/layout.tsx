@@ -1,13 +1,9 @@
 "use client";
 
 import JourneyEnter from "@/components/gouti/JourneyEnter";
-import ReportReadyHero from "@/components/gouti/ReportReadyHero";
 import ReportPageShell from "@/components/ReportPageShell";
 
-const USER_NAME = "Lewis Hamilton";
-const GIFT_HREF = "/gouti/prompt?name=Lewis%20Hamilton";
-
-export default function ReportPreviewLayout({
+export default function ReportPreview2Layout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,20 +11,16 @@ export default function ReportPreviewLayout({
   return (
     <JourneyEnter bg="#F7F7F7" className="min-h-screen">
       <ReportPageShell
-        userName={USER_NAME}
-        showIntro={false}
-        showPeekCaption={false}
+        userName="Lewis Hamilton"
+        shortThanks
         feedbackAsPopup
+        showPeekCaption
         actionsBelowReport
         footerSurface="soft"
         shellClassName="bg-[#F7F7F7]"
-        giftHref={GIFT_HREF}
-        reportHref="/gouti/report-preview"
+        giftHref="/gouti/prompt?name=Lewis%20Hamilton"
+        reportHref="/gouti/report-preview2"
         showGiftLink={false}
-        contentClassName="!pt-0"
-        aboveContent={
-          <ReportReadyHero userName={USER_NAME} giftHref={GIFT_HREF} />
-        }
       >
         {children}
       </ReportPageShell>

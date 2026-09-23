@@ -45,11 +45,15 @@ function BuildingInner() {
     const hold = prefersReduced ? 400 : HOLD_MS;
 
     const timer = window.setTimeout(() => {
-      journeyFadeTo("/gouti/report-animation", router, { durationMs: 420 });
+      const next =
+        seed && seed !== "Your Blueprint"
+          ? `/gouti/report-animation?n=${encodeURIComponent(seed)}`
+          : "/gouti/report-animation";
+      journeyFadeTo(next, router, { durationMs: 420 });
     }, hold);
 
     return () => window.clearTimeout(timer);
-  }, [router]);
+  }, [router, seed]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6">

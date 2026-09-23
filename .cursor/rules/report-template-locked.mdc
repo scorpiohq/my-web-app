@@ -3,20 +3,24 @@ description: Report template is final and locked — no edits unless user explic
 alwaysApply: true
 ---
 
-# Report Template — FINAL & LOCKED
+# Report Template — LIVE & LOCKED
 
-The personalized creator report template is **complete and approved**.
+The personalized creator report used in the live flow.
 
 ## Locked file
 
 - `app/gouti/report-preview/page.tsx` — `ReportTemplate`, `ReportData`, and all layout/spacing/styling
 
+## Archive / sandbox
+
+- `app/gouti/report-preview2/page.tsx` — previous template. Safe to experiment here.
+
 ## Rules
 
-- **Do not edit** this file for refactors, polish, drive-by fixes, or unrelated tasks.
+- **Do not edit** the locked file for refactors, polish, drive-by fixes, or unrelated tasks.
 - **Do not suggest** layout, spacing, typography, or copy changes unless the user asks.
 - **Only modify** when the user **explicitly** requests a change to the report template.
 
 ## Status
 
-Finalized August 2026. Lewis Hamilton sample data in preview. Wire to `/report/[id]` with API JSON when ready — without changing approved layout unless requested.
+Promoted from report-preview2 (September 2026). Lewis Hamilton sample data in preview. `/report/[id]` imports this template.
