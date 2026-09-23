@@ -33,10 +33,7 @@ export default async function ReportPage({
       userName={submission.name || "Creator"}
       submissionId={submission.public_id}
     >
-      <ReportTemplate
-        data={reportData}
-        gameplanHref="/gouti/landing"
-      />
+      <ReportTemplate data={reportData} />
     </ReportPageShell>
   );
 }

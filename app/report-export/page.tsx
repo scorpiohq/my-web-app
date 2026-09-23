@@ -12,20 +12,6 @@ import { getSubmissionForReportPage } from "@/lib/submissions";
 
 export const dynamic = "force-dynamic";
 
-function getGameplanHref(origin: string | undefined, _submissionId?: string) {
-  const path = "/gouti/landing";
-
-  if (!origin) {
-    return path;
-  }
-
-  try {
-    return new URL(path, origin).href;
-  } catch {
-    return path;
-  }
-}
-
 function ExportFrame({
   shouldPrint,
   children,
@@ -57,17 +43,13 @@ export default async function ReportExportPage({
     print?: string;
   }>;
 }) {
-  const { submission_id: submissionId, origin, print } = await searchParams;
+  const { submission_id: submissionId, print } = await searchParams;
   const shouldPrint = print === "1";
 
   if (!submissionId) {
     return (
       <ExportFrame shouldPrint={shouldPrint}>
-        <ReportTemplate
-          data={previewReportData}
-          gameplanHref={getGameplanHref(origin)}
-          exportMode
-        />
+        <ReportTemplate data={previewReportData} exportMode />
       </ExportFrame>
     );
   }
@@ -89,11 +71,7 @@ export default async function ReportExportPage({
 
   return (
     <ExportFrame shouldPrint={shouldPrint}>
-      <ReportTemplate
-        data={reportData}
-        gameplanHref={getGameplanHref(origin, submission.public_id)}
-        exportMode
-      />
+      <ReportTemplate data={reportData} exportMode />
     </ExportFrame>
   );
 }
