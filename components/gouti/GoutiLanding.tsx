@@ -12,7 +12,7 @@ import WhyNow from "@/components/gouti/WhyNow";
 import { getLaunchSpotStats } from "@/lib/spots";
 import { getVisitorGeo } from "@/lib/visitor-geo";
 
-const FORM_CTA = "/form?journey=gouti";
+const FORM_CTA = "/form";
 export const GOUTI_SALE_PRICE = "$15";
 export const GOUTI_ORIGINAL_PRICE = "$29";
 

@@ -56,8 +56,8 @@ function BuildingInner() {
       }
       const query = params.toString();
       const next = query
-        ? `/gouti/report-animation?${query}`
-        : "/gouti/report-animation";
+        ? `/animation?${query}`
+        : "/animation";
       journeyFadeTo(next, router, { durationMs: 420 });
     }, hold);
 

@@ -7,7 +7,7 @@ import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import CountrySelect from "@/components/CountrySelect";
 import { readFormDraft, writeFormDraft } from "@/lib/form-draft";
-import { journeyFadeTo } from "@/components/gouti/journeyFade";
+import { journeyFadeIn, journeyFadeTo } from "@/components/gouti/journeyFade";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
@@ -515,6 +515,19 @@ function FormPageInner() {
   }, [skipToLast]);
 
   useEffect(() => {
+    if (searchParams.get("journey") !== "gouti") return;
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete("journey");
+    const query = next.toString();
+    router.replace(query ? `/form?${query}` : "/form");
+  }, [router, searchParams]);
+
+  useEffect(() => {
+    if (!ready) return;
+    journeyFadeIn(280);
+  }, [ready]);
+
+  useEffect(() => {
     if (!ready || showIntro) return;
     writeFormDraft({ step, responses });
   }, [ready, showIntro, step, responses]);
@@ -610,7 +623,7 @@ function FormPageInner() {
       setFormVisible(false);
       const name = String(responses.name ?? "").trim() || "friend";
       journeyFadeTo(
-        `/gouti/building?n=${encodeURIComponent(name)}`,
+        `/building?n=${encodeURIComponent(name)}`,
         router,
         { durationMs: 480 },
       );
@@ -665,7 +678,7 @@ function FormPageInner() {
         const name = String(responses.name ?? "").trim() || "friend";
         setFormVisible(false);
         journeyFadeTo(
-          `/gouti/building?n=${encodeURIComponent(name)}&sid=${encodeURIComponent(result.submissionId)}`,
+          `/building?n=${encodeURIComponent(name)}&sid=${encodeURIComponent(result.submissionId)}`,
           router,
           { durationMs: 480 },
         );

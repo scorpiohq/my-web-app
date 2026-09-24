@@ -43,6 +43,21 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
+        source: "/gouti/form",
+        destination: "/form",
+        permanent: false,
+      },
+      {
+        source: "/gouti/building",
+        destination: "/building",
+        permanent: false,
+      },
+      {
+        source: "/gouti/report-animation",
+        destination: "/animation",
+        permanent: false,
+      },
+      {
         source: "/261005-checkout-preview",
         destination: "/gouti/checkout-preview",
         permanent: true,
@@ -64,12 +79,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gouti/report-animation2",
-        destination: "/gouti/report-animation",
+        destination: "/animation",
         permanent: true,
       },
       {
         source: "/gouti/report-animation3",
-        destination: "/gouti/report-animation",
+        destination: "/animation",
         permanent: true,
       },
       {
