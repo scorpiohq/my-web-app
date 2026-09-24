@@ -124,24 +124,27 @@ export const metadata: Metadata = {
       : "https://yourblueprint.in",
   ),
   title: {
-    default: "Your Blueprint | Start Your Social Media Journey",
+    default: "Your Blueprint - Know Exactly Where to Start on Social Media",
     template: "%s | Your Blueprint",
   },
   description:
-    "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
+    "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
   applicationName: "Your Blueprint",
   icons: {
-    icon: "/logo-dp.svg",
-    apple: "/logo-dp.svg",
+    icon: [
+      { url: "/favicon-48.png?v=3", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-96.png?v=3", sizes: "96x96", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "https://yourblueprint.in",
     siteName: "Your Blueprint",
-    title: "Your Blueprint | Start Your Social Media Journey",
+    title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
-      "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
+      "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
     images: [
       {
         url: "https://yourblueprint.in/og-image.png?v=2",
@@ -154,9 +157,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Blueprint | Start Your Social Media Journey",
+    title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
-      "Answer 18 simple questions and get a personalized Blueprint that tells you exactly where to start on social media — built around your goals, interests, and situation.",
+      "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
     images: ["https://yourblueprint.in/og-image.png?v=2"],
   },
 };
