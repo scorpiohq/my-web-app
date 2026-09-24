@@ -1,12 +1,14 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Blobatar } from "@blobatar/react";
 import { surprised } from "blobatar/expression";
 import "blobatar/motion.css";
 import "./building.css";
-import { journeyFadeIn, journeyFadeTo } from "@/components/gouti/journeyFade";
+import { journeyFadeIn, journeyFadeThen } from "@/components/gouti/journeyFade";
+import ReportAnimationPage from "@/app/gouti/report-animation/page";
+import ReportAnimationLayout from "@/app/gouti/report-animation/layout";
 
 /** How long the cute bridge holds before report-animation. */
 const HOLD_MS = 1800;
@@ -27,9 +29,9 @@ function useBlobSize() {
 }
 
 function BuildingInner() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const blobSize = useBlobSize();
+  const [showReport, setShowReport] = useState(false);
 
   const seed = useMemo(() => {
     const raw = searchParams.get("n")?.trim();
@@ -44,25 +46,20 @@ function BuildingInner() {
     ).matches;
     const hold = prefersReduced ? 400 : HOLD_MS;
 
-    const sid = searchParams.get("sid")?.trim();
-
     const timer = window.setTimeout(() => {
-      const params = new URLSearchParams();
-      if (seed && seed !== "Your Blueprint") {
-        params.set("n", seed);
-      }
-      if (sid) {
-        params.set("sid", sid);
-      }
-      const query = params.toString();
-      const next = query
-        ? `/animation?${query}`
-        : "/animation";
-      journeyFadeTo(next, router, { durationMs: 420 });
+      journeyFadeThen(() => setShowReport(true), { durationMs: 420 });
     }, hold);
 
     return () => window.clearTimeout(timer);
-  }, [router, seed, searchParams]);
+  }, [searchParams]);
+
+  if (showReport) {
+    return (
+      <ReportAnimationLayout>
+        <ReportAnimationPage />
+      </ReportAnimationLayout>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
@@ -99,7 +96,7 @@ function BuildingInner() {
 }
 
 /**
- * Short Blobatar bridge after form submit → then /gouti/report-animation.
+ * Short Blobatar bridge after form submit → then the report build on /building.
  */
 export default function GoutiBuildingPage() {
   return (

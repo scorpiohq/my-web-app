@@ -31,6 +31,37 @@ type RouterLike = {
   replace: (href: string) => void;
 };
 
+function coverThen(next: () => void, durationMs: number) {
+  const overlay = ensureOverlay();
+  overlay.style.pointerEvents = "auto";
+
+  // Force reflow so the opacity transition always plays
+  void overlay.offsetHeight;
+  requestAnimationFrame(() => {
+    overlay.style.opacity = "1";
+  });
+
+  window.setTimeout(next, durationMs);
+}
+
+/**
+ * Fade to white, then run `next` on the same page. Call `journeyFadeIn()` after.
+ */
+export function journeyFadeThen(
+  next: () => void,
+  options?: { durationMs?: number },
+) {
+  if (typeof window === "undefined") {
+    next();
+    return;
+  }
+
+  const prefersReduced =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const durationMs = prefersReduced ? 0 : (options?.durationMs ?? 420);
+  coverThen(next, durationMs);
+}
+
 /**
  * Fade to white, then navigate. Call `journeyFadeIn()` on the destination.
  */
@@ -47,16 +78,8 @@ export function journeyFadeTo(
   const prefersReduced =
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const durationMs = prefersReduced ? 0 : (options?.durationMs ?? 520);
-  const overlay = ensureOverlay();
-  overlay.style.pointerEvents = "auto";
 
-  // Force reflow so the opacity transition always plays
-  void overlay.offsetHeight;
-  requestAnimationFrame(() => {
-    overlay.style.opacity = "1";
-  });
-
-  window.setTimeout(() => {
+  coverThen(() => {
     if (options?.replace) router.replace(href);
     else router.push(href);
   }, durationMs);

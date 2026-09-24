@@ -54,7 +54,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gouti/report-animation",
-        destination: "/animation",
+        destination: "/building",
+        permanent: false,
+      },
+      {
+        source: "/animation",
+        destination: "/building",
+        permanent: false,
+      },
+      {
+        source: "/reviews",
+        destination: "/",
         permanent: false,
       },
       {
@@ -79,12 +89,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gouti/report-animation2",
-        destination: "/animation",
+        destination: "/building",
         permanent: true,
       },
       {
         source: "/gouti/report-animation3",
-        destination: "/animation",
+        destination: "/building",
         permanent: true,
       },
       {

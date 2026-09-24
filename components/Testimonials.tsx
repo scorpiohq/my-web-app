@@ -30,7 +30,7 @@ export default function Testimonials() {
           ))}
 
           <Link
-            href="/reviews"
+            href="/#reviews"
             className="block w-full text-center text-sm font-medium text-black underline underline-offset-4 transition hover:text-black/70"
           >
             Wanna see more...
