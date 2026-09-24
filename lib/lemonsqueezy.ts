@@ -55,7 +55,9 @@ async function createLemonCheckout({
   redirectUrl,
   receiptButtonText,
   receiptThankYouNote,
-  embed = false,
+  productName,
+  productDescription,
+  productMedia,
 }: {
   variantId: number;
   variantEnvName: string;
@@ -65,7 +67,9 @@ async function createLemonCheckout({
   redirectUrl?: string;
   receiptButtonText: string;
   receiptThankYouNote: string;
-  embed?: boolean;
+  productName?: string;
+  productDescription?: string;
+  productMedia?: string[];
 }) {
   configureLemonSqueezy();
 
@@ -85,9 +89,12 @@ async function createLemonCheckout({
   const checkout = await createCheckout(storeId, variantId, {
     testMode,
     checkoutOptions: {
-      embed,
+      embed: false,
       media: true,
       logo: true,
+      desc: true,
+      buttonColor: "#FFC940",
+      buttonTextColor: "#000000",
     },
     checkoutData: {
       ...(email ? { email } : {}),
@@ -96,6 +103,9 @@ async function createLemonCheckout({
     },
     productOptions: {
       ...(redirectUrl ? { redirectUrl } : {}),
+      ...(productName ? { name: productName } : {}),
+      ...(productDescription ? { description: productDescription } : {}),
+      ...(productMedia?.length ? { media: productMedia } : {}),
       receiptButtonText,
       receiptThankYouNote,
     },
@@ -118,13 +128,13 @@ export async function createBlueprintCheckout({
   email,
   name,
   redirectUrl,
-  embed = false,
+  productMedia,
 }: {
   submissionId: string;
   email: string;
   name: string;
   redirectUrl: string;
-  embed?: boolean;
+  productMedia?: string[];
 }) {
   return createLemonCheckout({
     variantId: Number(requireEnv("LEMONSQUEEZY_VARIANT_ID")),
@@ -133,10 +143,13 @@ export async function createBlueprintCheckout({
     email,
     name,
     redirectUrl,
-    embed,
-    receiptButtonText: "View your progress",
+    productName: "Your Personalized Blueprint",
+    productDescription:
+      "Built from your answers. Download it instantly. Lifetime access.",
+    productMedia,
+    receiptButtonText: "See my Blueprint",
     receiptThankYouNote:
-      "Thanks for your purchase. Your Blueprint is on the way.",
+      "You're in. Open the button below to watch your Blueprint get built.",
   });
 }
 

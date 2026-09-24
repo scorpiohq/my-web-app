@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import ReportPreviewStack from "@/components/ReportPreviewStack";
 import { Reveal } from "@/components/gouti/Reveal";
 
@@ -184,14 +184,20 @@ const STATUS_MESSAGES = [
   },
 ] as const;
 
-function Step2ProgressMock({ soft }: { soft?: boolean }) {
+function Step2ProgressMock({
+  soft,
+  active = false,
+}: {
+  soft?: boolean;
+  active?: boolean;
+}) {
   const [secondsLeft, setSecondsLeft] = useState(7);
   const [statusIndex, setStatusIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (ready) return;
+    if (!active || ready) return;
 
     const id = window.setInterval(() => {
       setSecondsLeft((s) => {
@@ -204,11 +210,11 @@ function Step2ProgressMock({ soft }: { soft?: boolean }) {
     }, 1000);
 
     return () => window.clearInterval(id);
-  }, [ready]);
+  }, [active, ready]);
 
   useEffect(() => {
-    if (ready) {
-      setVisible(true);
+    if (!active || ready) {
+      if (ready) setVisible(true);
       return;
     }
 
@@ -225,7 +231,7 @@ function Step2ProgressMock({ soft }: { soft?: boolean }) {
       window.clearTimeout(fadeOutTimer);
       window.clearTimeout(nextTimer);
     };
-  }, [statusIndex, ready]);
+  }, [active, statusIndex, ready]);
 
   const current = ready
     ? STATUS_MESSAGES[STATUS_MESSAGES.length - 1]
@@ -467,6 +473,26 @@ export default function HowItWorks({
   showStep1?: boolean;
 }) {
   const soft = variant === "soft";
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const [step2Active, setStep2Active] = useState(false);
+
+  useEffect(() => {
+    const el = badgeRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStep2Active(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35, rootMargin: "0px 0px -12% 0px" },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section
@@ -479,6 +505,7 @@ export default function HowItWorks({
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center">
         <Reveal className="flex w-full flex-col items-center">
+          <div ref={badgeRef} className="flex w-full flex-col items-center">
           {showBadge ? (
             soft ? (
               <p className="mb-4 text-[12px] font-semibold tracking-[0.16em] text-[#FFA126] sm:mb-5 sm:text-[13px]">
@@ -517,6 +544,7 @@ export default function HowItWorks({
               {caption}
             </p>
           ) : null}
+          </div>
         </Reveal>
 
         <div
@@ -559,7 +587,7 @@ export default function HowItWorks({
                     : "mt-6 border-t border-black/10 px-2 pb-2 sm:mt-8 sm:px-4 sm:pb-4"
                 }
               >
-                <Step2ProgressMock soft={soft} />
+                <Step2ProgressMock soft={soft} active={step2Active} />
               </div>
             </div>
           </Reveal>

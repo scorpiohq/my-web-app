@@ -378,6 +378,69 @@ body {
   }
 }
 
+@keyframes gouti-logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.86) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes gouti-star-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gouti-instructions {
+  transition:
+    opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gouti-instructions-leaving {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.gouti-instructions-item {
+  opacity: 0;
+  animation: form-item-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.gouti-instructions-logo {
+  opacity: 0;
+  animation: gouti-logo-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.gouti-instructions-star {
+  display: inline-block;
+  animation: gouti-star-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gouti-instructions,
+  .gouti-instructions-item,
+  .gouti-instructions-logo,
+  .gouti-instructions-star {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
 .form-journey {
   font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
 }

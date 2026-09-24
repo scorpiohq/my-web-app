@@ -24,18 +24,23 @@ const nextConfig: NextConfig = {
       })),
       {
         source: "/261005-landing",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
       {
         source: "/261005-gameplan",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
       {
         source: "/261005-story-section",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
+      },
+      {
+        source: "/gouti/landing",
+        destination: "/",
+        permanent: false,
       },
       {
         source: "/261005-checkout-preview",
@@ -49,12 +54,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gouti/gameplan",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
       {
         source: "/gouti/gameplan-waitlist",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
       {
@@ -74,12 +79,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gouti/landing2",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
       {
         source: "/gouti/story-section",
-        destination: "/gouti/landing",
+        destination: "/",
         permanent: true,
       },
     ];

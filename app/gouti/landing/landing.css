@@ -236,7 +236,65 @@
   height: 0.38em;
   border-radius: 0.12em;
   background: #f2c94c;
-  transform: rotate(-1.2deg);
+  transform: rotate(-1.2deg) scaleX(0);
+  transform-origin: left center;
+}
+
+.gouti-landing .st-scroll-reveal.is-in .yf-hero__how-to-mark {
+  animation: yf-hero-mark-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
+}
+
+@keyframes yf-hero-mark-draw {
+  from {
+    transform: rotate(-1.2deg) scaleX(0);
+  }
+  to {
+    transform: rotate(-1.2deg) scaleX(1);
+  }
+}
+
+.gouti-landing .yf-hero__doodle {
+  opacity: 0;
+  animation:
+    yf-hero-doodle-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    yf-hero-doodle-float 5.2s ease-in-out 1.2s infinite;
+}
+
+.gouti-landing .yf-hero__doodle-1 {
+  animation-delay: 0.35s, 1.25s;
+}
+
+.gouti-landing .yf-hero__doodle-2 {
+  animation-delay: 0.5s, 1.5s;
+}
+
+.gouti-landing .yf-hero__doodle-3 {
+  animation-delay: 0.65s, 1.7s;
+}
+
+.gouti-landing .yf-hero__doodle-4 {
+  animation-delay: 0.8s, 1.9s;
+}
+
+@keyframes yf-hero-doodle-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes yf-hero-doodle-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -7px;
+  }
 }
 
 .gouti-landing .yf-hero__sub {
@@ -575,11 +633,6 @@
   padding: 0.05em 0.28em;
   border-radius: 0.3em;
   background: #ececec;
-  text-decoration: underline;
-  text-decoration-color: #e25555;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
-  text-decoration-style: wavy;
 }
 
 .gouti-landing .meet-founder__place-arrow {
@@ -685,6 +738,16 @@
     opacity: 1;
     transform: none;
     filter: none;
+  }
+
+  .gouti-landing .yf-hero__how-to-mark {
+    transform: rotate(-1.2deg) scaleX(1);
+    animation: none;
+  }
+
+  .gouti-landing .yf-hero__doodle {
+    opacity: 1;
+    animation: none;
   }
 }
 

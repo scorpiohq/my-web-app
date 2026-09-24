@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createCheckoutUrl, paymentProvider } from "@/lib/checkout";
+import { createCheckoutUrl } from "@/lib/checkout";
 import {
   createPendingSubmission,
   type SubmissionPayload,
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const isGoutiJourney = body.journey === "gouti";
+    const isGoutiJourney = body.journey !== "default";
 
     const submission = await createPendingSubmission({
       name: body.name.trim(),

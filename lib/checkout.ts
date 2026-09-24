@@ -1,16 +1,11 @@
 import { createBlueprintCheckout } from "@/lib/lemonsqueezy";
-import { createBlueprintStripeCheckout } from "@/lib/stripe";
 import { getAppBaseUrl } from "@/lib/submissions";
 
+/** Stripe is off. Flip this when India export is approved. */
+const USE_STRIPE = false;
+
 export function paymentProvider() {
-  const raw = process.env.PAYMENT_PROVIDER?.trim().toLowerCase();
-  if (raw === "stripe" || raw === "lemon" || raw === "lemonsqueezy") {
-    return raw === "lemonsqueezy" ? "lemon" : raw;
-  }
-  if (process.env.STRIPE_SECRET_KEY?.trim()) {
-    return "stripe";
-  }
-  return "lemon";
+  return USE_STRIPE ? "stripe" : "lemon";
 }
 
 export async function createCheckoutUrl({
@@ -41,30 +36,12 @@ export async function createCheckoutUrl({
     );
   }
 
-  const provider = paymentProvider();
-
-  if (provider === "stripe") {
-    const cancelUrl = isGoutiJourney
-      ? `${appUrl}/gouti/report-animation?n=${encodeURIComponent(name)}&sid=${encodeURIComponent(publicId)}`
-      : `${appUrl}/form`;
-    const checkoutUrl = await createBlueprintStripeCheckout({
-      submissionId,
-      email,
-      name,
-      successUrl: redirectUrl.includes("?")
-        ? `${redirectUrl}&session_id={CHECKOUT_SESSION_ID}`
-        : `${redirectUrl}?session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl,
-    });
-    return { checkoutUrl, provider };
-  }
-
   const checkoutUrl = await createBlueprintCheckout({
     submissionId,
     email,
     name,
     redirectUrl,
-    embed: isGoutiJourney,
   });
-  return { checkoutUrl, provider };
+
+  return { checkoutUrl, provider: "lemon" as const };
 }

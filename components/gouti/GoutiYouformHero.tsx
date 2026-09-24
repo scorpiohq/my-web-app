@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ReportScaleFrame from "@/components/ReportScaleFrame";
+import { Reveal } from "@/components/gouti/Reveal";
 import {
   landingReportData,
   ReportTemplate,
@@ -91,54 +92,62 @@ export default function GoutiYouformHero({
     <section id="hero" className="yf-hero relative">
       <div className="yf-hero__grain pointer-events-none absolute inset-0" aria-hidden />
 
-      <BubbleIcon className="pointer-events-none absolute left-[2%] top-[72px] h-6 w-6 text-[#C4B8A8] sm:left-[3%] sm:top-[96px] sm:h-8 sm:w-8 md:left-[5%] md:top-[110px] md:h-9 md:w-9 lg:left-[9%] lg:top-[120px]" />
-      <SparkleIcon className="pointer-events-none absolute right-[2%] top-[68px] h-6 w-6 text-[#C4B8A8] sm:right-[4%] sm:top-[88px] sm:h-8 sm:w-8 md:right-[6%] md:top-[100px] md:h-9 md:w-9 lg:right-[10%] lg:top-[108px]" />
-      <MotionLinesIcon className="pointer-events-none absolute right-[3%] top-[168px] h-6 w-6 rotate-[-8deg] text-[#B5A48E] sm:right-[6%] sm:top-[200px] sm:h-8 sm:w-8 md:right-[8%] md:top-[220px] md:h-9 md:w-9 lg:right-[14%] lg:top-[240px]" />
-      <FlowerIcon className="pointer-events-none absolute left-[3%] top-[210px] h-6 w-6 text-[#C4B8A8] sm:left-auto sm:right-[5%] sm:top-[340px] sm:h-8 sm:w-8 md:right-[7%] md:top-[360px] md:h-9 md:w-9 lg:right-[11%] lg:top-[380px]" />
+      <BubbleIcon className="yf-hero__doodle yf-hero__doodle-1 pointer-events-none absolute left-[2%] top-[72px] h-6 w-6 text-[#C4B8A8] sm:left-[3%] sm:top-[96px] sm:h-8 sm:w-8 md:left-[5%] md:top-[110px] md:h-9 md:w-9 lg:left-[9%] lg:top-[120px]" />
+      <SparkleIcon className="yf-hero__doodle yf-hero__doodle-2 pointer-events-none absolute right-[2%] top-[68px] h-6 w-6 text-[#C4B8A8] sm:right-[4%] sm:top-[88px] sm:h-8 sm:w-8 md:right-[6%] md:top-[100px] md:h-9 md:w-9 lg:right-[10%] lg:top-[108px]" />
+      <MotionLinesIcon className="yf-hero__doodle yf-hero__doodle-3 pointer-events-none absolute right-[3%] top-[168px] h-6 w-6 rotate-[-8deg] text-[#B5A48E] sm:right-[6%] sm:top-[200px] sm:h-8 sm:w-8 md:right-[8%] md:top-[220px] md:h-9 md:w-9 lg:right-[14%] lg:top-[240px]" />
+      <FlowerIcon className="yf-hero__doodle yf-hero__doodle-4 pointer-events-none absolute left-[3%] top-[210px] h-6 w-6 text-[#C4B8A8] sm:left-auto sm:right-[5%] sm:top-[340px] sm:h-8 sm:w-8 md:right-[7%] md:top-[360px] md:h-9 md:w-9 lg:right-[11%] lg:top-[380px]" />
 
       <div className="relative mx-auto w-full max-w-[1100px] px-3.5 pt-12 sm:px-8 sm:pt-14 md:pt-16">
         <div className="mx-auto flex w-full max-w-[980px] flex-col items-center text-center">
-          <p className="mb-3.5 text-[10px] font-semibold tracking-[0.14em] text-[#3D5A45] sm:mb-5 sm:text-[12px] sm:tracking-[0.16em]">
-            • YOUR PERSONALIZED BLUEPRINT
-          </p>
+          <Reveal eager>
+            <p className="mb-3.5 text-[10px] font-semibold tracking-[0.14em] text-[#3D5A45] sm:mb-5 sm:text-[12px] sm:tracking-[0.16em]">
+              • YOUR PERSONALIZED BLUEPRINT
+            </p>
+          </Reveal>
 
-          <h1 className="yf-hero__title m-0">
-            <span className="yf-hero__title-line block whitespace-nowrap">
-              You want to Start on Social Media,
-            </span>
-            <span className="yf-hero__title-line mt-[0.06em] block whitespace-nowrap">
-              But you don&apos;t know{" "}
-              <span className="yf-hero__how-to relative inline-block italic">
-                how to...
-                <span className="yf-hero__how-to-mark" aria-hidden />
+          <Reveal eager delayMs={90}>
+            <h1 className="yf-hero__title m-0">
+              <span className="yf-hero__title-line block whitespace-nowrap">
+                You want to Start on Social Media,
               </span>
-            </span>
-          </h1>
+              <span className="yf-hero__title-line mt-[0.06em] block whitespace-nowrap">
+                But you don&apos;t know{" "}
+                <span className="yf-hero__how-to relative inline-block italic">
+                  how to...
+                  <span className="yf-hero__how-to-mark" aria-hidden />
+                </span>
+              </span>
+            </h1>
+          </Reveal>
 
-          <p className="yf-hero__sub mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-[#6B6B6B] text-balance sm:mt-6 sm:text-[17px] sm:leading-[1.7]">
-            Answer 18 simple questions about you, and get a personalized
-            Blueprint that tells you exactly where to start.
-          </p>
+          <Reveal eager delayMs={180}>
+            <p className="yf-hero__sub mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-[#6B6B6B] text-balance sm:mt-6 sm:text-[17px] sm:leading-[1.7]">
+              Answer 18 simple questions about you, and get a personalized
+              Blueprint that tells you exactly where to start.
+            </p>
+          </Reveal>
 
-          <div className="mt-7 flex w-full flex-col items-center gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:justify-center sm:gap-3">
-            <Link
-              href={ctaHref}
-              className="btn-brutal btn-brutal-primary inline-flex min-h-[52px] min-w-[240px] items-center justify-center px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-black sm:min-h-[56px] sm:min-w-[280px] sm:px-10 sm:text-base"
+          <Reveal eager delayMs={260}>
+            <div className="mt-7 flex w-full flex-col items-center gap-3 sm:mt-8 sm:w-auto sm:flex-row sm:justify-center sm:gap-3">
+              <Link
+                href={ctaHref}
+                className="btn-brutal btn-brutal-primary inline-flex min-h-[52px] min-w-[240px] items-center justify-center px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-black sm:min-h-[56px] sm:min-w-[280px] sm:px-10 sm:text-base"
+              >
+                Build my Blueprint →
+              </Link>
+            </div>
+
+            <p
+              className="mt-5 text-[14px] text-[#5A5A5A] sm:mt-5 sm:text-[15px]"
+              style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
             >
-              Build my Blueprint →
-            </Link>
-          </div>
-
-          <p
-            className="mt-5 text-[14px] text-[#5A5A5A] sm:mt-5 sm:text-[15px]"
-            style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
-          >
-            {peopleCount.toLocaleString("en-US")} people already built their
-            Blueprint.
-          </p>
+              {peopleCount.toLocaleString("en-US")} people already built their
+              Blueprint.
+            </p>
+          </Reveal>
         </div>
 
-        <div className="yf-hero__preview-wrap relative mx-auto mt-10 w-full max-w-[920px] px-0 sm:mt-12 sm:px-2 md:max-w-[980px]">
+        <Reveal eager delayMs={340} className="yf-hero__preview-wrap relative mx-auto mt-10 w-full max-w-[920px] px-0 sm:mt-12 sm:px-2 md:max-w-[980px]">
           <p className="mb-4 flex items-center justify-center gap-2 text-[14px] text-[#5A5A5A] sm:mb-5 sm:gap-2.5 sm:text-[15px]">
             <span style={{ fontFamily: "var(--font-garamond), Georgia, serif" }}>
               A real Blueprint. Go ahead, peek.
@@ -198,7 +207,7 @@ export default function GoutiYouformHero({
             height={146}
             className="mx-auto mt-10 h-auto w-full max-w-[720px] sm:mt-12"
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

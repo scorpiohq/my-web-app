@@ -1,6 +1,8 @@
 "use client";
 
-import BlueprintJourneyIntro from "@/components/BlueprintJourneyIntro";
+import BlueprintJourneyIntro, {
+  GoutiInstructionsStep,
+} from "@/components/BlueprintJourneyIntro";
 import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
 import CountrySelect from "@/components/CountrySelect";
@@ -16,13 +18,13 @@ function getOptionLetter(index: number): string {
 const questions = [
   {
     id: "instructions",
-    text: "Before We Start, A Few Things to Know",
+    text: "Before We Start, A Few Things..",
     type: "intro",
     options: [
-      "There are no right or wrong answers. So just answer Honestly.",
-      "It only takes 1\u20133 minutes.",
-      "The more you share, the better your blueprint becomes.",
-      "When you\u2019re ready, hit Start and let\u2019s begin.",
+      "No right or wrong answers here. Just be honest.",
+      "Takes 1\u20133 minutes. Not a big deal.",
+      "The more you share, the sharper your Blueprint gets.",
+      "Ready? Hit Start and let\u2019s go.",
     ],
   },
   {
@@ -476,7 +478,7 @@ function buildGoutiSkipResponses(): FormResponses {
 function FormPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isGoutiJourney = searchParams.get("journey") === "gouti";
+  const isGoutiJourney = searchParams.get("journey") !== "default";
   const skipToLast =
     isGoutiJourney && searchParams.get("skip") === "1";
   const [ready, setReady] = useState(false);
@@ -697,6 +699,7 @@ function FormPageInner() {
   if (showIntro) {
     return (
       <BlueprintJourneyIntro
+        variant={isGoutiJourney ? "soft" : "default"}
         onComplete={() => {
           setShowIntro(false);
         }}
@@ -704,12 +707,24 @@ function FormPageInner() {
     );
   }
 
+  const goutiInstructions =
+    isGoutiJourney && current.type === "intro";
+
   return (
     <div
       className="form-journey flex min-h-screen flex-col bg-white transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
       style={{ opacity: formVisible ? 1 : 0 }}
     >
       {showCheckoutTransition && <CheckoutTransition />}
+      {goutiInstructions ? (
+        <GoutiInstructionsStep
+          title={current.text}
+          points={current.options ?? []}
+          onStart={goNext}
+          disabled={!canContinue || submitting || isNavigating}
+        />
+      ) : (
+        <>
       <FormHeader />
 
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-5 pb-10 pt-6 sm:px-8 sm:pb-12 lg:max-w-4xl xl:max-w-5xl">
@@ -835,11 +850,11 @@ function FormPageInner() {
                       ✦
                     </span>
                     <span>
-                      {opt.includes("hit Start") ? (
+                      {opt.includes("Hit Start") ? (
                         <>
-                          When you&apos;re ready, hit <em>Start</em>
+                          Ready? Hit <em>Start</em>
                           {" "}
-                          and let&apos;s begin.
+                          and let&apos;s go.
                         </>
                       ) : (
                         opt
@@ -933,6 +948,8 @@ function FormPageInner() {
           </div>
         </div>
       </main>
+        </>
+      )}
     </div>
   );
 }

@@ -37,7 +37,7 @@ Copy from [`.env.example`](.env.example):
 | `LEMONSQUEEZY_VARIANT_ID` | Your $24 product variant ID |
 | `LEMONSQUEEZY_WEBHOOK_SECRET` | From webhook setup (step 4) |
 | `LEMONSQUEEZY_TEST_MODE` | `true` while testing |
-| `PAYMENT_PROVIDER` | `stripe` or `lemon` (if unset: Stripe when `STRIPE_SECRET_KEY` exists, else Lemon) |
+| `PAYMENT_PROVIDER` | `lemon` (launch default) or `stripe` (only when India export is approved) |
 | `STRIPE_SECRET_KEY` | Stripe → Developers → API keys (`sk_test_…` / `sk_live_…`) |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_…`) |
 | `STRIPE_PRICE_ID` | Optional. Stripe Price ID for Blueprint. If unset, uses amount below |
