@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function ReportPageFooter({
   surface = "grid",
@@ -18,13 +17,10 @@ export default function ReportPageFooter({
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-10 sm:px-8 sm:py-12">
         <Link href="/" className="mb-6 sm:mb-8">
-          <Image
+          <img
             src="/logo.svg"
             alt="Your Blueprint"
-            width={160}
-            height={40}
             className="h-9 w-auto sm:h-10"
-            style={{ width: "auto", height: "auto" }}
           />
         </Link>
 

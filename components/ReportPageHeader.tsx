@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -161,14 +160,15 @@ export default function ReportPageHeader({
     <header className="relative z-30 border-b border-black/10">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
         <Link href="/" className="flex shrink-0 items-center">
-          <Image
+          <img
+            src="/logo-dp.svg"
+            alt="Your Blueprint"
+            className="h-9 w-9 lg:hidden"
+          />
+          <img
             src="/logo.svg"
             alt="Your Blueprint"
-            width={160}
-            height={40}
-            className="h-9 w-auto sm:h-10"
-            style={{ width: "auto", height: "auto" }}
-            priority
+            className="hidden h-10 w-auto lg:block"
           />
         </Link>
 

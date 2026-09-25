@@ -1,5 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { ReportTemplate } from "@/app/gouti/report-preview/page";
+import JourneyEnter from "@/components/gouti/JourneyEnter";
+import ReportReadyHero from "@/components/gouti/ReportReadyHero";
 import ReportPageShell from "@/components/ReportPageShell";
 import {
   mapSubmissionToReportData,
@@ -27,13 +29,35 @@ export default async function ReportPage({
     submission,
     submission.report_json as StoredReportJson,
   );
+  const userName = submission.name || "Creator";
+  const giftParams = new URLSearchParams();
+  giftParams.set("submission_id", submission.public_id);
+  if (userName.trim()) {
+    giftParams.set("name", userName.trim());
+  }
+  const giftHref = `/prompt?${giftParams.toString()}`;
 
   return (
-    <ReportPageShell
-      userName={submission.name || "Creator"}
-      submissionId={submission.public_id}
-    >
-      <ReportTemplate data={reportData} />
-    </ReportPageShell>
+    <JourneyEnter bg="#F7F7F7" className="min-h-screen">
+      <ReportPageShell
+        userName={userName}
+        submissionId={submission.public_id}
+        showIntro={false}
+        showPeekCaption={false}
+        feedbackAsPopup
+        actionsBelowReport
+        footerSurface="soft"
+        shellClassName="bg-[#F7F7F7]"
+        giftHref={giftHref}
+        reportHref={`/report/${encodeURIComponent(submission.public_id)}`}
+        showGiftLink={false}
+        contentClassName="!pt-0"
+        aboveContent={
+          <ReportReadyHero userName={userName} giftHref={giftHref} />
+        }
+      >
+        <ReportTemplate data={reportData} />
+      </ReportPageShell>
+    </JourneyEnter>
   );
 }
