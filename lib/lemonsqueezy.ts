@@ -54,6 +54,7 @@ async function createLemonCheckout({
   name,
   redirectUrl,
   receiptButtonText,
+  receiptLinkUrl,
   receiptThankYouNote,
   productName,
   productDescription,
@@ -66,6 +67,7 @@ async function createLemonCheckout({
   name?: string;
   redirectUrl?: string;
   receiptButtonText: string;
+  receiptLinkUrl?: string;
   receiptThankYouNote: string;
   productName?: string;
   productDescription?: string;
@@ -107,6 +109,7 @@ async function createLemonCheckout({
       ...(productDescription ? { description: productDescription } : {}),
       ...(productMedia?.length ? { media: productMedia } : {}),
       receiptButtonText,
+      ...(receiptLinkUrl ? { receiptLinkUrl } : {}),
       receiptThankYouNote,
     },
   });
@@ -128,12 +131,14 @@ export async function createBlueprintCheckout({
   email,
   name,
   redirectUrl,
+  receiptLinkUrl,
   productMedia,
 }: {
   submissionId: string;
   email: string;
   name: string;
   redirectUrl: string;
+  receiptLinkUrl: string;
   productMedia?: string[];
 }) {
   return createLemonCheckout({
@@ -143,13 +148,14 @@ export async function createBlueprintCheckout({
     email,
     name,
     redirectUrl,
+    receiptLinkUrl,
     productName: "Your Personalized Blueprint",
     productDescription:
       "Built from your answers. Download it instantly. Lifetime access.",
     productMedia,
     receiptButtonText: "See my Blueprint",
     receiptThankYouNote:
-      "You're in. Open the button below to watch your Blueprint get built.",
+      "You're in. Open the button below to see your Blueprint.",
   });
 }
 

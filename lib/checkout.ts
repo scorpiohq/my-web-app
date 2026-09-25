@@ -27,9 +27,11 @@ export async function createCheckoutUrl({
   const redirectUrl = isGoutiJourney
     ? `${appUrl}/progress?submission_id=${publicId}`
     : `${appUrl}/form/thank-you?submission_id=${publicId}`;
+  const receiptLinkUrl = `${appUrl}/report/${publicId}`;
 
   try {
     new URL(redirectUrl);
+    new URL(receiptLinkUrl);
   } catch {
     throw new Error(
       "App URL is misconfigured. Set NEXT_PUBLIC_APP_URL to your Vercel URL on Vercel.",
@@ -41,6 +43,7 @@ export async function createCheckoutUrl({
     email,
     name,
     redirectUrl,
+    receiptLinkUrl,
   });
 
   return { checkoutUrl, provider: "lemon" as const };

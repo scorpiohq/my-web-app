@@ -79,7 +79,7 @@ export default function PaymentThankYouTicket({
       : `/progress?submission_id=${encodeURIComponent(publicId)}`
     : isGameplan
       ? "/signin"
-      : "/progress";
+      : "/signin";
 
   return (
     <div
