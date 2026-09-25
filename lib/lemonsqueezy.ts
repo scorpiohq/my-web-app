@@ -159,35 +159,3 @@ export async function createBlueprintCheckout({
   });
 }
 
-export function getGameplanVariantId() {
-  const raw = process.env.LEMONSQUEEZY_GAMEPLAN_VARIANT_ID?.trim();
-  if (!raw) {
-    return null;
-  }
-
-  const variantId = Number(raw);
-  return Number.isFinite(variantId) ? variantId : null;
-}
-
-export async function createGameplanCheckout({
-  submissionId,
-  redirectUrl,
-}: {
-  submissionId?: string;
-  redirectUrl: string;
-}) {
-  const variantId = getGameplanVariantId();
-  if (!variantId) {
-    throw new Error("LEMONSQUEEZY_GAMEPLAN_VARIANT_ID is not set");
-  }
-
-  return createLemonCheckout({
-    variantId,
-    variantEnvName: "LEMONSQUEEZY_GAMEPLAN_VARIANT_ID",
-    submissionId,
-    redirectUrl,
-    receiptButtonText: "Continue",
-    receiptThankYouNote:
-      "Thanks. Your Gameplan slot is locked in. We'll email you when it's ready.",
-  });
-}

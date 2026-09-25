@@ -1,8 +1,6 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
-import { getGameplanVariantId } from "@/lib/lemonsqueezy";
 import {
-  markGameplanPurchased,
   markSubmissionPaid,
   triggerReportGeneration,
 } from "@/lib/submissions";
@@ -43,14 +41,6 @@ export async function POST(request: Request) {
       event_name?: string;
       custom_data?: {
         submission_id?: string;
-        product?: string;
-      };
-    };
-    data?: {
-      attributes?: {
-        first_order_item?: {
-          variant_id?: number | string;
-        };
       };
     };
   };
@@ -66,29 +56,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true });
   }
 
-  const variantId = Number(
-    payload.data?.attributes?.first_order_item?.variant_id,
-  );
-  const gameplanVariantId = getGameplanVariantId();
-  const isGameplan =
-    payload.meta?.custom_data?.product === "gameplan" ||
-    (gameplanVariantId != null && variantId === gameplanVariantId);
-
   const submissionId = payload.meta?.custom_data?.submission_id;
-
-  if (isGameplan) {
-    if (submissionId) {
-      try {
-        await markGameplanPurchased(submissionId);
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Failed to update Gameplan";
-        return NextResponse.json({ error: message }, { status: 500 });
-      }
-    }
-
-    return NextResponse.json({ received: true });
-  }
 
   if (!submissionId) {
     return NextResponse.json(

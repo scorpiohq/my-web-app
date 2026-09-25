@@ -78,18 +78,6 @@ export async function createPendingSubmission(payload: SubmissionPayload) {
   };
 }
 
-export async function markGameplanPurchased(submissionId: string) {
-  const { error } = await supabaseAdmin
-    .from("submissions")
-    .update({ gameplan_purchased_at: new Date().toISOString() })
-    .eq("id", submissionId)
-    .is("gameplan_purchased_at", null);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-}
-
 export async function getPendingSubmissionForCheckout(publicId: string) {
   if (!isPublicAccessId(publicId)) {
     return null;
