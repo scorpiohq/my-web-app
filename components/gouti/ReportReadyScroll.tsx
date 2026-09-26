@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { REPORT_BUILD_COMPLETE } from "@/components/gouti/ReportLockOverlay";
+import { isUnlockReady } from "@/lib/unlock-ready";
 
 /**
  * After the report finishes building, gently scroll so the lock + UNLOCK!
@@ -9,7 +11,24 @@ import { REPORT_BUILD_COMPLETE } from "@/components/gouti/ReportLockOverlay";
  * Used by /gouti/report-animation.
  */
 export default function ReportReadyScroll() {
+  const searchParams = useSearchParams();
+  const instantReady = isUnlockReady(searchParams);
+
+  useLayoutEffect(() => {
+    if (!instantReady) return;
+    const anchor = document.querySelector<HTMLElement>(
+      "[data-report-ready-anchor]",
+    );
+    anchor?.scrollIntoView({
+      behavior: "auto",
+      block: "center",
+      inline: "nearest",
+    });
+  }, [instantReady]);
+
   useEffect(() => {
+    if (instantReady) return;
+
     const prefersReduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,7 +53,7 @@ export default function ReportReadyScroll() {
     return () => {
       window.removeEventListener(REPORT_BUILD_COMPLETE, scrollToReady);
     };
-  }, []);
+  }, [instantReady]);
 
   return null;
 }

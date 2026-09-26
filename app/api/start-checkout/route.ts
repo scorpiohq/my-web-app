@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { markCheckoutStarted } from "@/lib/abandoned-checkout-emails";
 import { createCheckoutUrl } from "@/lib/checkout";
 import { getPendingSubmissionForCheckout } from "@/lib/submissions";
 
@@ -26,6 +27,8 @@ export async function POST(request: Request) {
         progressUrl: `/progress?submission_id=${submission.publicId}`,
       });
     }
+
+    await markCheckoutStarted(submission.id);
 
     const { checkoutUrl, provider } = await createCheckoutUrl({
       request,

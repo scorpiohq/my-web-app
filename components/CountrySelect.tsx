@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
-const COUNTRIES = [
+export const COUNTRIES = [
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -200,6 +200,32 @@ const COUNTRIES = [
   "Zambia",
   "Zimbabwe",
 ];
+
+const COUNTRY_ALIASES: Record<string, string> = {
+  "united states of america": "United States",
+  usa: "United States",
+  us: "United States",
+  uk: "United Kingdom",
+  "great britain": "United Kingdom",
+  "czech republic": "Czechia",
+  "republic of korea": "South Korea",
+  "korea, republic of": "South Korea",
+  "russian federation": "Russia",
+  "viet nam": "Vietnam",
+  "cote d'ivoire": "Ivory Coast",
+  "côte d’ivoire": "Ivory Coast",
+};
+
+export function matchListedCountry(name: string): string | null {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+  const exact = COUNTRIES.find(
+    (country) => country.toLowerCase() === trimmed.toLowerCase(),
+  );
+  if (exact) return exact;
+  const alias = COUNTRY_ALIASES[trimmed.toLowerCase()];
+  return alias && COUNTRIES.includes(alias) ? alias : null;
+}
 
 function CheckIcon() {
   return (

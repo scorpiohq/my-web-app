@@ -18,6 +18,6 @@ export function getResend() {
 export function getAbandonedEmailFrom() {
   return (
     process.env.RESEND_FROM_EMAIL?.trim() ||
-    "Andy at Your Blueprint <andy@yourblueprint.in>"
+    "Andy <andy@yourblueprint.in>"
   );
 }

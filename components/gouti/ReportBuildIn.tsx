@@ -141,8 +141,10 @@ function skeletonThenType(
  */
 export default function ReportBuildIn({
   gentleScroll = false,
+  instantReady = false,
 }: {
   gentleScroll?: boolean;
+  instantReady?: boolean;
 } = {}) {
   useLayoutEffect(() => {
     const frame = document.querySelector<HTMLElement>("[data-report-frame]");
@@ -341,6 +343,13 @@ export default function ReportBuildIn({
       }, article);
     };
 
+    if (instantReady) {
+      camera.classList.remove("opacity-0");
+      gsap.set(camera, { clearProps: "transform,opacity,filter" });
+      gsap.set(content, { clearProps: "opacity" });
+      return;
+    }
+
     // Hidden while generation plays above — soft reveal when build starts
     lockFullFrame();
     gsap.set(content, { opacity: 0 });
@@ -358,7 +367,7 @@ export default function ReportBuildIn({
       window.clearTimeout(fallback);
       cleanupVisuals();
     };
-  }, [gentleScroll]);
+  }, [gentleScroll, instantReady]);
 
   return null;
 }

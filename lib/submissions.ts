@@ -171,7 +171,7 @@ export async function getSubmissionForGeneration(submissionId: string) {
   const { data, error } = await supabaseAdmin
     .from("submissions")
     .select(
-      "id, name, email, age, location, gender, answers, profile_image_reference, payment_status, report_status, report_json",
+      "id, public_id, name, email, age, location, gender, answers, profile_image_reference, payment_status, report_status, report_json",
     )
     .eq("id", submissionId)
     .eq("payment_status", "paid")

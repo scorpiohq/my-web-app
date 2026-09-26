@@ -62,7 +62,9 @@ export async function POST(request: Request) {
   const tags = tagsToRecord(event.data?.tags);
   const whichRaw = tags.which;
   const which =
-    whichRaw === "1" || whichRaw === "2" ? (Number(whichRaw) as 1 | 2) : undefined;
+    whichRaw === "1" || whichRaw === "2" || whichRaw === "3"
+      ? (Number(whichRaw) as 1 | 2 | 3)
+      : undefined;
   const submissionId = tags.submission_id;
   const resendEmailId = event.data?.email_id;
 

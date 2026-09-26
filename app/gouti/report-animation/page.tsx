@@ -15,6 +15,7 @@ import {
   previewReportData,
   type ReportData,
 } from "@/lib/report-preview-data";
+import { isUnlockReady } from "@/lib/unlock-ready";
 
 export type { ReportData };
 
@@ -113,22 +114,26 @@ export function ReportTemplate({
   data,
   gameplanHref = "/gouti/landing",
   exportMode = false,
+  instantReady = false,
 }: {
   data: ReportData;
   gameplanHref?: string;
   exportMode?: boolean;
+  instantReady?: boolean;
 }) {
   return (
     <main
       className={`report-page-main ${inter.className} ${exportMode ? "bg-white" : "min-h-screen overflow-x-hidden bg-transparent pb-3 sm:pb-6 lg:pb-10"}`}
     >
-      {!exportMode ? <ReportBuildIn gentleScroll /> : null}
+      {!exportMode ? (
+        <ReportBuildIn gentleScroll instantReady={instantReady} />
+      ) : null}
       <div
         data-report-camera
         className={
           exportMode
             ? "report-viewport h-[3365px] w-[2214px]"
-            : "report-viewport mx-auto -mt-[11px] h-[494px] w-full origin-top-left overflow-hidden opacity-0 md:-mt-[21px] md:h-[943px] xl:-mt-[34px] xl:h-[1496px]"
+            : `report-viewport mx-auto -mt-[11px] h-[494px] w-full origin-top-left overflow-hidden md:-mt-[21px] md:h-[943px] xl:-mt-[34px] xl:h-[1496px]${instantReady ? "" : " opacity-0"}`
         }
       >
         <article
@@ -376,5 +381,10 @@ function ReportAnimationPageInner() {
   const name =
     raw && raw.length > 0 ? raw : previewReportData.name;
 
-  return <ReportTemplate data={{ ...previewReportData, name }} />;
+  return (
+    <ReportTemplate
+      data={{ ...previewReportData, name }}
+      instantReady={isUnlockReady(searchParams)}
+    />
+  );
 }

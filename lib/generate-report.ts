@@ -11,6 +11,7 @@ import {
   type Stage2Violation,
 } from "@/lib/report-limits";
 import type { Stage2ReportJson, StoredReportJson } from "@/lib/report-mapper";
+import { sendReportReadyEmail } from "@/lib/report-ready-email";
 import {
   getSubmissionForGeneration,
   saveGeneratedReport,
@@ -226,6 +227,21 @@ export async function generateReportForSubmission(
     };
 
     await saveGeneratedReport(submissionId, reportJson);
+
+    const reportEmail = submission.email?.trim();
+    const reportPublicId = String(submission.public_id || "").trim();
+    if (reportEmail && reportPublicId) {
+      try {
+        await sendReportReadyEmail({
+          to: reportEmail,
+          name: submission.name || "there",
+          publicId: reportPublicId,
+        });
+      } catch (emailError) {
+        console.error("Report-ready email failed", emailError);
+      }
+    }
+
     return reportJson;
   } catch (error) {
     await setReportStatus(submissionId, "failed");

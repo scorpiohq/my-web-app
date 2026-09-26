@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { setGenerationStatus } from "@/components/gouti/BlueprintSearchIntro";
 import { journeyFadeTo } from "@/components/gouti/journeyFade";
+import { isUnlockReady } from "@/lib/unlock-ready";
+import { markGoingToCheckout } from "@/lib/checkout-nav";
 
 export const REPORT_LOCK_REVEAL = "report-lock-reveal";
 export const REPORT_BUILD_COMPLETE = "report-build-complete";
@@ -25,6 +27,8 @@ export default function ReportLockOverlay({
   checkoutSubmissionId?: string;
 } = {}) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const instantReady = isUnlockReady(searchParams);
   const iconRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const startingCheckout = useRef(false);
@@ -33,6 +37,34 @@ export default function ReportLockOverlay({
     const icon = iconRef.current;
     const button = buttonRef.current;
     if (!icon || !button) return;
+
+    if (instantReady) {
+      gsap.set(icon, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        filter: "blur(0px)",
+        visibility: "visible",
+      });
+      gsap.set(button, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        filter: "blur(0px)",
+        visibility: "visible",
+      });
+      gsap.to(icon, {
+        y: -4,
+        duration: 1.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+      return () => {
+        gsap.killTweensOf(icon);
+        gsap.killTweensOf(button);
+      };
+    }
 
     // Belts-and-suspenders: hide before paint, even if CSS is overridden
     gsap.set(icon, {
@@ -97,7 +129,7 @@ export default function ReportLockOverlay({
       gsap.killTweensOf(icon);
       gsap.killTweensOf(button);
     };
-  }, []);
+  }, [instantReady]);
 
   return (
     <div
@@ -111,8 +143,8 @@ export default function ReportLockOverlay({
       >
         <div
           ref={iconRef}
-          className="opacity-0"
-          style={{ visibility: "hidden" }}
+          className={instantReady ? "" : "opacity-0"}
+          style={{ visibility: instantReady ? "visible" : "hidden" }}
         >
           <Image
             src="/lock.svg"
@@ -145,12 +177,14 @@ export default function ReportLockOverlay({
               });
               const result = await res.json();
               if (result.alreadyPaid && result.progressUrl) {
+                markGoingToCheckout();
                 journeyFadeTo(result.progressUrl, router, { durationMs: 520 });
                 return;
               }
               if (!res.ok || !result.checkoutUrl) {
                 throw new Error(result.error || "Could not start checkout");
               }
+              markGoingToCheckout();
               window.location.assign(result.checkoutUrl);
             } catch (error) {
               startingCheckout.current = false;
@@ -161,9 +195,9 @@ export default function ReportLockOverlay({
               );
             }
           }}
-          className="btn-brutal btn-brutal-primary pointer-events-auto inline-flex min-h-[40px] min-w-[180px] items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-wide text-black opacity-0 sm:min-h-[44px] sm:min-w-[200px] sm:px-6 sm:text-sm"
+          className={`btn-brutal btn-brutal-primary pointer-events-auto inline-flex min-h-[40px] min-w-[180px] items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-wide text-black sm:min-h-[44px] sm:min-w-[200px] sm:px-6 sm:text-sm${instantReady ? "" : " opacity-0"}`}
           style={{
-            visibility: "hidden",
+            visibility: instantReady ? "visible" : "hidden",
             fontFamily: "var(--font-bricolage), \"Bricolage Grotesque\", sans-serif",
           }}
           tabIndex={-1}

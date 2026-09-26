@@ -13,6 +13,7 @@ class BlueprintGeneration extends HTMLElement {
       "second-line",
       "autoplay",
       "layout",
+      "done",
     ];
   }
 
@@ -23,11 +24,16 @@ class BlueprintGeneration extends HTMLElement {
   }
 
   connectedCallback() {
+    if (this.getAttribute("done") === "true") {
+      this.finish();
+      return;
+    }
     if (this.getAttribute("autoplay") !== "false") this.play();
   }
 
   attributeChangedCallback() {
     if (this.shadowRoot) this.render();
+    if (this.getAttribute("done") === "true") this.finish();
   }
 
   render() {
@@ -192,6 +198,11 @@ class BlueprintGeneration extends HTMLElement {
         /* Second line is driven by the page when report build starts / finishes */
         .is-playing .second { opacity: 0; }
 
+        .is-done .user-bubble { opacity: 1; transform: none; }
+        .is-done .engine { display: none; }
+        .is-done .first { display: none; opacity: 0; visibility: hidden; }
+        .is-done .second { opacity: 1; transform: none; visibility: visible; }
+
         @keyframes yb-enter { to { opacity: 1; } }
         @keyframes yb-engine-exit { to { opacity: 0; transform: scale(.78); } }
         @keyframes yb-breathe { 0%,100% { transform: translate(-50%,-50%) scale(.82); } 45% { transform: translate(-50%,-50%) scale(1.16); } }
@@ -227,10 +238,17 @@ class BlueprintGeneration extends HTMLElement {
 
   play() {
     const generation = this.shadowRoot.querySelector(".generation");
-    generation.classList.remove("is-playing");
+    generation.classList.remove("is-playing", "is-done");
     // Restart keyframes cleanly whenever the component is shown again.
     void generation.offsetWidth;
     generation.classList.add("is-playing");
+  }
+
+  finish() {
+    const generation = this.shadowRoot.querySelector(".generation");
+    if (!generation) return;
+    generation.classList.remove("is-playing");
+    generation.classList.add("is-done");
   }
 }
 

@@ -5,7 +5,7 @@ import BlueprintJourneyIntro, {
 } from "@/components/BlueprintJourneyIntro";
 import CheckoutTransition from "@/components/CheckoutTransition";
 import FormHeader from "@/components/FormHeader";
-import CountrySelect from "@/components/CountrySelect";
+import CountrySelect, { matchListedCountry } from "@/components/CountrySelect";
 import { readFormDraft, writeFormDraft } from "@/lib/form-draft";
 import { journeyFadeIn, journeyFadeTo } from "@/components/gouti/journeyFade";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -513,6 +513,28 @@ function FormPageInner() {
     }
     setReady(true);
   }, [skipToLast]);
+
+  useEffect(() => {
+    if (!ready || skipToLast) return;
+    if (responses.location?.trim()) return;
+
+    let cancelled = false;
+    fetch("/api/visitor-geo")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { countryName?: string } | null) => {
+        if (cancelled) return;
+        const country = matchListedCountry(data?.countryName ?? "");
+        if (!country) return;
+        setResponses((prev) =>
+          prev.location?.trim() ? prev : { ...prev, location: country },
+        );
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, skipToLast, responses.location]);
 
   useEffect(() => {
     if (searchParams.get("journey") !== "gouti") return;

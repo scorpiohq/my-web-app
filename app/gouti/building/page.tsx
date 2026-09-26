@@ -7,6 +7,8 @@ import { surprised } from "blobatar/expression";
 import "blobatar/motion.css";
 import "./building.css";
 import { journeyFadeIn, journeyFadeThen } from "@/components/gouti/journeyFade";
+import { isUnlockReady } from "@/lib/unlock-ready";
+import { clearGoingToCheckout, isGoingToCheckout } from "@/lib/checkout-nav";
 import ReportAnimationPage from "@/app/gouti/report-animation/page";
 import ReportAnimationLayout from "@/app/gouti/report-animation/layout";
 
@@ -31,7 +33,8 @@ function useBlobSize() {
 function BuildingInner() {
   const searchParams = useSearchParams();
   const blobSize = useBlobSize();
-  const [showReport, setShowReport] = useState(false);
+  const skipBuild = isUnlockReady(searchParams);
+  const [showReport, setShowReport] = useState(skipBuild);
 
   const seed = useMemo(() => {
     const raw = searchParams.get("n")?.trim();
@@ -39,7 +42,42 @@ function BuildingInner() {
   }, [searchParams]);
 
   useEffect(() => {
+    const sid = searchParams.get("sid")?.trim();
+    if (!sid) return;
+
+    clearGoingToCheckout();
+
+    const pingLeave = () => {
+      if (isGoingToCheckout()) return;
+      const body = JSON.stringify({ publicId: sid });
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(
+            "/api/abandoned-leave",
+            new Blob([body], { type: "application/json" }),
+          );
+          return;
+        }
+      } catch {
+        // fall through to fetch
+      }
+      void fetch("/api/abandoned-leave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+        keepalive: true,
+      });
+    };
+
+    window.addEventListener("pagehide", pingLeave);
+    return () => {
+      window.removeEventListener("pagehide", pingLeave);
+    };
+  }, [searchParams]);
+
+  useEffect(() => {
     journeyFadeIn(320);
+    if (skipBuild) return;
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -51,7 +89,7 @@ function BuildingInner() {
     }, hold);
 
     return () => window.clearTimeout(timer);
-  }, [searchParams]);
+  }, [searchParams, skipBuild]);
 
   if (showReport) {
     return (

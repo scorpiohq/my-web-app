@@ -7,7 +7,9 @@ import {
   type DetailedHTMLProps,
   type HTMLAttributes,
 } from "react";
+import { useSearchParams } from "next/navigation";
 import gsap from "gsap";
+import { isUnlockReady } from "@/lib/unlock-ready";
 
 export const BLUEPRINT_SEARCH_COMPLETE = "blueprint-search-complete";
 
@@ -57,10 +59,9 @@ export function setGenerationStatus(nextText: string) {
   });
 }
 
-function markSearchComplete() {
+function markSearchComplete(status = "Your Blueprint is taking shape…") {
   searchIntroDone = true;
-  // Report generation is starting — move status to “taking shape…”
-  setGenerationStatus("Your Blueprint is taking shape…");
+  if (status) setGenerationStatus(status);
   window.dispatchEvent(new Event(BLUEPRINT_SEARCH_COMPLETE));
 }
 
@@ -84,6 +85,7 @@ declare module "react" {
         "second-line"?: string;
         layout?: string;
         autoplay?: string;
+        done?: string;
       };
     }
   }
@@ -134,11 +136,13 @@ export default function BlueprintSearchIntro({
   secondLine?: string;
   layout?: "default" | "centered";
 }) {
+  const searchParams = useSearchParams();
+  const instantReady = isUnlockReady(searchParams);
   const [ready, setReady] = useState(false);
   const startedRef = useRef(false);
 
   useEffect(() => {
-    searchIntroDone = false;
+    searchIntroDone = instantReady;
     let cancelled = false;
 
     loadBlueprintGenerationScript()
@@ -153,11 +157,17 @@ export default function BlueprintSearchIntro({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [instantReady]);
 
   useEffect(() => {
     if (!ready || startedRef.current) return;
     startedRef.current = true;
+
+    if (instantReady) {
+      searchIntroDone = true;
+      window.dispatchEvent(new Event(BLUEPRINT_SEARCH_COMPLETE));
+      return;
+    }
 
     const prefersReduced =
       typeof window !== "undefined" &&
@@ -171,7 +181,7 @@ export default function BlueprintSearchIntro({
     return () => {
       window.clearTimeout(timer);
     };
-  }, [ready]);
+  }, [ready, instantReady]);
 
   return (
     <div className="relative z-20 w-full bg-transparent [&_blueprint-generation]:block [&_blueprint-generation]:w-full [&_blueprint-generation]:bg-transparent">
@@ -181,7 +191,10 @@ export default function BlueprintSearchIntro({
           user-name={userName}
           user-message={userMessage}
           first-line={firstLine}
-          second-line={secondLine}
+          second-line={
+            instantReady ? "Your Blueprint is ready…" : secondLine
+          }
+          {...(instantReady ? { done: "true", autoplay: "false" } : {})}
           {...(layout === "centered" ? { layout: "centered" } : {})}
         />
       ) : (
