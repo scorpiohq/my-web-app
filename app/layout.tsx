@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Bebas_Neue, DM_Sans, Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Bebas_Neue, Geist, Geist_Mono, Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import HashScroll from "@/components/HashScroll";
 import UtmCapture from "@/components/UtmCapture";
@@ -28,10 +28,11 @@ const roboto = Roboto({
   weight: ["100", "300", "500"],
 });
 
-const dmSans = DM_Sans({
+const dmSans = localFont({
+  src: "../public/Fonts/DM_Sans/DMSans-Variable.ttf",
   variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400 700",
+  display: "swap",
 });
 
 const fuzzyBubbles = localFont({
