@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 function sectionNav(sectionPath: string) {
   const prefix =
@@ -61,13 +60,10 @@ export default function Footer({
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-12 sm:px-8 sm:py-14">
         <Link href="/" className="mb-8 sm:mb-10">
-          <Image
+          <img
             src="/logo.svg"
             alt="Your Blueprint"
-            width={160}
-            height={40}
             className="h-9 w-auto sm:h-10"
-            style={{ width: "auto", height: "auto" }}
           />
         </Link>
 

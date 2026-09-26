@@ -132,10 +132,10 @@ export const metadata: Metadata = {
   applicationName: "Your Blueprint",
   icons: {
     icon: [
-      { url: "/favicon-48.png?v=3", sizes: "48x48", type: "image/png" },
-      { url: "/favicon-96.png?v=3", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-32.png?v=4", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.96.png?v=4", sizes: "96x96", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png?v=4", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
