@@ -241,6 +241,10 @@ type FormResponses = Record<string, FormAnswer> & {
   gender?: string;
 };
 
+function asTrimmedText(value: FormAnswer | undefined) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
@@ -516,7 +520,7 @@ function FormPageInner() {
 
   useEffect(() => {
     if (!ready || skipToLast) return;
-    if (responses.location?.trim()) return;
+    if (asTrimmedText(responses.location)) return;
 
     let cancelled = false;
     fetch("/api/visitor-geo")
@@ -526,7 +530,7 @@ function FormPageInner() {
         const country = matchListedCountry(data?.countryName ?? "");
         if (!country) return;
         setResponses((prev) =>
-          prev.location?.trim() ? prev : { ...prev, location: country },
+          asTrimmedText(prev.location) ? prev : { ...prev, location: country },
         );
       })
       .catch(() => {});
