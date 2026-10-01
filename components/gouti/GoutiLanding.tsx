@@ -60,7 +60,7 @@ export default async function GoutiLanding({
         originalPrice={GOUTI_ORIGINAL_PRICE}
         salePrice={GOUTI_SALE_PRICE}
         heading="Start Today, Not Someday."
-        offerBadge="EARLY BIRD OFFER"
+        offerBadge="EARLY SUPPORTERS"
         purchasePill="One Time Payment, Lifetime Access"
         features={[
           "Your Personalized Blueprint",

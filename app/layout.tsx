@@ -129,12 +129,13 @@ export const metadata: Metadata = {
     template: "%s | Your Blueprint",
   },
   description:
-    "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
+    "Stuck on where to Start on Social Media? Answer 18 questions and get a Personalized Creator Blueprint - your exact starting point, built for you.",
   applicationName: "Your Blueprint",
   icons: {
     icon: [
       { url: "/favicon-32.png?v=4", sizes: "32x32", type: "image/png" },
       { url: "/favicon.96.png?v=4", sizes: "96x96", type: "image/png" },
+      { url: "/favicon-192.png?v=5", sizes: "192x192", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png?v=4", sizes: "180x180", type: "image/png" }],
   },
@@ -145,7 +146,7 @@ export const metadata: Metadata = {
     siteName: "Your Blueprint",
     title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
-      "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
+      "Stuck on where to Start on Social Media? Answer 18 questions and get a Personalized Creator Blueprint - your exact starting point, built for you.",
     images: [
       {
         url: "https://yourblueprint.in/og-image.png?v=2",
@@ -160,7 +161,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
-      "Answer 18 Simple Questions about you, and Get a Personalized Creator Blueprint that tells you exactly where to start.",
+      "Stuck on where to Start on Social Media? Answer 18 questions and get a Personalized Creator Blueprint - your exact starting point, built for you.",
     images: ["https://yourblueprint.in/og-image.png?v=2"],
   },
 };

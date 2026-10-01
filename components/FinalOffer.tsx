@@ -55,6 +55,10 @@ export default function FinalOffer({
                 : "mx-auto w-full text-center md:mx-0 md:w-max md:max-w-full md:translate-y-2 md:-translate-x-2 md:text-left lg:-translate-x-3"
             }
           >
+            <span className="final-offer-badge mb-5 inline-block border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs">
+              GET STARTED
+            </span>
+
             <h2
               className={
                 centered

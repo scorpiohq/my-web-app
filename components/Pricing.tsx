@@ -120,9 +120,12 @@ export default function Pricing({
             <span
               className={
                 soft
-                  ? "absolute -top-3 right-5 z-10 inline-block rounded-full bg-[#FFF1C2] px-3.5 py-1.5 text-[11px] font-semibold tracking-wide text-black"
-                  : "absolute -top-3 right-4 z-10 inline-block border border-black bg-[#FFC940] px-3 py-1 text-[10px] font-bold tracking-[0.08em] text-black shadow-[3px_3px_0_0_#000] sm:right-5 sm:text-[11px]"
+                  ? "absolute -top-3 right-5 z-10 inline-block rounded-full bg-[#FFF1C2] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-black"
+                  : "absolute -top-3 right-4 z-10 inline-block border border-black bg-[#FFC940] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-black shadow-[3px_3px_0_0_#000] sm:right-5 sm:text-[11px]"
               }
+              style={{
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              }}
             >
               {offerBadge}
             </span>

@@ -48,19 +48,13 @@
 
 .gouti-landing > footer {
   position: relative;
-  border-top: none !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 .gouti-landing > footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  z-index: 1;
-  width: min(720px, calc(100% - 2.5rem));
-  transform: translateX(-50%);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  pointer-events: none;
+  display: none;
 }
 
 .gouti-landing > footer .footer-nav-link,
