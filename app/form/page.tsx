@@ -8,7 +8,7 @@ import FormHeader from "@/components/FormHeader";
 import CountrySelect, { matchListedCountry } from "@/components/CountrySelect";
 import { readFormDraft, writeFormDraft } from "@/lib/form-draft";
 import { journeyFadeIn, journeyFadeTo } from "@/components/gouti/journeyFade";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 function getOptionLetter(index: number): string {
@@ -481,7 +481,9 @@ function buildGoutiSkipResponses(): FormResponses {
 
 function FormPageInner() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isAdminStudio = pathname.startsWith("/admin");
   const isGoutiJourney = searchParams.get("journey") !== "default";
   const skipToLast =
     isGoutiJourney && searchParams.get("skip") === "1";
@@ -505,18 +507,20 @@ function FormPageInner() {
       return;
     }
 
-    const draft = readFormDraft();
-    if (draft) {
-      const safeStep = Math.min(
-        Math.max(0, draft.step),
-        questions.length - 1,
-      );
-      setResponses(draft.responses as FormResponses);
-      setStep(safeStep);
-      setShowIntro(false);
+    if (!isAdminStudio) {
+      const draft = readFormDraft();
+      if (draft) {
+        const safeStep = Math.min(
+          Math.max(0, draft.step),
+          questions.length - 1,
+        );
+        setResponses(draft.responses as FormResponses);
+        setStep(safeStep);
+        setShowIntro(false);
+      }
     }
     setReady(true);
-  }, [skipToLast]);
+  }, [skipToLast, isAdminStudio]);
 
   useEffect(() => {
     if (!ready || skipToLast) return;
@@ -554,9 +558,9 @@ function FormPageInner() {
   }, [ready]);
 
   useEffect(() => {
-    if (!ready || showIntro) return;
+    if (!ready || showIntro || isAdminStudio) return;
     writeFormDraft({ step, responses });
-  }, [ready, showIntro, step, responses]);
+  }, [ready, showIntro, step, responses, isAdminStudio]);
 
   useEffect(() => {
     if (!showIntro) {
@@ -645,11 +649,11 @@ function FormPageInner() {
     setSubmitting(true);
 
     // Animation-only skip: no Supabase / checkout.
-    if (skipToLast) {
+    if (skipToLast || isAdminStudio) {
       setFormVisible(false);
       const name = String(responses.name ?? "").trim() || "friend";
       journeyFadeTo(
-        `/building?n=${encodeURIComponent(name)}`,
+        `${isAdminStudio ? "/admin/building" : "/building"}?n=${encodeURIComponent(name)}`,
         router,
         { durationMs: 480 },
       );

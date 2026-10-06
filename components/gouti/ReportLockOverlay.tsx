@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { setGenerationStatus } from "@/components/gouti/BlueprintSearchIntro";
@@ -27,7 +27,9 @@ export default function ReportLockOverlay({
   checkoutSubmissionId?: string;
 } = {}) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isAdminStudio = pathname.startsWith("/admin");
   const instantReady = isUnlockReady(searchParams);
   const iconRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -160,6 +162,7 @@ export default function ReportLockOverlay({
           ref={buttonRef}
           type="button"
           onClick={async () => {
+            if (isAdminStudio) return;
             if (!checkoutSubmissionId) {
               journeyFadeTo(unlockHref, router, { durationMs: 520 });
               return;

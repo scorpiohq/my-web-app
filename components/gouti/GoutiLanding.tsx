@@ -18,8 +18,11 @@ export const GOUTI_ORIGINAL_PRICE = "$29";
 
 export default async function GoutiLanding({
   sectionPath = "/",
+  /** Admin studio: every homepage button goes here instead of the pricing anchor. */
+  formHref,
 }: {
   sectionPath?: string;
+  formHref?: string;
 }) {
   const [spotStats, geo] = await Promise.all([
     getLaunchSpotStats(),
@@ -28,15 +31,22 @@ export default async function GoutiLanding({
 
   const pricingCta =
     sectionPath === "/" ? "/#pricing" : `${sectionPath.replace(/\/$/, "")}#pricing`;
+  const buttonHref = formHref ?? pricingCta;
+  const formButtonHref = formHref ?? FORM_CTA;
+  const homeHref = formHref ? sectionPath : "/";
 
   return (
     <div className="gouti-landing bg-[#fefefe]">
-      <Header ctaHref={pricingCta} sectionPath={sectionPath} />
+      <Header
+        ctaHref={buttonHref}
+        homeHref={homeHref}
+        sectionPath={sectionPath}
+      />
       <GoutiYouformHero
-        ctaHref={pricingCta}
+        ctaHref={buttonHref}
         blueprintsBuilt={spotStats.blueprintsBuilt}
       />
-      <WhyNow ctaHref={pricingCta} />
+      <WhyNow ctaHref={buttonHref} />
       <HowItWorks
         step1Preview="platform"
         step2Eyebrow="02 — BACKEND SYSTEM"
@@ -68,20 +78,20 @@ export default async function GoutiLanding({
           "One Bonus Gift (Early birds only)",
           "7-Day Money-Back Guarantee",
         ]}
-        ctaHref={FORM_CTA}
+        ctaHref={formButtonHref}
         checkoutButton={
           <GoutiFormCta
-            href={FORM_CTA}
+            href={formButtonHref}
             className="btn-brutal btn-brutal-primary inline-flex w-full items-center justify-center px-7 py-4 text-center text-base font-bold tracking-wide text-black sm:py-4.5 sm:text-lg"
           >
             BUILD MY BLUEPRINT →
           </GoutiFormCta>
         }
       />
-      <MessageTestimonials ctaHref={pricingCta} />
+      <MessageTestimonials ctaHref={buttonHref} />
       <FAQ />
-      <FinalOffer layout="centered" ctaHref={pricingCta} />
-      <Footer sectionPath={sectionPath} />
+      <FinalOffer layout="centered" ctaHref={buttonHref} />
+      <Footer sectionPath={sectionPath} homeHref={homeHref} />
     </div>
   );
 }

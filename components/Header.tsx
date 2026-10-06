@@ -15,11 +15,13 @@ function sectionNav(sectionPath: string) {
 
 export default function Header({
   ctaHref = "/#pricing",
+  homeHref = "/",
   surface = "grid",
   /** Page path for section anchors. Use `/gouti/landing` on that page. */
   sectionPath = "/",
 }: {
   ctaHref?: string;
+  homeHref?: string;
   /** `soft` = solid white bar (milky page canvas). Default keeps grid. */
   surface?: "grid" | "soft";
   sectionPath?: string;
@@ -36,7 +38,7 @@ export default function Header({
       className={`relative ${soft ? "border-b border-black/[0.08] bg-white" : "grid-bg"}`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-3.5 sm:px-8 sm:py-5">
-        <Link href="/" className="flex shrink-0 items-center">
+        <Link href={homeHref} className="flex shrink-0 items-center">
           {/* Mobile: mark only — Desktop: full wordmark */}
           <img
             src="/logo-dp.svg"

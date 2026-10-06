@@ -15,6 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           "/prompt",
           "/report-export",
           "/gouti",
+          "/admin",
           "/261005-",
         ],
       },

@@ -61,9 +61,11 @@ export default function Footer({
   surface = "grid",
   /** Page path for section anchors. Use `/gouti/landing` on that page. */
   sectionPath = "/",
+  homeHref = "/",
 }: {
   surface?: "grid" | "soft";
   sectionPath?: string;
+  homeHref?: string;
 } = {}) {
   const soft = surface === "soft";
   const navLinks = sectionNav(sectionPath);
@@ -82,7 +84,7 @@ export default function Footer({
     >
       <div className="mx-auto w-full max-w-6xl px-6 pt-8 sm:px-8 sm:pt-9 lg:px-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-          <Link href="/" className="shrink-0">
+          <Link href={homeHref} className="shrink-0">
             <img
               src="/logo.svg"
               alt="Your Blueprint"
