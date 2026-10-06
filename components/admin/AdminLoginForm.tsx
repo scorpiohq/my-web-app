@@ -28,14 +28,13 @@ export default function AdminLoginForm() {
         code: code.trim(),
       }),
     });
-    const result = await res.json().catch(() => ({}));
     setLoading(false);
 
     if (!res.ok) {
       setError(
-        typeof result.error === "string"
-          ? result.error
-          : "Could not sign in.",
+        res.status === 401
+          ? "We couldn't find that name and code. Double-check them and try again."
+          : "Something went wrong. Try again.",
       );
       return;
     }
@@ -59,10 +58,10 @@ export default function AdminLoginForm() {
           />
 
           <h1 className="text-lg font-semibold leading-snug text-black sm:text-xl">
-            Admin
+            Sign in
           </h1>
           <p className="mt-1 text-xs leading-snug text-[#6B6B6B] sm:text-sm">
-            Enter your username and code to open the recording studio.
+            Enter your name and code.
           </p>
 
           <div className="mt-5 space-y-3">
@@ -74,12 +73,12 @@ export default function AdminLoginForm() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSubmit();
               }}
-              placeholder="Username"
+              placeholder="Your name"
               className={inputClassName}
             />
             <input
-              type="password"
-              autoComplete="current-password"
+              type="text"
+              autoComplete="off"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               onKeyDown={(e) => {
@@ -91,7 +90,7 @@ export default function AdminLoginForm() {
           </div>
 
           {error ? (
-            <p className="mt-3 text-sm text-[#B42318]" role="alert">
+            <p className="mt-3 text-xs leading-snug text-[#c0392b] sm:text-sm" role="alert">
               {error}
             </p>
           ) : null}
@@ -100,9 +99,9 @@ export default function AdminLoginForm() {
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit || loading}
-            className="btn-brutal btn-brutal-primary mt-5 inline-flex w-full items-center justify-center px-5 py-3 text-sm font-bold tracking-wide text-black disabled:opacity-60"
+            className="btn-brutal btn-brutal-primary mt-5 inline-flex w-full items-center justify-center px-5 py-3 text-sm font-semibold text-black disabled:opacity-60"
           >
-            {loading ? "Checking..." : "Enter"}
+            {loading ? "Checking..." : "Sign in"}
           </button>
         </div>
       </div>

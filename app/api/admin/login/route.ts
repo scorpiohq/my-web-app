@@ -9,7 +9,7 @@ import {
 export async function POST(request: Request) {
   if (!adminCredentials().configured) {
     return NextResponse.json(
-      { error: "Admin login is not set up yet." },
+      { error: "Sign in isn't available right now." },
       { status: 503 },
     );
   }
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   if (!credentialsMatch(String(body.username ?? ""), String(body.code ?? ""))) {
     return NextResponse.json(
-      { error: "That username or code is wrong." },
+      { error: "Name and code did not match." },
       { status: 401 },
     );
   }
