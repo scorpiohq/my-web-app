@@ -1,37 +1,49 @@
 import Link from "next/link";
+import Image from "next/image";
+import "@/app/gouti/landing/landing.css";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-full flex-1 flex-col items-center justify-center bg-white px-6 py-16 sm:px-8 sm:py-24">
-      <div className="mx-auto flex w-full max-w-xl flex-col items-center text-center">
-        <h1
-          className="text-[clamp(1.75rem,6vw,2.75rem)] leading-tight tracking-wide text-black"
-          style={{ fontFamily: "var(--font-hero)" }}
-        >
-          SEEMS LIKE YOU ARE LOST
-        </h1>
+    <main className="gouti-landing flex min-h-screen flex-1 flex-col items-center justify-center">
+      <section className="yf-hero relative flex w-full flex-1 flex-col items-center justify-center px-3.5 py-16 sm:px-8 sm:py-24">
+        <div
+          className="yf-hero__grain pointer-events-none absolute inset-0"
+          aria-hidden
+        />
 
-        <p
-          className="mt-1 text-[clamp(4.5rem,18vw,7.5rem)] leading-none tracking-wide text-black [text-shadow:4px_4px_0_rgba(0,0,0,0.12),8px_8px_0_rgba(0,0,0,0.06)] sm:mt-1.5"
-          style={{ fontFamily: "var(--font-hero)" }}
-        >
-          404!
-        </p>
+        <div className="relative mx-auto flex w-full max-w-[980px] flex-col items-center justify-center text-center">
+          <Link href="/" className="mb-7 sm:mb-8">
+            <Image
+              src="/logo-dp.svg"
+              alt="Your Blueprint"
+              width={48}
+              height={48}
+              className="h-11 w-11 sm:h-12 sm:w-12"
+              priority
+            />
+          </Link>
 
-        <p className="mt-1 max-w-lg text-sm leading-relaxed text-[#444] sm:mt-1.5 sm:text-base">
-          I know the feeling. I was lost too, unsure where to start while
-          everyone else seemed to be moving forward. That&apos;s one of the
-          reasons I built{" "}
-          <span className="font-semibold text-black">Your Blueprint.</span>
-        </p>
+          <h1 className="yf-hero__title not-found__title m-0">
+            <span className="yf-hero__title-line block">
+              Page Not Found!
+            </span>
+          </h1>
 
-        <Link
-          href="/"
-          className="btn-brutal btn-brutal-primary mt-10 inline-block px-8 py-3.5 text-sm font-semibold tracking-wide text-black sm:mt-12"
-        >
-          ← BACK TO YOUR BLUEPRINT
-        </Link>
-      </div>
+          <p className="yf-hero__sub mx-auto mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-[#6B6B6B] text-balance sm:mt-6 sm:text-[17px] sm:leading-[1.7]">
+            We can help with many things, but finding this page isn&apos;t one of
+            them.
+          </p>
+
+          <div className="mt-7 flex w-full justify-center sm:mt-8">
+            <Link
+              href="/"
+              className="btn-brutal btn-brutal-primary inline-flex min-h-[52px] min-w-[240px] items-center justify-center px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-black sm:min-h-[56px] sm:min-w-[280px] sm:px-10 sm:text-base"
+            >
+              Back home →
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

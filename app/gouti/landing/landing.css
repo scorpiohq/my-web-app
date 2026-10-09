@@ -213,6 +213,10 @@
   max-width: 100%;
 }
 
+.gouti-landing .not-found__title {
+  font-size: clamp(1.35rem, 4.2vw, 2.35rem) !important;
+}
+
 .gouti-landing .yf-hero__how-to {
   font-family: var(--font-garamond), Georgia, "Times New Roman", serif !important;
   font-style: italic !important;
