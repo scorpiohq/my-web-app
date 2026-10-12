@@ -28,7 +28,7 @@ Copy from [`.env.example`](.env.example):
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_APP_URL` | `https://your-blueprint.vercel.app` |
+| `NEXT_PUBLIC_APP_URL` | `https://your-blueprint.com` (primary domain) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase anon/publishable key |
 | `SUPABASE_SECRET_KEY` | Supabase service role key |
@@ -41,7 +41,7 @@ Copy from [`.env.example`](.env.example):
 | `STRIPE_SECRET_KEY` | Stripe → Developers → API keys (`sk_test_…` / `sk_live_…`) |
 | `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_…`) |
 | `STRIPE_PRICE_ID` | Optional. Stripe Price ID for Blueprint. If unset, uses amount below |
-| `STRIPE_UNIT_AMOUNT_CENTS` | Optional. Default `1500` ($15) when no `STRIPE_PRICE_ID` |
+| `STRIPE_UNIT_AMOUNT_CENTS` | Optional. Default `900` ($9) when no `STRIPE_PRICE_ID` |
 | `STRIPE_CURRENCY` | Optional. Default `usd` |
 | `OPENAI_API_KEY` | OpenAI API key for report generation |
 | `OPENAI_MODEL` | `gpt-4o-mini` (or `gpt-4o`) |
@@ -53,7 +53,7 @@ Redeploy after saving env vars.
 
 1. Create a Stripe account → **Developers → API keys** → copy **Secret key** → `STRIPE_SECRET_KEY`.
 2. Optional: Products → create “Creator Blueprint” → copy **Price ID** → `STRIPE_PRICE_ID`.  
-   If you skip this, checkout uses `STRIPE_UNIT_AMOUNT_CENTS` (default **1500** = $15).
+   If you skip this, checkout uses `STRIPE_UNIT_AMOUNT_CENTS` (default **900** = $9).
 3. Set `PAYMENT_PROVIDER=stripe` (or just set `STRIPE_SECRET_KEY` and leave provider unset).
 4. **Webhooks** → Add endpoint:
    - **URL:** `https://your-blueprint.vercel.app/api/webhooks/stripe`
@@ -109,7 +109,7 @@ NEXT_PUBLIC_APP_URL=http://127.0.0.1:3000
 PAYMENT_PROVIDER=stripe
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...   # from `stripe listen` locally
-# STRIPE_PRICE_ID=price_...       # optional; else $15 via STRIPE_UNIT_AMOUNT_CENTS
+# STRIPE_PRICE_ID=price_...       # optional; else $9 via STRIPE_UNIT_AMOUNT_CENTS
 ```
 
 ## 7. End-to-end flow (production)

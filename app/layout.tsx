@@ -122,7 +122,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL?.startsWith("http")
       ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
-      : "https://yourblueprint.in",
+      : "https://your-blueprint.com",
   ),
   title: {
     default: "Your Blueprint - Know Exactly Where to Start on Social Media",
@@ -142,14 +142,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://yourblueprint.in",
+    url: "https://your-blueprint.com",
     siteName: "Your Blueprint",
     title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
       "Stuck on where to Start on Social Media? Answer 18 questions and get a Personalized Creator Blueprint - your exact starting point, built for you.",
     images: [
       {
-        url: "https://yourblueprint.in/og-image.png?v=2",
+        url: "https://your-blueprint.com/og-image.png?v=2",
         width: 1230,
         height: 630,
         alt: "Your Blueprint",
@@ -162,7 +162,7 @@ export const metadata: Metadata = {
     title: "Your Blueprint - Know Exactly Where to Start on Social Media",
     description:
       "Stuck on where to Start on Social Media? Answer 18 questions and get a Personalized Creator Blueprint - your exact starting point, built for you.",
-    images: ["https://yourblueprint.in/og-image.png?v=2"],
+    images: ["https://your-blueprint.com/og-image.png?v=2"],
   },
 };
 

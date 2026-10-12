@@ -9,7 +9,7 @@ import { Reveal } from "@/components/gouti/Reveal";
 export default function MeetFounder({
   countryName,
   flag,
-  salePrice = "$15",
+  salePrice = "$9",
 }: {
   countryName?: string | null;
   flag?: string | null;

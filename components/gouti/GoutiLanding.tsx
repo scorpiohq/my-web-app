@@ -13,8 +13,8 @@ import { getLaunchSpotStats } from "@/lib/spots";
 import { getVisitorGeo } from "@/lib/visitor-geo";
 
 const FORM_CTA = "/form";
-export const GOUTI_SALE_PRICE = "$15";
-export const GOUTI_ORIGINAL_PRICE = "$29";
+export const GOUTI_SALE_PRICE = "$9";
+export const GOUTI_ORIGINAL_PRICE = "$18";
 
 export default async function GoutiLanding({
   sectionPath = "/",
@@ -69,7 +69,8 @@ export default async function GoutiLanding({
       <Pricing
         originalPrice={GOUTI_ORIGINAL_PRICE}
         salePrice={GOUTI_SALE_PRICE}
-        heading="Start Today, Not Someday."
+        heading="Your next step starts here."
+        subheading="Get the clarity you need to start your social media journey, with a blueprint built around you."
         offerBadge="EARLY SUPPORTERS"
         purchasePill="One Time Payment, Lifetime Access"
         features={[

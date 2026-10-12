@@ -28,7 +28,7 @@ export function getStripe() {
 
 /**
  * Hosted Checkout Session for the Blueprint.
- * Prefer STRIPE_PRICE_ID. Otherwise uses STRIPE_UNIT_AMOUNT_CENTS (default 1500 = $15).
+ * Prefer STRIPE_PRICE_ID. Otherwise uses STRIPE_UNIT_AMOUNT_CENTS (default 900 = $9).
  */
 export async function createBlueprintStripeCheckout({
   submissionId,
@@ -46,7 +46,7 @@ export async function createBlueprintStripeCheckout({
   const stripe = getStripe();
   const priceId = process.env.STRIPE_PRICE_ID?.trim();
   const currency = (process.env.STRIPE_CURRENCY || "usd").toLowerCase();
-  const unitAmount = Number(process.env.STRIPE_UNIT_AMOUNT_CENTS || "1500");
+  const unitAmount = Number(process.env.STRIPE_UNIT_AMOUNT_CENTS || "900");
 
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = priceId
     ? [{ price: priceId, quantity: 1 }]
@@ -55,7 +55,7 @@ export async function createBlueprintStripeCheckout({
           quantity: 1,
           price_data: {
             currency,
-            unit_amount: Number.isFinite(unitAmount) ? unitAmount : 1500,
+            unit_amount: Number.isFinite(unitAmount) ? unitAmount : 900,
             product_data: {
               name: "Your Personalized Creator Blueprint",
               description: "One-time Blueprint + download",

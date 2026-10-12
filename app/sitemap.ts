@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 /** Canonical public domain for SEO (not the Vercel preview URL). */
-const SITE_URL = "https://yourblueprint.in";
+const SITE_URL = "https://your-blueprint.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

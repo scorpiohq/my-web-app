@@ -28,7 +28,6 @@ type PricingProps = {
   salePrice?: string;
   offerBadge?: string;
   planLabel?: string;
-  priceNote?: string;
   purchasePill?: string;
   scarcityNote?: string;
   buttonLabel?: string;
@@ -39,6 +38,8 @@ type PricingProps = {
   showPricingBadge?: boolean;
   /** Section headline above the pricing card. */
   heading?: string;
+  /** Optional line under the headline. */
+  subheading?: string;
   features?: string[];
   checkoutButton?: ReactNode;
   showInstantPdfRow?: boolean;
@@ -53,7 +54,6 @@ export default function Pricing({
   salePrice = "$9",
   offerBadge = "LIMITED OFFER",
   planLabel = "YOUR BLUEPRINT",
-  priceNote = "USD",
   purchasePill = "One Time Payment",
   scarcityNote = "Special launch price, going up once these spots are gone.",
   buttonLabel = "BUILD MY BLUEPRINT →",
@@ -62,6 +62,7 @@ export default function Pricing({
   showIntro = true,
   showPricingBadge = true,
   heading = "Your first step. Right here.",
+  subheading,
   features = defaultFeatures,
   checkoutButton,
   showInstantPdfRow = false,
@@ -93,9 +94,20 @@ export default function Pricing({
         {showIntro ? (
           <Reveal className="flex w-full flex-col items-center">
             {soft ? (
-              <h2 className="mb-10 max-w-xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] sm:mb-12">
-                {heading}
-              </h2>
+              <>
+                <h2
+                  className={`max-w-xl text-[clamp(1.85rem,4.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] ${
+                    subheading ? "mb-4" : "mb-10 sm:mb-12"
+                  }`}
+                >
+                  {heading}
+                </h2>
+                {subheading ? (
+                  <p className="mb-10 max-w-xl text-[15px] leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-[17px]">
+                    {subheading}
+                  </p>
+                ) : null}
+              </>
             ) : (
               <>
                 {showPricingBadge ? (
@@ -105,11 +117,23 @@ export default function Pricing({
                 ) : null}
 
                 <h2
-                  className="mb-10 max-w-none whitespace-nowrap text-[clamp(1.5rem,4.2vw,3.25rem)] font-bold leading-tight tracking-wide text-black sm:mb-12"
+                  className={`max-w-3xl text-[clamp(1.5rem,4.2vw,3.25rem)] font-bold leading-tight tracking-wide text-black ${
+                    subheading ? "mb-4 sm:mb-5" : "mb-10 sm:mb-12"
+                  }`}
                   style={{ fontFamily: "var(--font-hero)" }}
                 >
                   {heading}
                 </h2>
+                {subheading ? (
+                  <p
+                    className="mb-10 max-w-xl text-[15px] leading-relaxed text-[#6B6B6B] sm:mb-12 sm:text-[17px]"
+                    style={{
+                      fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                    }}
+                  >
+                    {subheading}
+                  </p>
+                ) : null}
               </>
             )}
           </Reveal>
@@ -143,18 +167,6 @@ export default function Pricing({
             </p>
 
             <div className="mt-4 flex flex-wrap items-end gap-x-2.5 gap-y-1 sm:mt-5">
-              {originalPrice ? (
-                <span
-                  className={
-                    soft
-                      ? "pricing-price text-[2.75rem] font-semibold leading-none text-[#CCC] line-through decoration-2 sm:text-[3.25rem]"
-                      : "pricing-price text-[2.75rem] leading-none text-[#999] line-through decoration-2 sm:text-[3.25rem] lg:text-[3.5rem]"
-                  }
-                  style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
-                >
-                  {originalPrice}
-                </span>
-              ) : null}
               <span
                 className={
                   soft
@@ -165,9 +177,18 @@ export default function Pricing({
               >
                 {salePrice}
               </span>
-              <span className="mb-1.5 text-sm text-[#6B6B6B] sm:text-base">
-                {priceNote}
-              </span>
+              {originalPrice ? (
+                <span
+                  className={
+                    soft
+                      ? "pricing-price mb-0.5 text-[2rem] font-semibold leading-none text-[#CCC] line-through decoration-2 sm:mb-1 sm:text-[2.25rem]"
+                      : "pricing-price mb-0.5 text-[2rem] leading-none text-[#999] line-through decoration-2 sm:mb-1 sm:text-[2.25rem] lg:text-[2.4rem]"
+                  }
+                  style={soft ? undefined : { fontFamily: "var(--font-hero)" }}
+                >
+                  {originalPrice}
+                </span>
+              ) : null}
             </div>
 
             <p className="pricing-purchase-pill mt-2 text-sm text-[#6B6B6B] sm:text-[15px]">
@@ -315,9 +336,9 @@ export default function Pricing({
               )}
               <p
                 className="pricing-cta-note mt-3 text-center text-[14px] text-[#5A5A5A] sm:text-[15px]"
-                style={{ fontFamily: "var(--font-garamond), Georgia, serif" }}
+                style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
               >
-                Takes 2 minutes, This won&apos;t stay {salePrice} forever.
+                This won&apos;t stay {salePrice} forever, build yours..
               </p>
             </div>
           </div>
