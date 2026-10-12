@@ -201,7 +201,7 @@ export default function GoutiYouformHero({
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/inline-review.svg"
+            src="/inline-review.webp"
             alt="Review from @creatorandy"
             width={453}
             height={146}

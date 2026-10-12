@@ -139,15 +139,6 @@ export default function Hero({
                 </p>
               </div>
 
-              <img
-                src="/sticker-report.png"
-                alt="Personalized Creator Blueprint preview"
-                width={800}
-                height={1297}
-                fetchPriority="high"
-                decoding="async"
-                className="relative z-0 h-auto w-full object-contain"
-              />
             </div>
           </div>
         ) : null}

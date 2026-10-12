@@ -20,7 +20,7 @@ export const landingReportData: ReportData = {
   age: 26,
   location: "Manchester, United Kingdom",
   goal: "I want to build an income online, but I don't know what to sell or where to start.",
-  profileImage: "/avatars/marcus-webb.png",
+  profileImage: "/avatars/marcus-webb.webp",
   creatorIdentity: "The Everyday Money Guy",
   identityDescription:
     "You're not selling a course or a secret system — you're sharing exactly how you saved $3,000 in 6 months on a normal income, using simple habits anyone can copy. That's easy for people to understand, and easy for them to trust.",
