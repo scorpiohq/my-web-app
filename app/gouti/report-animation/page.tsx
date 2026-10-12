@@ -15,7 +15,7 @@ import {
   previewReportData,
   type ReportData,
 } from "@/lib/report-preview-data";
-import { isUnlockReady } from "@/lib/unlock-ready";
+import { useUnlockReady } from "@/lib/unlock-ready";
 
 export type { ReportData };
 
@@ -380,11 +380,12 @@ function ReportAnimationPageInner() {
   const raw = searchParams.get("n")?.trim();
   const name =
     raw && raw.length > 0 ? raw : previewReportData.name;
+  const instantReady = useUnlockReady();
 
   return (
     <ReportTemplate
       data={{ ...previewReportData, name }}
-      instantReady={isUnlockReady(searchParams)}
+      instantReady={instantReady}
     />
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { setGenerationStatus } from "@/components/gouti/BlueprintSearchIntro";
 import { journeyFadeTo } from "@/components/gouti/journeyFade";
-import { isUnlockReady } from "@/lib/unlock-ready";
+import { markUnlockSeen, useUnlockReady } from "@/lib/unlock-ready";
 import { markGoingToCheckout } from "@/lib/checkout-nav";
 
 export const REPORT_LOCK_REVEAL = "report-lock-reveal";
@@ -28,9 +28,8 @@ export default function ReportLockOverlay({
 } = {}) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const isAdminStudio = pathname.startsWith("/admin");
-  const instantReady = isUnlockReady(searchParams);
+  const instantReady = useUnlockReady();
   const iconRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const startingCheckout = useRef(false);
@@ -41,6 +40,7 @@ export default function ReportLockOverlay({
     if (!icon || !button) return;
 
     if (instantReady) {
+      markUnlockSeen(checkoutSubmissionId);
       gsap.set(icon, {
         opacity: 1,
         scale: 1,
@@ -121,6 +121,7 @@ export default function ReportLockOverlay({
       });
 
       setGenerationStatus("Your Blueprint is ready…");
+      markUnlockSeen(checkoutSubmissionId);
     };
 
     window.addEventListener(REPORT_LOCK_REVEAL, revealLock);
@@ -131,7 +132,7 @@ export default function ReportLockOverlay({
       gsap.killTweensOf(icon);
       gsap.killTweensOf(button);
     };
-  }, [instantReady]);
+  }, [instantReady, checkoutSubmissionId]);
 
   return (
     <div

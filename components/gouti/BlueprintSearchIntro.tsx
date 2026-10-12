@@ -7,9 +7,8 @@ import {
   type DetailedHTMLProps,
   type HTMLAttributes,
 } from "react";
-import { useSearchParams } from "next/navigation";
 import gsap from "gsap";
-import { isUnlockReady } from "@/lib/unlock-ready";
+import { useUnlockReady } from "@/lib/unlock-ready";
 
 export const BLUEPRINT_SEARCH_COMPLETE = "blueprint-search-complete";
 
@@ -136,8 +135,7 @@ export default function BlueprintSearchIntro({
   secondLine?: string;
   layout?: "default" | "centered";
 }) {
-  const searchParams = useSearchParams();
-  const instantReady = isUnlockReady(searchParams);
+  const instantReady = useUnlockReady();
   const [ready, setReady] = useState(false);
   const startedRef = useRef(false);
 

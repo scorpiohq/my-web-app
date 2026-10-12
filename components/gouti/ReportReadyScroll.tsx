@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useLayoutEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { REPORT_BUILD_COMPLETE } from "@/components/gouti/ReportLockOverlay";
-import { isUnlockReady } from "@/lib/unlock-ready";
+import { useUnlockReady } from "@/lib/unlock-ready";
 
 /**
  * After the report finishes building, gently scroll so the lock + UNLOCK!
@@ -11,8 +10,7 @@ import { isUnlockReady } from "@/lib/unlock-ready";
  * Used by /gouti/report-animation.
  */
 export default function ReportReadyScroll() {
-  const searchParams = useSearchParams();
-  const instantReady = isUnlockReady(searchParams);
+  const instantReady = useUnlockReady();
 
   useLayoutEffect(() => {
     if (!instantReady) return;

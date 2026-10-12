@@ -1,13 +1,13 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Blobatar } from "@blobatar/react";
 import { surprised } from "blobatar/expression";
 import "blobatar/motion.css";
 import "./building.css";
 import { journeyFadeIn, journeyFadeThen } from "@/components/gouti/journeyFade";
-import { isUnlockReady } from "@/lib/unlock-ready";
+import { hasRememberedUnlockReady, isUnlockReady } from "@/lib/unlock-ready";
 import { clearGoingToCheckout, isGoingToCheckout } from "@/lib/checkout-nav";
 import ReportAnimationPage from "@/app/gouti/report-animation/page";
 import ReportAnimationLayout from "@/app/gouti/report-animation/layout";
@@ -33,8 +33,17 @@ function useBlobSize() {
 function BuildingInner() {
   const searchParams = useSearchParams();
   const blobSize = useBlobSize();
-  const skipBuild = isUnlockReady(searchParams);
-  const [showReport, setShowReport] = useState(skipBuild);
+  const paramReady = isUnlockReady(searchParams);
+  const sid = searchParams.get("sid");
+  const [skipBuild, setSkipBuild] = useState(paramReady);
+  const [showReport, setShowReport] = useState(paramReady);
+
+  useLayoutEffect(() => {
+    if (paramReady || skipBuild) return;
+    if (!hasRememberedUnlockReady(sid)) return;
+    setSkipBuild(true);
+    setShowReport(true);
+  }, [paramReady, sid, skipBuild]);
 
   const seed = useMemo(() => {
     const raw = searchParams.get("n")?.trim();
@@ -76,8 +85,8 @@ function BuildingInner() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (skipBuild || showReport) return;
     journeyFadeIn(320);
-    if (skipBuild) return;
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -89,7 +98,7 @@ function BuildingInner() {
     }, hold);
 
     return () => window.clearTimeout(timer);
-  }, [searchParams, skipBuild]);
+  }, [skipBuild, showReport]);
 
   if (showReport) {
     return (
