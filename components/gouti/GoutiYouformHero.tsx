@@ -160,10 +160,13 @@ export default function GoutiYouformHero({
 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/landing-report-peek.webp"
+              src="/landing-report-peek-880.webp"
+              srcSet="/landing-report-peek-880.webp 880w, /landing-report-peek-1280.webp 1280w, /landing-report-peek.webp 2214w"
+              sizes="(min-width: 768px) 920px, calc(100vw - 28px)"
               alt="Sample Blueprint for Marcus Webb"
               width={2214}
               height={3365}
+              fetchPriority="high"
               className="block h-auto w-full"
             />
           </div>
