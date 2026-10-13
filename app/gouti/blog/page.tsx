@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
-import BlogPostCard from "@/components/blog/BlogPostCard";
+import Link from "next/link";
 import {
   BlogShell,
   blogBricolage,
   blogDmSans,
 } from "@/components/blog/BlogShell";
-import { getAllPosts } from "@/lib/blog";
+import { BLOG_BASE, formatPostDate, getAllPosts } from "@/lib/blog";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "I write stuff. | Your Blueprint",
-  description: "And if I wrote more often I'd probably call this a blog.",
+  title: "Articles | Your Blueprint",
+  description: "I overthink a lot, so I decided to start sharing it.",
 };
+
+const essayLink =
+  "font-semibold text-[#121212] hover:text-black";
 
 function BookIcon() {
   return (
@@ -48,63 +51,69 @@ function ClockIcon() {
 
 export default function BlogPage() {
   const posts = getAllPosts();
+  const latest = posts[0];
 
   return (
-    <BlogShell wide>
+    <BlogShell canvas="white">
       <div className="mb-10 flex flex-col items-center text-center sm:mb-12">
         <span
           className="mb-5 inline-flex items-center gap-2 border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs"
           style={blogBricolage}
         >
           <BookIcon />
-          BLOG
+          ARTICLES
         </span>
 
         <h1
           className="mb-4 text-[clamp(2rem,5.5vw,3.15rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212]"
           style={blogBricolage}
         >
-          I write stuff.
+          Articles
         </h1>
 
         <p
-          className="mb-6 max-w-xl text-sm font-bold leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base"
+          className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base"
           style={blogDmSans}
         >
-          (And if I wrote more often I&apos;d probably call this a blog.)
+          I overthink a lot, so I decided to start sharing it.
         </p>
 
-        <span
-          className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm"
-          style={blogDmSans}
-        >
-          <ClockIcon />
-          {posts.length > 0
-            ? `${posts.length} ${posts.length === 1 ? "post" : "posts"}`
-            : "New posts coming soon"}
-        </span>
+        {latest ? (
+          <span
+            className="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-xs font-medium text-black shadow-[2px_2px_0_0_#000] sm:text-sm"
+            style={blogDmSans}
+          >
+            <ClockIcon />
+            Last Updated on {formatPostDate(latest.date)}
+          </span>
+        ) : null}
       </div>
 
-      <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 sm:gap-6">
-        {posts.length === 0 ? (
-          <section className="border-2 border-black bg-white px-5 py-7 shadow-[4px_4px_0_0_#000] sm:col-span-2 sm:px-7 sm:py-8">
-            <h2
-              className="mb-4 text-xl font-bold tracking-[-0.02em] text-[#121212] sm:text-2xl"
-              style={blogBricolage}
-            >
-              Nothing here yet
-            </h2>
-            <p
-              className="text-sm leading-relaxed text-[#333] sm:text-base"
-              style={blogDmSans}
-            >
-              This is where the writing will live. First post is on the way.
-            </p>
-          </section>
-        ) : (
-          posts.map((post) => <BlogPostCard key={post.slug} post={post} />)
-        )}
-      </div>
+      {posts.length === 0 ? (
+        <p
+          className="text-sm leading-relaxed text-[#333] sm:text-base"
+          style={blogDmSans}
+        >
+          This is where the writing will live. First post is on the way.
+        </p>
+      ) : (
+        <ul className="flex flex-col gap-8">
+          {posts.map((post) => (
+            <li key={post.slug}>
+              <p className="mb-1 text-sm text-[#6B6B6B]" style={blogDmSans}>
+                {formatPostDate(post.date)}
+              </p>
+              <Link
+                href={`${BLOG_BASE}/${post.slug}`}
+                className={`text-[1.15rem] leading-snug ${essayLink}`}
+                style={blogDmSans}
+              >
+                {post.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </BlogShell>
   );
 }

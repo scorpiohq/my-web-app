@@ -236,9 +236,6 @@
   background: #f2c94c;
   transform: rotate(-1.2deg) scaleX(0);
   transform-origin: left center;
-}
-
-.gouti-landing .st-scroll-reveal.is-in .yf-hero__how-to-mark {
   animation: yf-hero-mark-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
 }
 

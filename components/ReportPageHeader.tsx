@@ -161,14 +161,9 @@ export default function ReportPageHeader({
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
         <Link href="/" className="flex shrink-0 items-center">
           <img
-            src="/logo-dp.svg"
-            alt="Your Blueprint"
-            className="h-9 w-9 lg:hidden"
-          />
-          <img
             src="/logo.svg"
             alt="Your Blueprint"
-            className="hidden h-10 w-auto lg:block"
+            className="h-9 w-auto sm:h-10"
           />
         </Link>
 

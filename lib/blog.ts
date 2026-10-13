@@ -77,7 +77,10 @@ export function getAllPosts() {
   return getPostSlugs()
     .map((slug) => getPostBySlug(slug))
     .filter((post): post is BlogPost => post !== null)
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+    .sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      return a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0;
+    });
 }
 
 export function getRelatedPosts(slug: string, limit = 3) {

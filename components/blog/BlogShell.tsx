@@ -13,12 +13,17 @@ export const blogDmSans = {
 export function BlogShell({
   children,
   wide = false,
+  canvas = "paper",
 }: {
   children: ReactNode;
   wide?: boolean;
+  /** `white` matches the policies page. `paper` is the essay canvas. */
+  canvas?: "paper" | "white";
 }) {
   return (
-    <div className="flex min-h-full flex-col bg-[#fefefe]">
+    <div
+      className={`flex min-h-full flex-col ${canvas === "white" ? "bg-[#fefefe]" : "bg-[#f4f7f4]"}`}
+    >
       <Header surface="soft" />
       <main
         className={`flex-1 py-12 sm:py-16 ${wide ? "px-6 sm:px-10 lg:px-16" : "px-6 sm:px-8"}`}

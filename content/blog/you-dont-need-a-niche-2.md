@@ -1,7 +1,7 @@
 ---
-title: "You don't need a niche. You need one story."
-description: "If you're stuck figuring out your niche, start with one true thing you can say this week."
-date: "2026-09-28"
+title: "How & Where to Start on Social Media"
+description: "Your Blueprint to Start your Social Media journey."
+date: "2026-08-22"
 image: "/blog/you-dont-need-a-niche.jpg"
 imageAlt: "An open notebook with one sentence written on a mostly blank page."
 ---

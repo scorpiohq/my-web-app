@@ -39,16 +39,10 @@ export default function Header({
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-3.5 sm:px-8 sm:py-5">
         <Link href={homeHref} className="flex shrink-0 items-center">
-          {/* Mobile: mark only — Desktop: full wordmark */}
-          <img
-            src="/logo-dp.svg"
-            alt="Your Blueprint"
-            className="h-9 w-9 lg:hidden"
-          />
           <img
             src="/logo.svg"
             alt="Your Blueprint"
-            className="hidden h-10 w-auto lg:block"
+            className="h-9 w-auto sm:h-10"
           />
         </Link>
 
@@ -82,35 +76,22 @@ export default function Header({
           </Link>
         </div>
 
-        {/* Mobile: CTA + menu (Youform-style) */}
-        <div className="flex shrink-0 items-center gap-2 lg:hidden">
-          <Link
-            href={ctaHref}
-            className="btn-brutal btn-brutal-primary inline-flex items-center justify-center px-3 py-2 text-[12px] font-semibold tracking-wide text-black sm:px-3.5 sm:text-[13px]"
-            style={navFont}
-          >
-            Build my Blueprint →
-          </Link>
-          <button
-            type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={
-              soft
-                ? "inline-flex items-center justify-center bg-transparent p-2 text-black"
-                : "inline-flex items-center justify-center border border-black bg-white p-2 text-black shadow-[2px_2px_0_0_#c8c8c8]"
-            }
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-          >
-            {menuOpen ? (
-              <span className="text-xl leading-none">×</span>
-            ) : (
-              <span className="flex flex-col gap-1">
-                <span className="block h-0.5 w-5 bg-black" />
-                <span className="block h-0.5 w-5 bg-black" />
-              </span>
-            )}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="inline-flex items-center justify-center border border-black bg-white p-2 text-black shadow-[2px_2px_0_0_#c8c8c8] lg:hidden"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+        >
+          {menuOpen ? (
+            <span className="text-xl leading-none">×</span>
+          ) : (
+            <span className="flex flex-col gap-1">
+              <span className="block h-0.5 w-6 bg-black" />
+              <span className="block h-0.5 w-6 bg-black" />
+              <span className="block h-0.5 w-6 bg-black" />
+            </span>
+          )}
+        </button>
       </div>
 
       {menuOpen && (
@@ -134,7 +115,7 @@ export default function Header({
               ))}
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 space-y-3">
               <Link
                 href="/signin"
                 className="btn-brutal btn-brutal-secondary block px-4 py-3 text-center text-sm font-medium text-black"
@@ -142,6 +123,14 @@ export default function Header({
                 onClick={() => setMenuOpen(false)}
               >
                 Sign in
+              </Link>
+              <Link
+                href={ctaHref}
+                className="btn-brutal btn-brutal-primary block px-4 py-3 text-center text-sm font-semibold text-black"
+                style={navFont}
+                onClick={() => setMenuOpen(false)}
+              >
+                Build my Blueprint →
               </Link>
             </div>
           </div>
