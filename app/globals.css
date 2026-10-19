@@ -70,6 +70,17 @@ body {
   z-index: 1;
 }
 
+/* Blog — marker-style text selection (same yellow as homepage) */
+.blog-shell ::selection {
+  background: #ffc940;
+  color: #1a1a1a;
+}
+
+.blog-shell ::-moz-selection {
+  background: #ffc940;
+  color: #1a1a1a;
+}
+
 /* Report sits on the page grid — outer canvas stays transparent */
 .report-page-shell main {
   background-color: transparent !important;

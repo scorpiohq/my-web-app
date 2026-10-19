@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Bebas_Neue, Geist, Geist_Mono, Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import HashScroll from "@/components/HashScroll";
+import SiteJsonLd from "@/components/SiteJsonLd";
 import UtmCapture from "@/components/UtmCapture";
 import "./globals.css";
 
@@ -177,6 +178,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${roboto.variable} ${dmSans.variable} ${fuzzyBubbles.variable} ${appleGaramond.variable} ${bethanyElingston.variable} ${azoSansUber.variable} ${cocogooseProBold.variable} ${authorBold.variable} ${bricolageGrotesque.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SiteJsonLd />
         <GoogleAnalytics />
         <UtmCapture />
         <HashScroll />

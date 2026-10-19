@@ -10,12 +10,13 @@ import { BLOG_BASE, formatPostDate, getAllPosts } from "@/lib/blog";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Articles | Your Blueprint",
-  description: "I overthink a lot, so I decided to start sharing it.",
+  title: "Blogs | Your Blueprint",
+  description:
+    "Things I'm learning, building, and figuring out along the way.",
 };
 
 const essayLink =
-  "font-semibold text-[#121212] hover:text-black";
+  "font-semibold text-[#121212] underline decoration-[#121212] decoration-2 underline-offset-[5px] hover:text-black";
 
 function BookIcon() {
   return (
@@ -57,25 +58,26 @@ export default function BlogPage() {
     <BlogShell canvas="white">
       <div className="mb-10 flex flex-col items-center text-center sm:mb-12">
         <span
-          className="mb-5 inline-flex items-center gap-2 border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs"
+          className="invisible mb-5 inline-flex items-center gap-2 border border-black bg-[#E5C4A1] px-4 py-2 text-[11px] font-semibold tracking-[0.12em] text-black shadow-[3px_3px_0_0_#000] sm:mb-6 sm:text-xs"
           style={blogBricolage}
+          aria-hidden="true"
         >
           <BookIcon />
-          ARTICLES
+          BLOGS
         </span>
 
         <h1
           className="mb-4 text-[clamp(2rem,5.5vw,3.15rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212]"
           style={blogBricolage}
         >
-          Articles
+          Blogs
         </h1>
 
         <p
           className="mb-6 max-w-xl text-sm leading-relaxed text-[#6B6B6B] sm:mb-7 sm:text-base"
           style={blogDmSans}
         >
-          I overthink a lot, so I decided to start sharing it.
+          Things I&apos;m learning, building, and figuring out along the way.
         </p>
 
         {latest ? (

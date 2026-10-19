@@ -87,6 +87,14 @@ export default function BlogPostLayout({
             ARTICLES
           </span>
 
+          <Link
+            href={BLOG_BASE}
+            className="mb-4 inline-block text-sm font-medium text-[#6B6B6B] no-underline hover:text-[#121212] sm:mb-5 sm:text-base"
+            style={blogDmSans}
+          >
+            ← Blogs
+          </Link>
+
           <h1
             className="mb-4 text-[clamp(2rem,5.5vw,3.15rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212]"
             style={blogBricolage}
@@ -172,31 +180,39 @@ export default function BlogPostLayout({
                 andy@yourblueprint.in
               </a>
             </p>
-            <p className="mt-0.5 text-[0.95rem] text-[#5c676d]">Founder</p>
+            <p className="mt-0.5 text-[0.95rem] text-[#5c676d]">
+              Founder & creator
+            </p>
           </div>
         </footer>
-      </article>
 
-      {morePosts.length > 0 ? (
-        <nav
-          aria-label="More writing"
-          className="mx-auto mt-16 w-full max-w-[40rem] border-t border-[#243038]/10 pt-10 sm:mt-20"
-        >
-          <ul className="flex flex-col gap-4">
-            {morePosts.map((related) => (
-              <li key={related.slug}>
-                <Link
-                  href={`${BLOG_BASE}/${related.slug}`}
-                  className={`text-[1.05rem] leading-snug ${essayLink}`}
-                  style={blogDmSans}
-                >
-                  {related.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      ) : null}
+        {morePosts.length > 0 ? (
+          <nav
+            aria-label="Few more articles"
+            className="mt-16 w-full border-t border-[#243038]/10 pt-10 text-left sm:mt-20"
+          >
+            <p
+              className={`mb-5 text-[1.05rem] font-semibold leading-snug ${essayLink}`}
+              style={blogBricolage}
+            >
+              ✵ Few More Articles
+            </p>
+            <ul className="m-0 flex list-none flex-col gap-4 p-0">
+              {morePosts.map((related) => (
+                <li key={related.slug} className="m-0 p-0">
+                  <Link
+                    href={`${BLOG_BASE}/${related.slug}`}
+                    className={`text-[1.05rem] leading-snug ${essayLink}`}
+                    style={blogDmSans}
+                  >
+                    {related.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
+      </article>
     </BlogShell>
   );
 }

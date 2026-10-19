@@ -22,7 +22,7 @@ export function BlogShell({
 }) {
   return (
     <div
-      className={`flex min-h-full flex-col ${canvas === "white" ? "bg-[#fefefe]" : "bg-[#f4f7f4]"}`}
+      className={`blog-shell flex min-h-full flex-col ${canvas === "white" ? "bg-[#fefefe]" : "bg-[#f4f7f4]"}`}
     >
       <Header surface="soft" />
       <main
